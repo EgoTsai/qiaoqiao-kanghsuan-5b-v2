@@ -9,7 +9,6 @@
   <meta name="theme-color" content="#fdf2f8" />
   <title>喬喬的五下康軒夢幻學園 ✨ 初音×三麗鷗 150關大冒險</title>
   <meta name="description" content="專為喬喬設計的小學五年級下學期（五下）康軒評量線上學習遊戲（英文・社會・自然共150關），初音未來與三麗鷗可愛夥伴陪妳每天闖三關！" />
-  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Fredoka:wght@500;600;700&display=swap');
@@ -114,9 +113,21 @@
     .option-btn:hover:not(:disabled) {
       transform: translateX(4px);
     }
+
+    /* UR Rainbow Holographic Shimmer Card */
+    @keyframes holoBorder {
+      0%, 100% { border-color: #f472b6; box-shadow: 0 8px 22px -4px rgba(236, 72, 153, 0.28), 0 0 0 1px rgba(56, 189, 248, 0.25); }
+      50% { border-color: #2dd4bf; box-shadow: 0 8px 22px -4px rgba(45, 212, 191, 0.32), 0 0 0 1px rgba(251, 191, 36, 0.35); }
+    }
+    .ur-holo-card {
+      background: linear-gradient(135deg, #fff1f2 0%, #ffffff 38%, #f0fdfa 72%, #fefce8 100%);
+      animation: holoBorder 2.8s ease-in-out infinite;
+    }
   </style>
 </head>
 <body class="bg-dreamy-pattern pb-24 md:pb-10">
+  <div id="confetti-layer" aria-hidden="true"></div>
+  <div id="mini-toast" class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-2xl bg-slate-800/95 text-white text-xs sm:text-sm font-black shadow-xl"></div>
 
   <!-- TOP HEADER BAR -->
   <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b-2 border-pink-100 shadow-sm">
@@ -139,7 +150,7 @@
             </a>
           </div>
           <p class="text-xs text-pink-500 font-semibold">
-            ✨ 初音未來 × 大耳狗 × 美樂蒂 陪妳快樂闖關！
+            ✨ 櫻花初音 × 我推 × 弗莉蓮 × 三麗鷗 換裝陪妳闖關！
           </p>
         </div>
       </div>
@@ -171,7 +182,7 @@
       <button onclick="app.switchTab('home')" id="nav-d-home" class="px-4 py-1.5 rounded-full transition-all">🏠 今日三關任務</button>
       <button onclick="app.switchTab('map')" id="nav-d-map" class="px-4 py-1.5 rounded-full transition-all">🗺️ 150關冒險地圖</button>
       <button onclick="app.switchTab('mistakes')" id="nav-d-mistakes" class="px-4 py-1.5 rounded-full transition-all">📓 魔法錯題本 <span id="badge-d-mistakes" class="ml-1 px-1.5 py-0.2 text-xs rounded-full bg-rose-100 text-rose-600">0</span></button>
-      <button onclick="app.switchTab('gacha')" id="nav-d-gacha" class="px-4 py-1.5 rounded-full transition-all">🎀 貼紙扭蛋館</button>
+      <button onclick="app.switchTab('gacha')" id="nav-d-gacha" class="px-4 py-1.5 rounded-full transition-all">👗 換裝＆抽卡館</button>
       <button onclick="app.switchTab('calendar')" id="nav-d-calendar" class="px-4 py-1.5 rounded-full transition-all">📅 50天進度與備份</button>
     </nav>
   </header>
@@ -183,6 +194,26 @@
     <!-- VIEW 1: HOME (今日三關任務 & 角色互動應援台) -->
     <!-- =================================================================== -->
     <section id="view-home" class="space-y-5 animate-pop">
+      <!-- V2 UPDATE WELCOME GIFT BANNER (Shown once until claimed!) -->
+      <div id="v2-welcome-gift-banner" class="hidden ur-holo-card rounded-3xl p-4 sm:p-5 border-2 border-pink-300 shadow-md">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="space-y-1 text-center md:text-left">
+            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-pink-500 text-white text-xs font-black">
+              🎉 喬喬許願大改版驚喜禮包！
+            </div>
+            <h3 class="text-base sm:text-lg font-black text-slate-800">
+              新增【🌸櫻花初音・可愛洋裝・皇冠首飾換裝】＆【我推/弗莉蓮/小圓/暗殺/進擊等 64 款動漫貼紙】！
+            </h3>
+            <p class="text-xs text-slate-600 font-medium">
+              謝謝喬喬認真寫回饋！特別準備了改版大禮包，領取後馬上就能去試試「🌈 豪華 5 連抽」與夢幻更衣室喔！
+            </p>
+          </div>
+          <button onclick="app.claimWelcomeGift()" class="btn-bounce shrink-0 px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-500 via-amber-400 to-teal-400 text-white font-black text-xs sm:text-sm shadow-lg">
+            🎁 領取 200 🎵 ＋ 40 💎 ＋ 草莓公主裙！
+          </button>
+        </div>
+      </div>
+
       <!-- Hero Welcome Banner with Miku, Cinnamoroll & My Melody -->
       <div class="kawaii-card p-4 sm:p-6 bg-gradient-to-r from-pink-50/95 via-teal-50/95 to-sky-50/95 border-2 border-pink-200 relative overflow-hidden">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
@@ -192,13 +223,14 @@
               <div id="hero-partner-svg" class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-white p-2 shadow-md border-2 border-pink-300 flex items-center justify-center animate-float">
               </div>
               <span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap bg-pink-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow">
-                點我換夥伴 ✨
+                點我換角色 ✨
               </span>
             </div>
             <div class="space-y-1.5">
               <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 border border-pink-200 text-xs font-bold text-pink-600">
-                <span id="hero-partner-name">🎤 初音未來 Miku</span>
+                <span id="hero-partner-name">🌸 櫻花初音 / 星光夥伴</span>
                 <span>・五年級下學期康軒評量</span>
+                <button onclick="app.switchTab('gacha'); app.setGachaSubTab('wardrobe');" class="ml-1 px-2 py-0.5 rounded-full bg-pink-500 text-white text-xs font-black hover:bg-pink-600 transition-all">👗 換裝更衣室</button>
               </div>
               <h2 id="hero-greeting" class="text-lg sm:text-2xl font-black text-slate-800 leading-snug">
                 嗨，喬喬！歡迎來到五下夢幻學園！🌸
@@ -283,7 +315,7 @@
             </button>
             <button onclick="app.switchTab('gacha')" class="btn-bounce p-3 rounded-2xl bg-teal-50 border-2 border-teal-200 text-left hover:bg-teal-100/70">
               <div class="text-lg">🎀</div>
-              <div class="text-xs font-black text-teal-700 mt-0.5">貼紙扭蛋機</div>
+              <div class="text-xs font-black text-teal-700 mt-0.5">換裝＆動漫抽卡</div>
               <div id="home-sticker-count" class="text-xs text-teal-600 font-semibold">已收集 0/24</div>
             </button>
           </div>
@@ -523,7 +555,7 @@
             🔄 再玩一次本關
           </button>
           <button onclick="app.switchTab('gacha')" class="btn-bounce px-5 py-3 rounded-2xl bg-amber-50 border-2 border-amber-200 text-amber-700 font-bold text-sm">
-            🎀 去抽可愛貼紙
+            👗 去抽櫻花初音＆換裝
           </button>
         </div>
       </div>
@@ -554,50 +586,140 @@
       </div>
     </section>
 
-    <!-- =================================================================== -->
-    <!-- VIEW 5: GACHA & STICKER BOOK (初音×三麗鷗可愛貼紙扭蛋館 - 絕無酷洛米) -->
+        <!-- =================================================================== -->
+    <!-- VIEW 5: STARLIGHT GACHA, DRESS-UP WARDROBE & 64 ANIME STICKERS (V2) -->
     <!-- =================================================================== -->
     <section id="view-gacha" class="hidden space-y-5 animate-pop">
-      <div class="kawaii-card p-5 sm:p-6 bg-gradient-to-r from-pink-50 via-white to-teal-50 border-2 border-pink-200">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-5">
-          <div class="space-y-2 text-center md:text-left">
-            <span class="inline-block px-3 py-0.5 rounded-full bg-teal-100 text-teal-700 text-xs font-black">
-              ✨ 喬喬最愛角色五下限定（初音未來・大耳狗・美樂蒂・布丁狗・雙子星・帕恰狗・Hello Kitty）
+      <!-- Top Currency & 3 Sub-Tabs Header -->
+      <div class="kawaii-card p-4 sm:p-5 bg-gradient-to-r from-pink-50 via-white to-teal-50 border-2 border-pink-200 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <span class="inline-block px-3 py-0.5 rounded-full bg-pink-100 text-pink-700 text-xs font-black">
+              🌸 喬喬許願大改版 ✨ 櫻花初音・換裝首飾・64款超人氣動漫貼紙
             </span>
-            <h2 class="text-xl sm:text-2xl font-black text-slate-800">
-              🎀 夢幻星光貼紙扭蛋機（五下珍藏版）
+            <h2 class="text-xl sm:text-2xl font-black text-slate-800 mt-1">
+              👗 星光換裝更衣室 ＆ 夢幻動漫扭蛋館
             </h2>
-            <p class="text-xs sm:text-sm text-slate-600 max-w-lg">
-              每過一關都能獲得「偶像音符幣 🎵」！使用 <strong>30 枚音符幣</strong> 就可以轉一次夢幻扭蛋，收集全套 24 款五下限定可愛角色貼紙！
-            </p>
-            <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1">
-              <div class="px-4 py-2 rounded-2xl bg-white border-2 border-pink-200 text-sm font-black text-pink-600">
-                目前擁有：<span id="gacha-coin-display">0</span> 🎵
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="px-3.5 py-1.5 rounded-2xl bg-white border-2 border-pink-200 text-xs sm:text-sm font-black text-pink-600 shadow-sm">
+              🎵 音符幣：<span id="gacha-coin-display">0</span>
+            </div>
+            <div class="px-3.5 py-1.5 rounded-2xl bg-white border-2 border-purple-200 text-xs sm:text-sm font-black text-purple-700 shadow-sm" title="每次抽卡都會贈送許願水晶，可直接兌換喜歡的櫻花初音、服裝首飾或動漫貼紙！">
+              💎 許願水晶：<span id="gacha-crystal-display">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Sub-Tab Buttons -->
+        <div class="flex flex-wrap gap-2 pt-1 border-t border-pink-100">
+          <button id="gsub-btn-machine" onclick="app.setGachaSubTab('machine')" class="px-4 py-2 rounded-2xl text-xs sm:text-sm font-black">
+            🎰 星光扭蛋機
+          </button>
+          <button id="gsub-btn-wardrobe" onclick="app.setGachaSubTab('wardrobe')" class="px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold">
+            👗 夢幻更衣室 (<span id="gsub-wardrobe-count">0/64</span>)
+          </button>
+          <button id="gsub-btn-stickers" onclick="app.setGachaSubTab('stickers')" class="px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold">
+            📖 動漫貼紙圖鑑 (<span id="gsub-sticker-count">0/64</span>)
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB-PANEL 1: GACHA MACHINE -->
+      <div id="gsub-panel-machine" class="space-y-4">
+        <div class="kawaii-card p-4 sm:p-6 space-y-5">
+          <!-- Step 1: Choose Gacha Pool -->
+          <div class="space-y-2">
+            <div class="text-xs sm:text-sm font-black text-slate-700">1️⃣ 選擇想抽的主題扭蛋機台：</div>
+            <div id="gacha-banners-grid" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+          </div>
+
+          <!-- Step 2: Wish Rate-Up Selector -->
+          <div class="space-y-2">
+            <div class="text-xs sm:text-sm font-black text-slate-700">2️⃣ 點選喬喬的「心願定向 UP」（大幅提升該系列抽中機率！）：</div>
+            <div id="gacha-wish-pills" class="flex flex-wrap gap-1.5"></div>
+          </div>
+
+          <!-- Step 3: Pull Action Bar + Current Dressed-Up Preview -->
+          <div class="p-4 rounded-3xl bg-gradient-to-r from-teal-50/80 via-pink-50/80 to-amber-50/80 border-2 border-pink-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+              <div id="gacha-live-avatar" onclick="app.setGachaSubTab('wardrobe')" class="cursor-pointer w-20 h-20 rounded-3xl bg-white p-1.5 border-2 border-pink-300 shadow-md animate-float shrink-0" title="點我去更衣室換裝！"></div>
+              <div class="space-y-1">
+                <div class="text-xs font-black text-pink-600">✨ 保底福利：每 5 抽必出 SSR / UR 超稀有新品！</div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  抽到的<strong>頭像、洋裝、皇冠、項鍊與魔法杖</strong>都能馬上穿在喬喬的角色身上！重複單品還會變成 <strong>+15 💎 許願水晶</strong> 喔！
+                </p>
               </div>
-              <button onclick="app.pullGacha()" class="btn-bounce px-6 py-2.5 rounded-2xl bg-gradient-to-r from-teal-400 via-sky-400 to-pink-400 text-white font-black text-sm shadow-md">
-                🎰 轉一次扭蛋 (消耗 30 🎵)
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-2.5 shrink-0">
+              <button onclick="app.pullGacha(1)" class="btn-bounce px-5 py-3 rounded-2xl bg-white border-2 border-pink-300 text-pink-600 font-black text-xs sm:text-sm shadow-sm">
+                🎰 單抽 1 次 (25 🎵)
+              </button>
+              <button onclick="app.pullGacha(5)" class="btn-bounce px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-500 via-amber-400 to-teal-400 text-white font-black text-xs sm:text-sm shadow-md">
+                🌈 豪華 5 連抽 (100 🎵・省25幣)
               </button>
             </div>
           </div>
 
-          <!-- Gacha Machine SVG Illustration -->
-          <div id="gacha-result-box" class="w-44 h-44 rounded-3xl bg-white border-2 border-teal-200 shadow-inner flex flex-col items-center justify-center p-3 text-center">
-            <div class="text-4xl animate-float">🎁</div>
-            <div class="text-xs font-bold text-slate-500 mt-2">點擊扭蛋按鈕<br>看看抽到誰！</div>
+          <!-- Gacha Reveal Stage -->
+          <div id="gacha-reveal-stage">
+            <div class="p-6 rounded-3xl bg-white/80 border-2 border-dashed border-pink-200 text-center space-y-1.5">
+              <div class="text-4xl animate-float">🎁🌸✨</div>
+              <div class="text-sm font-black text-slate-700">準備好試試手氣了嗎？點擊上方按鈕開始抽卡吧！</div>
+              <div class="text-xs text-slate-500">有機會抽出【UR 櫻花初音】、【UR 星野愛偶像服】、【UR 弗莉蓮魔法杖】、【UR 圓環女神羽翼】喔！</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 24 Stickers Collection Grid -->
-      <div class="kawaii-card p-4 sm:p-6 space-y-4">
-        <div class="flex items-center justify-between">
-          <h3 class="font-black text-slate-800 text-base sm:text-lg">
-            📖 喬喬的五下貼紙收集冊 (<span id="sticker-collected-num">0</span> / 24)
-          </h3>
-          <span class="text-xs text-pink-500 font-bold">點選已解鎖貼紙可設為首頁陪伴夥伴喔！</span>
+      <!-- SUB-PANEL 2: DRESS-UP WARDROBE -->
+      <div id="gsub-panel-wardrobe" class="hidden space-y-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <!-- Left Live Styling Stage -->
+          <div class="kawaii-card p-5 flex flex-col items-center text-center space-y-3 bg-gradient-to-b from-white via-pink-50/40 to-teal-50/40">
+            <span class="text-xs font-black px-3 py-0.5 rounded-full bg-pink-100 text-pink-700">✨ 喬喬的專屬星光造型台</span>
+            <div id="wardrobe-stage-svg" class="w-44 h-44 sm:w-48 sm:h-48 rounded-3xl bg-white p-2 border-2 border-pink-300 shadow-lg animate-float"></div>
+            <div id="wardrobe-stage-name" class="text-base font-black text-slate-800"></div>
+            <p id="wardrobe-stage-cheer" class="text-xs text-slate-600 leading-relaxed"></p>
+            <div class="flex items-center gap-2 pt-1">
+              <span class="text-xs font-bold text-slate-500">舞台背景色：</span>
+              <div id="wardrobe-bg-swatches" class="flex items-center gap-1.5"></div>
+            </div>
+            <button onclick="app.randomCuteOutfit()" class="btn-bounce w-full py-2.5 rounded-2xl bg-gradient-to-r from-teal-400 to-pink-400 text-white text-xs sm:text-sm font-black shadow">
+              🎲 隨機幫我搭配一套可愛穿搭！
+            </button>
+          </div>
+
+          <!-- Right Closet & Signature Sets -->
+          <div class="lg:col-span-2 kawaii-card p-4 sm:p-5 space-y-4">
+            <div class="space-y-2">
+              <div class="text-xs font-black text-slate-700">🌟 人氣主題套裝一鍵換（已解鎖部件會自動穿上）：</div>
+              <div id="wardrobe-sets-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2"></div>
+            </div>
+
+            <div class="border-t border-pink-100 pt-3 space-y-3">
+              <div id="wardrobe-cat-tabs" class="flex flex-wrap gap-2"></div>
+              <div id="wardrobe-items-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[540px] overflow-y-auto pr-1"></div>
+            </div>
+          </div>
         </div>
-        <div id="stickers-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-          <!-- Rendered by JS -->
+      </div>
+
+      <!-- SUB-PANEL 3: 64 ANIME & KAWAII STICKERS ALBUM -->
+      <div id="gsub-panel-stickers" class="hidden space-y-4">
+        <div class="kawaii-card p-4 sm:p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 class="font-black text-slate-800 text-base sm:text-lg">
+                📖 喬喬的超人氣動漫＆三麗鷗貼紙冊 (<span id="sticker-collected-num">0</span> / <span id="sticker-total-num">64</span>)
+              </h3>
+              <p class="text-xs text-pink-600 font-semibold mt-0.5">
+                收錄：初音未來・三麗鷗・魔法少女小圓・暗殺教室・進擊的巨人・葬送的弗莉蓮・我推的孩子・安妮亞等可愛角色！點選已解鎖貼紙可設為首頁應援徽章喔！
+              </p>
+            </div>
+          </div>
+          <div id="sticker-series-filters" class="flex flex-wrap gap-1.5"></div>
+          <div id="stickers-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"></div>
         </div>
       </div>
     </section>
@@ -693,187 +815,1879 @@
     // =========================================================================
     // CUTE KAWAII SVG ARTWORK (Strictly NO Kuromi! Features Miku & Cute Sanrio)
     // =========================================================================
-    const CHARACTER_SVGS = {
-      miku: {
-        name: "🎤 初音未來 Miku",
-        cheer: "喬喬加油！五下的課程也超有趣，跟著初音一起開心過三關吧！🎵",
-        svg: `<svg viewBox="0 0 100 100" class="w-full h-full">
-          <!-- Twin tails in iconic Miku Teal #39C5BB -->
-          <path d="M18 36 C4 48, 4 78, 16 90 C22 86, 24 62, 26 42 Z" fill="#39C5BB"/>
-          <path d="M82 36 C96 48, 96 78, 84 90 C78 86, 76 62, 74 42 Z" fill="#39C5BB"/>
-          <!-- Magenta Hair Accessories -->
-          <rect x="17" y="28" width="11" height="11" rx="3" transform="rotate(-18 22 33)" fill="#ec4899" stroke="#1e293b" stroke-width="1.5"/>
-          <rect x="72" y="28" width="11" height="11" rx="3" transform="rotate(18 77 33)" fill="#ec4899" stroke="#1e293b" stroke-width="1.5"/>
-          <!-- Head & Face -->
-          <circle cx="50" cy="52" r="26" fill="#fff1f2"/>
-          <!-- Bangs -->
-          <path d="M24 46 C26 24, 74 24, 76 46 C70 36, 62 48, 50 48 C38 48, 30 36, 24 46 Z" fill="#39C5BB"/>
-          <!-- Cute Big Eyes -->
-          <ellipse cx="40" cy="55" rx="4.2" ry="5" fill="#0f766e"/>
-          <ellipse cx="60" cy="55" rx="4.2" ry="5" fill="#0f766e"/>
-          <circle cx="38.8" cy="53.2" r="1.6" fill="#ffffff"/>
-          <circle cx="58.8" cy="53.2" r="1.6" fill="#ffffff"/>
-          <!-- Blush & Smile -->
-          <ellipse cx="33" cy="61" rx="3.5" ry="2" fill="#f472b6" opacity="0.55"/>
-          <ellipse cx="67" cy="61" rx="3.5" ry="2" fill="#f472b6" opacity="0.55"/>
-          <path d="M46 62 Q50 66 54 62" stroke="#e11d48" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-          <!-- Musical Note -->
-          <text x="75" y="24" font-size="14">🎵</text>
-        </svg>`
-      },
-      cinnamoroll: {
-        name: "☁️ 大耳狗喜拿",
-        cheer: "軟綿綿的大耳狗陪喬喬逛麵包店學英文、認識台灣歷史！☁️",
-        svg: `<svg viewBox="0 0 100 100" class="w-full h-full">
-          <!-- Long Floppy White Ears -->
-          <ellipse cx="18" cy="58" rx="14" ry="24" transform="rotate(25 18 58)" fill="#ffffff" stroke="#7dd3fc" stroke-width="2.5"/>
-          <ellipse cx="82" cy="58" rx="14" ry="24" transform="rotate(-25 82 58)" fill="#ffffff" stroke="#7dd3fc" stroke-width="2.5"/>
-          <!-- Chubby White Head -->
-          <ellipse cx="50" cy="54" rx="28" ry="23" fill="#ffffff" stroke="#7dd3fc" stroke-width="2.5"/>
-          <!-- Sky Blue Eyes -->
-          <ellipse cx="38" cy="54" rx="3.5" ry="4.5" fill="#0284c7"/>
-          <ellipse cx="62" cy="54" rx="3.5" ry="4.5" fill="#0284c7"/>
-          <circle cx="37" cy="52.5" r="1.3" fill="#ffffff"/>
-          <circle cx="61" cy="52.5" r="1.3" fill="#ffffff"/>
-          <!-- Pink Cheeks & Cute ω Mouth -->
-          <ellipse cx="31" cy="59" rx="4" ry="2.2" fill="#f9a8d4"/>
-          <ellipse cx="69" cy="59" rx="4" ry="2.2" fill="#f9a8d4"/>
-          <path d="M45 58 Q47.5 61 50 58 Q52.5 61 55 58" stroke="#0284c7" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <!-- Cute Sky Ribbon on top -->
-          <circle cx="50" cy="30" r="4" fill="#38bdf8"/>
-          <ellipse cx="43" cy="30" rx="6" ry="3.5" fill="#7dd3fc"/>
-          <ellipse cx="57" cy="30" rx="6" ry="3.5" fill="#7dd3fc"/>
-        </svg>`
-      },
-      mymelody: {
-        name: "🌸 美樂蒂 My Melody",
-        cheer: "喬喬最棒了！美樂蒂陪妳一起觀察奇妙的植物世界與熱的傳播喔！🍓",
-        svg: `<svg viewBox="0 0 100 100" class="w-full h-full">
-          <!-- Pink Bunny Ears -->
-          <ellipse cx="34" cy="24" rx="9" ry="20" transform="rotate(-8 34 24)" fill="#f472b6"/>
-          <ellipse cx="66" cy="26" rx="9" ry="20" transform="rotate(14 66 26)" fill="#f472b6"/>
-          <!-- Pink Hood -->
-          <ellipse cx="50" cy="58" rx="30" ry="26" fill="#f472b6"/>
-          <!-- White Face Inside Hood -->
-          <ellipse cx="50" cy="61" rx="22" ry="18" fill="#ffffff"/>
-          <!-- Cute Flower / Bow on Ear -->
-          <circle cx="66" cy="38" r="7" fill="#fff1f2" stroke="#f43f5e" stroke-width="1.5"/>
-          <circle cx="66" cy="38" r="3" fill="#facc15"/>
-          <!-- Eyes & Yellow Oval Nose -->
-          <ellipse cx="40" cy="60" rx="2.8" ry="3.8" fill="#334155"/>
-          <ellipse cx="60" cy="60" rx="2.8" ry="3.8" fill="#334155"/>
-          <ellipse cx="50" cy="63" rx="3" ry="2.2" fill="#facc15"/>
-          <ellipse cx="34" cy="64" rx="3.2" ry="1.8" fill="#fbcfe8"/>
-          <ellipse cx="66" cy="64" rx="3.2" ry="1.8" fill="#fbcfe8"/>
-        </svg>`
-      },
-      pompompurin: {
-        name: "🍮 布丁狗 Pompompurin",
-        cheer: "焦糖布丁能量滿滿！跟著布丁狗一起變身聰明消費的小小理財家！🍮",
-        svg: `<svg viewBox="0 0 100 100" class="w-full h-full">
-          <!-- Golden Floppy Ears -->
-          <ellipse cx="20" cy="56" rx="10" ry="18" transform="rotate(20 20 56)" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
-          <ellipse cx="80" cy="56" rx="10" ry="18" transform="rotate(-20 80 56)" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
-          <!-- Pudding Body/Head -->
-          <ellipse cx="50" cy="58" rx="28" ry="24" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
-          <!-- Signature Brown Beret -->
-          <ellipse cx="50" cy="34" rx="18" ry="7" fill="#78350f"/>
-          <path d="M48 25 L52 25 L51 30 L49 30 Z" fill="#78350f"/>
-          <!-- Face -->
-          <circle cx="39" cy="55" r="2.8" fill="#451a03"/>
-          <circle cx="61" cy="55" r="2.8" fill="#451a03"/>
-          <ellipse cx="50" cy="58" rx="2.5" ry="1.8" fill="#78350f"/>
-          <path d="M44 61 Q47 64 50 60 Q53 64 56 61" stroke="#78350f" stroke-width="2" fill="none" stroke-linecap="round"/>
-        </svg>`
-      },
-      twinstars: {
-        name: "🌟 雙子星 Kiki & Lala",
-        cheer: "一閃一閃亮晶晶！雙子星陪喬喬探索大地的奧妙與力與運動！🌟",
-        svg: `<svg viewBox="0 0 100 100" class="w-full h-full">
-          <!-- Golden Star Background -->
-          <polygon points="50,8 61,34 90,36 67,54 75,82 50,66 25,82 33,54 10,36 39,34" fill="#fef08a" stroke="#f59e0b" stroke-width="2"/>
-          <!-- Twin Star Faces -->
-          <circle cx="38" cy="54" r="14" fill="#fff1f2"/>
-          <path d="M24 50 C26 36, 50 36, 52 50 Z" fill="#38bdf8"/>
-          <circle cx="62" cy="54" r="14" fill="#fff1f2"/>
-          <path d="M48 50 C50 36, 74 36, 76 50 Z" fill="#f472b6"/>
-          <circle cx="34" cy="55" r="1.8" fill="#334155"/>
-          <circle cx="42" cy="55" r="1.8" fill="#334155"/>
-          <circle cx="58" cy="55" r="1.8" fill="#334155"/>
-          <circle cx="66" cy="55" r="1.8" fill="#334155"/>
-        </svg>`
-      },
-      pochacco: {
-        name: "🐾 帕恰狗 Pochacco",
-        cheer: "充滿活力的帕恰狗最愛放學後打籃球跟騎單車！喬喬今天也要拿滿分喔！🐾",
-        svg: `<svg viewBox="0 0 100 100" class="w-full h-full">
-          <!-- Black Floppy Ears -->
-          <ellipse cx="22" cy="42" rx="7" ry="18" transform="rotate(28 22 42)" fill="#1e293b"/>
-          <ellipse cx="78" cy="42" rx="7" ry="18" transform="rotate(-28 78 42)" fill="#1e293b"/>
-          <!-- White Pear-Shaped Head -->
-          <ellipse cx="50" cy="56" rx="26" ry="23" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5"/>
-          <!-- 3 Cute Hair Sprouts -->
-          <path d="M50 33 L50 25 M46 34 L43 27 M54 34 L57 27" stroke="#1e293b" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Eyes & Nose -->
-          <circle cx="41" cy="54" r="2.8" fill="#1e293b"/>
-          <circle cx="59" cy="54" r="2.8" fill="#1e293b"/>
-          <ellipse cx="50" cy="59" rx="3.5" ry="2.5" fill="#1e293b"/>
-          <!-- Mint Scarf -->
-          <rect x="32" y="74" width="36" height="8" rx="4" fill="#34d399"/>
-        </svg>`
-      },
-      hellokitty: {
-        name: "🎀 Hello Kitty 凱蒂貓",
-        cheer: "戴上最可愛的蝴蝶結！跟 Kitty 一起挑選漂亮洋裝、學會關心朋友吧！🎀",
-        svg: `<svg viewBox="0 0 100 100" class="w-full h-full">
-          <!-- Kitty Ears & Head -->
-          <polygon points="24,42 28,20 44,34" fill="#ffffff" stroke="#fda4af" stroke-width="2.5"/>
-          <polygon points="76,42 72,20 56,34" fill="#ffffff" stroke="#fda4af" stroke-width="2.5"/>
-          <ellipse cx="50" cy="56" rx="28" ry="23" fill="#ffffff" stroke="#fda4af" stroke-width="2.5"/>
-          <!-- Signature Red/Pink Bow -->
-          <ellipse cx="62" cy="34" rx="8" ry="6" fill="#f43f5e"/>
-          <ellipse cx="76" cy="38" rx="8" ry="6" fill="#f43f5e"/>
-          <circle cx="69" cy="36" r="4.5" fill="#fb7185"/>
-          <!-- Whiskers -->
-          <line x1="16" y1="52" x2="26" y2="54" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
-          <line x1="15" y1="59" x2="26" y2="59" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
-          <line x1="84" y1="52" x2="74" y2="54" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
-          <line x1="85" y1="59" x2="74" y2="59" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
-          <!-- Eyes & Yellow Nose -->
-          <ellipse cx="38" cy="56" rx="2.8" ry="3.8" fill="#1e293b"/>
-          <ellipse cx="62" cy="56" rx="2.8" ry="3.8" fill="#1e293b"/>
-          <ellipse cx="50" cy="60" rx="3.2" ry="2.2" fill="#facc15"/>
-        </svg>`
-      }
+        // =========================================================================
+    // V2 LAYERED CHIBI DRESS-UP & ANIME SVG ENGINE (Strictly NO Kuromi!)
+    // Supports: 22 Avatars, 16 Outfits, 12 Headwear, 14 Jewelry/Props + Stickers
+    // =========================================================================
+
+    const SERIES_LABELS = {
+      vocaloid: "🌸 初音＆虛擬歌手",
+      sanrio: "🎀 三麗鷗夥伴",
+      oshinoko: "🌟 我推的孩子",
+      frieren: "🪄 葬送的弗莉蓮",
+      madoka: "🏹 魔法少女小圓",
+      ansatsu: "🐙 暗殺教室",
+      aot: "🪽 進擊的巨人",
+      anime_stars: "🥜 人氣動漫驚喜"
     };
 
-    // 24 Collectible Stickers for Gacha (5B Exclusive Edition - Strictly Miku + Sanrio Cute Friends, NO Kuromi)
-    const STICKER_CATALOG = [
-      { id: "s1", buddy: "miku", title: "鋼琴獨奏初音", rarity: "SSR", desc: "She plays the piano after school! 琴音閃耀全場～" },
-      { id: "s2", buddy: "cinnamoroll", title: "麵包烘焙大耳狗", rarity: "SSR", desc: "I'm going to the bakery! 剛出爐的可頌最香了！" },
-      { id: "s3", buddy: "mymelody", title: "粉紅洋裝美樂蒂", rarity: "SSR", desc: "She is wearing a cute pink dress! 時尚滿分！" },
-      { id: "s4", buddy: "twinstars", title: "植物花園雙子星", rarity: "SSR", desc: "行光合作用吸收二氧化碳、釋放滿滿氧氣！" },
-      { id: "s5", buddy: "pompompurin", title: "小小理財家布丁狗", rarity: "SR", desc: "分辨需要與想要，養成記帳儲蓄好習慣！" },
-      { id: "s6", buddy: "pochacco", title: "灌籃高手帕恰狗", rarity: "SR", desc: "I play basketball after school! 活力百分百！" },
-      { id: "s7", buddy: "hellokitty", title: "溫柔小護士Kitty", rarity: "SR", desc: "What's wrong? Take care and get well soon!" },
-      { id: "s8", buddy: "miku", title: "耳機聽歌初音", rarity: "SR", desc: "I listen to music in my free time! 🎵" },
-      { id: "s9", buddy: "cinnamoroll", title: "大稻埕茶香大耳狗", rarity: "SR", desc: "認識清代開港通商的台灣烏龍茶傳奇！" },
-      { id: "s10", buddy: "mymelody", title: "保溫瓶科學美樂蒂", rarity: "SR", desc: "真空夾層阻絕傳導與對流、鍍銀反射輻射！" },
-      { id: "s11", buddy: "miku", title: "鐵道領航員初音", rarity: "SSR", desc: "從劉銘傳鐵路到日治縱貫鐵路全線通車！" },
-      { id: "s12", buddy: "twinstars", title: "寶石礦物雙子星", rarity: "SR", desc: "鑽石最硬、滑石最軟，大理岩滴鹽酸冒氣泡！" },
-      { id: "s13", buddy: "pompompurin", title: "嘉南大圳布丁狗", rarity: "SR", desc: "認識八田與一與烏山頭水庫的農業奇蹟！" },
-      { id: "s14", buddy: "pochacco", title: "郵局送信帕恰狗", rarity: "R", desc: "He is going to the post office!" },
-      { id: "s15", buddy: "hellokitty", title: "百貨購物Kitty", rarity: "R", desc: "How much is this coat? 體驗摩登林百貨！" },
-      { id: "s16", buddy: "cinnamoroll", title: "彈簧秤實驗大耳狗", rarity: "R", desc: "在彈性限度內，受力越大伸長量越長！" },
-      { id: "s17", buddy: "mymelody", title: "蒲公英飛行美樂蒂", rarity: "R", desc: "乘著風力傳播種子，飛向夢想花園！" },
-      { id: "s18", buddy: "miku", title: "環保回收初音", rarity: "R", desc: "寶特瓶回收再利用，變身時尚環保衣！" },
-      { id: "s19", buddy: "twinstars", title: "熱氣球對流雙子星", rarity: "R", desc: "熱空氣上升、冷空氣下降，飛向藍天！" },
-      { id: "s20", buddy: "pompompurin", title: "防震小達人布丁狗", rarity: "R", desc: "抗震保命三步驟：趴下、掩護、穩住！" },
-      { id: "s21", buddy: "pochacco", title: "拔河冠軍帕恰狗", rarity: "R", desc: "穿上防滑鞋增加摩擦力，贏得拔河勝利！" },
-      { id: "s22", buddy: "hellokitty", title: "世界名畫家Kitty", rarity: "R", desc: "認識陳澄波油畫與黃土水《水牛群像》！" },
-      { id: "s23", buddy: "cinnamoroll", title: "書店愛書大耳狗", rarity: "SR", desc: "I read a book in the bookstore!" },
-      { id: "s24", buddy: "miku", title: "五下150關榮耀初音", rarity: "SSR", desc: "見證喬喬完成五年級下學期全部評量的最高榮耀！" }
+    const AVATAR_CATALOG = [
+      { id: "sakura_miku", name: "🌸 櫻花初音 Sakura Miku", rarity: "UR", series: "vocaloid", starter: false,
+        cheer: "春天的櫻花瓣飄落囉～喬喬今天也要帶著粉嫩好心情，輕鬆拿下三關滿分喔！🌸🍒",
+        cfg: { type: "human", backHair: "twintails", hair: "#f9a8d4", hair2: "#ec4899", tie: "cherry", eyes: "#db2777", pupil: "flower", blush: "#f472b6", bg: "#fdf2f8" } },
+      { id: "miku", name: "🎤 星光初音未來 Miku", rarity: "SSR", series: "vocaloid", starter: true,
+        cheer: "喬喬加油！跟著初音的音樂節奏，今天的三關一定能完美過關喔！🎵",
+        cfg: { type: "human", backHair: "twintails", hair: "#39C5BB", hair2: "#0d9488", tie: "miku_sq", eyes: "#0f766e", pupil: "normal", blush: "#f472b6", bg: "#f0fdfa" } },
+      { id: "snow_miku", name: "❄️ 雪初音 Snow Miku", rarity: "SSR", series: "vocaloid", starter: false,
+        cheer: "晶瑩剔透的雪花魔法！陪喬喬冷靜思考、每一題都冰雪聰明答對喔！❄️✨",
+        cfg: { type: "human", backHair: "twintails", hair: "#bae6fd", hair2: "#38bdf8", tie: "snow", eyes: "#0284c7", pupil: "star_both", blush: "#fda4af", bg: "#f0f9ff" } },
+      { id: "strawberry_miku", name: "🍓 草莓公主初音", rarity: "SSR", series: "vocaloid", starter: false,
+        cheer: "酸酸甜甜的草莓交響樂響起囉！喬喬認真學習的模樣最甜美了！🍓🎶",
+        cfg: { type: "human", backHair: "twintails", hair: "#fda4af", hair2: "#e11d48", tie: "ribbon_red", eyes: "#be123c", pupil: "heart", blush: "#fb7185", bg: "#fff1f2" } },
+      { id: "ai_hoshino", name: "🌟 星野愛 Ai Hoshino", rarity: "UR", series: "oshinoko", starter: false,
+        cheer: "雙眼閃耀星芒✨ 喬喬就是今天學習舞台上最耀眼的傳奇 C 位偶像喔！比愛心～💖",
+        cfg: { type: "human", backHair: "sidetail", hair: "#6d28d9", hair2: "#db2777", tie: "star_pink", eyes: "#a21caf", pupil: "star_both", blush: "#f472b6", bg: "#faf5ff" } },
+      { id: "ruby_hoshino", name: "💖 星野露比 Ruby", rarity: "SSR", series: "oshinoko", starter: false,
+        cheer: "新生 B 小町全力應援中！喬喬快跟露比一起點亮今天的三顆閃耀星星吧！💖⭐",
+        cfg: { type: "human", backHair: "sidetail", hair: "#fde047", hair2: "#f59e0b", tie: "ribbon_red", eyes: "#e11d48", pupil: "star_left", blush: "#fb7185", bg: "#fefce8" } },
+      { id: "kana_arima", name: "❤️ 有馬佳奈 Kana", rarity: "SR", series: "oshinoko", starter: false,
+        cheer: "哼哼，本天才童星來陪妳複習了！把重點卡片讀熟，上台測驗絕對零失誤！🎩✨",
+        cfg: { type: "human", backHair: "bob", hair: "#ef4444", hair2: "#b91c1c", tie: "none", eyes: "#be123c", pupil: "normal", blush: "#fca5a5", bg: "#fef2f2" } },
+      { id: "frieren", name: "🪄 弗莉蓮 Frieren", rarity: "UR", series: "frieren", starter: false,
+        cheer: "收集康軒知識就像收集可愛的民間魔法一樣有趣呢……勇者欣梅爾一定也會誇獎喬喬的！🌼",
+        cfg: { type: "human", elf: true, backHair: "twintails", hair: "#f1f5f9", hair2: "#94a3b8", tie: "gold_ring", eyes: "#10b981", pupil: "normal", blush: "#fbcfe8", bg: "#f8fafc" } },
+      { id: "fern", name: "🦋 費倫 Fern", rarity: "SSR", series: "frieren", starter: false,
+        cheer: "喬喬大人今天也很準時來學習呢，真了不起！讀完這三關就可以開心地去轉扭蛋囉。🦋",
+        cfg: { type: "human", backHair: "long", hair: "#7e22ce", hair2: "#581c87", tie: "none", eyes: "#9333ea", pupil: "normal", blush: "#f9a8d4", bg: "#faf5ff" } },
+      { id: "madoka", name: "🏹 鹿目圓 Madoka", rarity: "UR", series: "madoka", starter: false,
+        cheer: "只要每天累積一點點努力，就能化為最閃耀的粉紅希望之箭喔！喬喬加油！🏹🌸",
+        cfg: { type: "human", backHair: "hightwin", hair: "#fbcfe8", hair2: "#f472b6", tie: "ribbon_red", eyes: "#d97706", pupil: "flower", blush: "#f472b6", bg: "#fdf2f8" } },
+      { id: "homura", name: "⏳ 曉美焰 Homura", rarity: "SSR", series: "madoka", starter: false,
+        cheer: "無論重複練習幾次，我都會陪著喬喬把每一個觀念徹底守護起來！⏳💜",
+        cfg: { type: "human", backHair: "long", hair: "#1e293b", hair2: "#0f172a", tie: "purple_band", eyes: "#7c3aed", pupil: "normal", blush: "#fbcfe8", bg: "#f5f3ff" } },
+      { id: "korosensei", name: "🐙 殺老師 Koro-sensei", rarity: "SSR", series: "ansatsu", starter: false,
+        cheer: "蠕呼呼呼～用 20 馬赫的速度幫喬喬批改考卷！全部答對老師就飛去買夏威夷刨冰給妳！🍨⭕",
+        cfg: { type: "mascot", mascotKind: "koro", bg: "#fef9c3" } },
+      { id: "nagisa", name: "🩵 潮田渚 Nagisa", rarity: "SR", series: "ansatsu", starter: false,
+        cheer: "把每一題的關鍵字記在筆記本裡，就能一擊必中找出正確答案喔！喬喬一起加油！📘",
+        cfg: { type: "human", backHair: "shorttwin", hair: "#38bdf8", hair2: "#0284c7", tie: "dark_tie", eyes: "#0284c7", pupil: "normal", blush: "#fda4af", bg: "#f0f9ff" } },
+      { id: "levi_chibi", name: "⚔️ Q版里維兵長 Levi", rarity: "UR", series: "aot", starter: false,
+        cheer: "錯題就跟灰塵一樣，認真複習把它們一掃而空吧！做得很好，喬喬，選擇不後悔的道路吧！🧹🪽",
+        cfg: { type: "human", backHair: "undercut", hair: "#1e293b", hair2: "#0f172a", tie: "none", eyes: "#475569", pupil: "cool", blush: "#fda4af", bg: "#f0fdf4" } },
+      { id: "mikasa_chibi", name: "🧣 Q版米卡莎 Mikasa", rarity: "SSR", series: "aot", starter: false,
+        cheer: "不管遇到多難的題目，米卡莎都會溫暖守護喬喬，陪妳堅強突破所有難關！🧣❤️",
+        cfg: { type: "human", backHair: "bob", hair: "#1e293b", hair2: "#334155", tie: "none", eyes: "#334155", pupil: "normal", blush: "#fda4af", bg: "#fff1f2" } },
+      { id: "anya", name: "🥜 安妮亞 Anya", rarity: "UR", series: "anime_stars", starter: false,
+        cheer: "哇庫哇庫！！安妮亞讀心術看到喬喬今天會拿 100 分！答對就有花生跟星星拿喔！🥜✨",
+        cfg: { type: "human", backHair: "anya", hair: "#f9a8d4", hair2: "#f472b6", tie: "anya_cones", eyes: "#059669", pupil: "star_both", smile: "open", blush: "#fb7185", bg: "#fdf2f8" } },
+      { id: "cinnamoroll", name: "☁️ 大耳狗喜拿", rarity: "SSR", series: "sanrio", starter: true,
+        cheer: "軟綿綿的雲朵為喬喬應援！遇到不會的題目別緊張，看詳解就能學會囉！☁️",
+        cfg: { type: "mascot", mascotKind: "cinna", bg: "#f0f9ff" } },
+      { id: "mymelody", name: "🎀 美樂蒂 My Melody", rarity: "SSR", series: "sanrio", starter: true,
+        cheer: "喬喬最棒了！美樂蒂準備了草莓點心與滿滿的星星要送給認真的妳喔！🍓",
+        cfg: { type: "mascot", mascotKind: "melody", bg: "#fdf2f8" } },
+      { id: "pompompurin", name: "🍮 布丁狗 Pompompurin", rarity: "SR", series: "sanrio", starter: true,
+        cheer: "焦糖布丁能量滿滿！一步一步慢慢來，每天 30 分鐘不知不覺就變學霸囉！🍮",
+        cfg: { type: "mascot", mascotKind: "purin", bg: "#fefce8" } },
+      { id: "twinstars", name: "🌟 雙子星 Kiki & Lala", rarity: "SR", series: "sanrio", starter: true,
+        cheer: "一閃一閃亮晶晶！雙子星帶著夢幻星杖，陪喬喬探索自然與社會的奧祕！🌟",
+        cfg: { type: "mascot", mascotKind: "twins", bg: "#fef9c3" } },
+      { id: "pochacco", name: "🐾 帕恰狗 Pochacco", rarity: "SR", series: "sanrio", starter: true,
+        cheer: "充滿活力的帕恰狗來囉！運動跟學習都一樣，每天堅持三關最有成就感！🐾",
+        cfg: { type: "mascot", mascotKind: "pochacco", bg: "#ecfdf5" } },
+      { id: "hellokitty", name: "🐱 Hello Kitty 凱蒂貓", rarity: "SR", series: "sanrio", starter: true,
+        cheer: "戴上最可愛的蝴蝶結！喬喬今天也準備好拿下滿分三顆星了嗎？🎀",
+        cfg: { type: "mascot", mascotKind: "kitty", bg: "#fff1f2" } }
     ];
+
+    const OUTFIT_CATALOG = [
+      { id: "outfit_default", name: "🎀 夢幻學園水手制服", rarity: "R", series: "vocaloid", starter: true, desc: "清新薄荷綠配粉紅蝴蝶結的學園水手服！" },
+      { id: "outfit_sakura_lolita", name: "🌸 櫻花初音・春櫻和風蘿莉塔裙", rarity: "UR", series: "vocaloid", starter: false, desc: "粉櫻振袖搭配白蕾絲圍裙與櫻花大蝴蝶結，夢幻度滿分！" },
+      { id: "outfit_idol_stage", name: "🌟 B小町・閃耀C位偶像打歌服", rarity: "UR", series: "oshinoko", starter: false, desc: "紫粉漸層星光蓬蓬裙配金色星芒腰鍊，站上舞台最耀眼！" },
+      { id: "outfit_madoka_rose", name: "🏹 圓環之理・粉紅薔薇魔法裙", rarity: "UR", series: "madoka", starter: false, desc: "奶油白馬甲配多層花瓣粉紅蓬裙與發光靈魂寶石！" },
+      { id: "outfit_frieren_mage", name: "🪄 精靈魔法使白金披肩長袍", rarity: "SSR", series: "frieren", starter: false, desc: "鑲金邊純白魔法使斗篷配紅寶石緞帶，氣質滿分！" },
+      { id: "outfit_aot_cloak", name: "🪽 自由之翼・Q版調查兵團披風", rarity: "SSR", series: "aot", starter: false, desc: "翠綠披風繡上帥氣自由之翼徽章，勇敢突破所有難題！" },
+      { id: "outfit_strawberry_cake", name: "🍓 草莓鮮奶油公主蓬蓬裙", rarity: "SSR", series: "sanrio", starter: false, desc: "鮮奶油荷葉領配草莓點點蛋糕裙，甜美小公主必備！" },
+      { id: "outfit_snow_princess", name: "❄️ 北國冰雪水晶漸層禮服", rarity: "SSR", series: "vocaloid", starter: false, desc: "冰晶藍薄紗露肩禮服，鑲嵌閃亮雪花胸針！" },
+      { id: "outfit_cinna_cloud", name: "☁️ 大耳狗軟綿雲朵吊帶裙", rarity: "SR", series: "sanrio", starter: true, desc: "天空藍背帶裙配軟綿綿白雲口袋，舒適又可愛！" },
+      { id: "outfit_melody_berry", name: "🌷 美樂蒂花園蕾絲圍裙裝", rarity: "SR", series: "sanrio", starter: false, desc: "粉紅格紋洋裝搭配愛心蕾絲小圍裙！" },
+      { id: "outfit_kunugigaoka", name: "🎓 椚丘學園E班滿分制服", rarity: "SR", series: "ansatsu", starter: false, desc: "鵝黃針織背心配殺老師微笑新月領帶！" },
+      { id: "outfit_eden_academy", name: "🥜 伊甸學園金邊名門禮服", rarity: "SSR", series: "anime_stars", starter: false, desc: "安妮亞同款黑金幾何滾邊學院洋裝配紅領結！" },
+      { id: "outfit_moonlight_gala", name: "🌙 星夜紫藤珍珠晚禮服", rarity: "SSR", series: "madoka", starter: false, desc: "夢幻薰衣草紫星空禮服，點綴銀河珍珠腰封！" },
+      { id: "outfit_macaron_chef", name: "🧁 甜點派對馬卡龍小廚娘裝", rarity: "R", series: "sanrio", starter: false, desc: "薄荷粉彩雙色甜點師洋裝，鈕扣是繽紛馬卡龍！" },
+      { id: "outfit_miko_sakura", name: "⛩️ 滿分祈願・櫻緋巫女千早裝", rarity: "SR", series: "vocaloid", starter: false, desc: "純白羽織配緋紅百褶袴與金鈴鐺，保佑考試全對！" },
+      { id: "outfit_angel_symphony", name: "🎼 天使交響樂純白羽翼禮服", rarity: "UR", series: "vocaloid", starter: false, desc: "幻彩絲帶與金色音符交織的純白歌姬最高禮服！" }
+    ];
+
+    const HEADWEAR_CATALOG = [
+      { id: "head_none", name: "✨ 清新自然髮型", rarity: "R", series: "vocaloid", starter: true, desc: "不配戴額外頭飾，展現角色原本的可愛髮型！" },
+      { id: "head_sakura_crown", name: "🌸 櫻花初音・春櫻花冠與櫻桃簪", rarity: "UR", series: "vocaloid", starter: false, desc: "盛開粉櫻花環搭配晶瑩紅櫻桃垂墜髮簪！" },
+      { id: "head_ai_bunny", name: "🐰 星野愛・傳奇C位兔耳髮飾", rarity: "UR", series: "oshinoko", starter: false, desc: "《我推的孩子》最經典粉白兔耳星星髮夾！" },
+      { id: "head_diamond_tiara", name: "👑 璀璨粉鑽愛心小皇冠", rarity: "SSR", series: "sanrio", starter: false, desc: "純金蕾絲皇冠鑲嵌閃耀心型粉紅鑽石！" },
+      { id: "head_frieren_wreath", name: "🌼 欣梅爾的蒼月草花冠", rarity: "SSR", series: "frieren", starter: false, desc: "故鄉盛開的天空藍蒼月草編織而成的溫柔花環！" },
+      { id: "head_fern_butterfly", name: "🦋 費倫紫水晶蝴蝶髮飾", rarity: "SR", series: "frieren", starter: false, desc: "芙拉梅與欣梅爾風格的優雅紫蝶銀鏈髮夾！" },
+      { id: "head_madoka_ribbons", name: "🎀 魔法少女絲絨雙蝴蝶結", rarity: "SR", series: "madoka", starter: true, desc: "小圓同款珍珠白與薔薇紅雙邊蝴蝶結髮飾！" },
+      { id: "head_neko_headphones", name: "🎧 初音電音發光貓耳耳機", rarity: "SSR", series: "vocaloid", starter: false, desc: "蔥綠與霓虹粉雙色發光的超萌貓耳音樂耳機！" },
+      { id: "head_koro_gradcap", name: "🎓 殺老師20馬赫學霸博士帽", rarity: "SR", series: "ansatsu", starter: false, desc: "附金色流蘇與滿分櫻花章的小巧學士帽！" },
+      { id: "head_star_halo", name: "🌟 雙子星許願流星光環", rarity: "SSR", series: "sanrio", starter: false, desc: "漂浮在頭頂閃閃發光的金色星星許願光環！" },
+      { id: "head_pearl_beret", name: "🎨 天才童星珍珠紅貝雷帽", rarity: "SR", series: "oshinoko", starter: false, desc: "有馬佳奈最愛的時尚珍珠點綴緋紅貝雷帽！" },
+      { id: "head_angel_clips", name: "🪽 純白小天使羽翼髮夾", rarity: "R", series: "madoka", starter: false, desc: "左右兩側軟綿綿的雪白小翅膀髮夾！" }
+    ];
+
+    const JEWELRY_CATALOG = [
+      { id: "jewel_none", name: "✨ 素雅清新（無首飾）", rarity: "R", series: "vocaloid", starter: true, desc: "簡約清爽造型，隨時可搭配喜歡的首飾！" },
+      { id: "jewel_sakura_pearl", name: "🌸 櫻花粉鑽珍珠項鍊＆花瓣耳環組", rarity: "UR", series: "vocaloid", starter: false, desc: "珍珠頸鍊配粉櫻寶石墜飾、櫻花耳環與漫天飛舞櫻瓣！" },
+      { id: "jewel_soulgem_heart", name: "💖 靈魂寶石心型項鍊＆星芒耳墜", rarity: "UR", series: "madoka", starter: false, desc: "玫瑰金心型粉鑽項鍊搭配閃亮六芒星耳環！" },
+      { id: "jewel_idol_mic", name: "🎤 閃耀鑽石麥克風＆愛心寶石耳環", rarity: "UR", series: "oshinoko", starter: false, desc: "翅膀粉鑽偶像麥克風加上飄揚彩色音符特效！" },
+      { id: "jewel_frieren_staff", name: "🪄 弗莉蓮紅寶石新月法杖＆鏡蓮華戒", rarity: "UR", series: "frieren", starter: false, desc: "黃金新月魔法杖綻放蒼藍花田魔法星光！" },
+      { id: "jewel_angel_wings", name: "🪽 圓環女神・夢幻雪白大羽翼＆珍珠鍊", rarity: "UR", series: "madoka", starter: false, desc: "背後展開超華麗粉白漸層天使羽翼與璀璨珍珠項鍊！" },
+      { id: "jewel_sapphire_star", name: "💎 銀河藍寶石星芒項鍊＆水晶耳墜", rarity: "SSR", series: "oshinoko", starter: false, desc: "深海藍寶石六芒星墜鍊與晶瑩水滴耳環！" },
+      { id: "jewel_red_scarf_key", name: "🧣 溫暖守護紅圍巾＆黃金地下室鑰匙", rarity: "SSR", series: "aot", starter: false, desc: "米卡莎紅圍巾搭配艾連的金鑰匙項鍊！" },
+      { id: "jewel_strawberry_ribbon", name: "🍓 草莓紅寶石蕾絲頸鍊＆櫻桃耳環", rarity: "SR", series: "sanrio", starter: false, desc: "白蕾絲頸圈鑲嵌紅草莓寶石與可愛櫻桃耳墜！" },
+      { id: "jewel_emerald_brooch", name: "💚 自由之翼翡翠寶石領巾胸針", rarity: "SR", series: "aot", starter: false, desc: "里維兵長風白色領巾別上翠綠寶石胸針！" },
+      { id: "jewel_koro_sweets", name: "🍮 殺老師特製布丁徽章＆滿分紅圈", rarity: "SR", series: "ansatsu", starter: false, desc: "超萌焦糖布丁胸章與 100 分櫻花印記！" },
+      { id: "jewel_anya_peanut", name: "🥜 奇美拉玩偶徽章＆黃金花生星光", rarity: "SSR", series: "anime_stars", starter: false, desc: "安妮亞最愛的獅子奇美拉別針與閃亮星星特效！" },
+      { id: "jewel_butterfly_aura", name: "🦋 紫晶蝴蝶項鍊＆幻彩蝶舞光環", rarity: "SSR", series: "frieren", starter: false, desc: "紫水晶墜鍊搭配翩翩飛舞的夢幻紫蝶特效！" },
+      { id: "jewel_music_symphony", name: "🎼 初音蔥綠水晶音符胸針＆星光譜", rarity: "R", series: "vocaloid", starter: true, desc: "閃耀薄荷綠高音譜記號寶石胸針！" }
+    ];
+
+    const SIGNATURE_SETS = [
+      { id: "set_sakura", name: "🌸 櫻花初音・春櫻漫舞套裝", avatar: "sakura_miku", outfit: "outfit_sakura_lolita", headwear: "head_sakura_crown", jewelry: "jewel_sakura_pearl" },
+      { id: "set_idol", name: "🌟 星野愛・傳奇C位偶像套裝", avatar: "ai_hoshino", outfit: "outfit_idol_stage", headwear: "head_ai_bunny", jewelry: "jewel_idol_mic" },
+      { id: "set_frieren", name: "🪄 弗莉蓮・精靈花田魔法套裝", avatar: "frieren", outfit: "outfit_frieren_mage", headwear: "head_frieren_wreath", jewelry: "jewel_frieren_staff" },
+      { id: "set_madoka", name: "🏹 鹿目圓・圓環女神希望套裝", avatar: "madoka", outfit: "outfit_madoka_rose", headwear: "head_madoka_ribbons", jewelry: "jewel_angel_wings" },
+      { id: "set_aot", name: "🪽 調查兵團・自由之翼守護套裝", avatar: "levi_chibi", outfit: "outfit_aot_cloak", headwear: "head_none", jewelry: "jewel_red_scarf_key" },
+      { id: "set_anya", name: "🥜 安妮亞・伊甸學園星星套裝", avatar: "anya", outfit: "outfit_eden_academy", headwear: "head_star_halo", jewelry: "jewel_anya_peanut" }
+    ];
+
+    function renderStarPolygon(cx, cy, rOuter, rInner, fill) {
+      const pts = [];
+      for (let i = 0; i < 12; i++) {
+        const angle = (Math.PI / 6) * i - Math.PI / 2;
+        const r = i % 2 === 0 ? rOuter : rInner;
+        pts.push(`${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`);
+      }
+      return `<polygon points="${pts.join(' ')}" fill="${fill}"/>`;
+    }
+
+    function renderOutfitLayer(outfitId) {
+      switch (outfitId) {
+        case "outfit_sakura_lolita":
+          return `
+            <path d="M32 72 L16 94 L30 102 L40 82 Z" fill="#f9a8d4" stroke="#ec4899" stroke-width="1.5"/>
+            <path d="M88 72 L104 94 L90 102 L80 82 Z" fill="#f9a8d4" stroke="#ec4899" stroke-width="1.5"/>
+            <path d="M38 70 L82 70 L92 114 L28 114 Z" fill="#ec4899"/>
+            <path d="M43 70 L77 70 L84 112 L36 112 Z" fill="#fff1f2"/>
+            <path d="M28 108 Q60 116 92 108 L94 114 L26 114 Z" fill="#fbcfe8"/>
+            <path d="M46 70 L60 82 L74 70" fill="none" stroke="#f43f5e" stroke-width="2.5"/>
+            <ellipse cx="52" cy="88" rx="8" ry="4.5" fill="#f43f5e"/>
+            <ellipse cx="68" cy="88" rx="8" ry="4.5" fill="#f43f5e"/>
+            <circle cx="60" cy="88" r="4" fill="#fde047"/>
+            <circle cx="24" cy="92" r="2.5" fill="#fff1f2"/><circle cx="96" cy="92" r="2.5" fill="#fff1f2"/>`;
+        case "outfit_idol_stage":
+          return `
+            <circle cx="36" cy="76" r="8" fill="#f472b6"/><circle cx="84" cy="76" r="8" fill="#f472b6"/>
+            <path d="M40 70 L80 70 L92 114 L28 114 Z" fill="#9333ea"/>
+            <path d="M42 70 L78 70 L85 96 L35 96 Z" fill="#db2777"/>
+            <path d="M30 96 L90 96 L94 106 L26 106 Z" fill="#f472b6"/>
+            <path d="M46 70 L60 84 L74 70 Z" fill="#1e1b4b"/>
+            ${renderStarPolygon(60, 82, 5.5, 2.4, "#fde047")}
+            <circle cx="46" cy="96" r="2.2" fill="#fde047"/><circle cx="60" cy="98" r="2.5" fill="#fde047"/><circle cx="74" cy="96" r="2.2" fill="#fde047"/>`;
+        case "outfit_madoka_rose":
+          return `
+            <circle cx="35" cy="76" r="9" fill="#fbcfe8" stroke="#f472b6" stroke-width="1.5"/>
+            <circle cx="85" cy="76" r="9" fill="#fbcfe8" stroke="#f472b6" stroke-width="1.5"/>
+            <path d="M26 92 Q60 84 94 92 L98 114 L22 114 Z" fill="#fff1f2" stroke="#f9a8d4" stroke-width="1.5"/>
+            <path d="M34 90 Q47 104 60 92 Q73 104 86 90 L82 70 L38 70 Z" fill="#fbcfe8"/>
+            <path d="M47 70 L73 70 L70 92 L50 92 Z" fill="#fffbeb"/>
+            <ellipse cx="60" cy="77" rx="3.8" ry="5" fill="#ec4899" stroke="#fde047" stroke-width="1.5"/>`;
+        case "outfit_frieren_mage":
+          return `
+            <path d="M32 70 L88 70 L96 114 L24 114 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+            <path d="M28 70 Q60 96 92 70 L96 92 Q60 106 24 92 Z" fill="#ffffff" stroke="#eab308" stroke-width="2"/>
+            <line x1="60" y1="72" x2="60" y2="114" stroke="#eab308" stroke-width="2"/>
+            <rect x="46" y="75" width="5" height="7" rx="1" fill="#dc2626"/>
+            <rect x="69" y="75" width="5" height="7" rx="1" fill="#dc2626"/>
+            <path d="M53 71 L60 80 L67 71" fill="#dc2626"/>`;
+        case "outfit_aot_cloak":
+          return `
+            <path d="M34 70 L86 70 L94 114 L26 114 Z" fill="#f8fafc"/>
+            <path d="M28 68 L92 68 L98 114 L22 114 Z" fill="#15803d" stroke="#14532d" stroke-width="1.6"/>
+            <path d="M48 70 L60 88 L72 70 Z" fill="#fef3c7"/>
+            <circle cx="60" cy="78" r="3.5" fill="#fbbf24"/>
+            <path d="M72 86 L82 82 L79 92 Z" fill="#eff6ff"/><path d="M70 89 L78 86 L76 95 Z" fill="#38bdf8"/>`;
+        case "outfit_strawberry_cake":
+          return `
+            <circle cx="35" cy="76" r="8.5" fill="#fda4af"/><circle cx="85" cy="76" r="8.5" fill="#fda4af"/>
+            <path d="M36 70 L84 70 L95 114 L25 114 Z" fill="#fb7185"/>
+            <path d="M38 70 Q49 80 60 72 Q71 80 82 70" fill="#ffffff" stroke="#fecdd3" stroke-width="2"/>
+            <path d="M25 106 Q36 101 47 106 Q60 101 73 106 Q84 101 95 106 L96 114 L24 114 Z" fill="#ffffff"/>
+            <circle cx="44" cy="92" r="3" fill="#e11d48"/><circle cx="60" cy="95" r="3" fill="#e11d48"/><circle cx="76" cy="92" r="3" fill="#e11d48"/>`;
+        case "outfit_snow_princess":
+          return `
+            <path d="M28 74 L92 74 L96 114 L24 114 Z" fill="#bae6fd"/>
+            <path d="M38 70 L82 70 L90 114 L30 114 Z" fill="#38bdf8"/>
+            <path d="M44 70 L76 70 L80 114 L40 114 Z" fill="#e0f2fe"/>
+            ${renderStarPolygon(60, 82, 6, 2.5, "#ffffff")}`;
+        case "outfit_cinna_cloud":
+          return `
+            <circle cx="36" cy="77" r="8" fill="#ffffff"/><circle cx="84" cy="77" r="8" fill="#ffffff"/>
+            <path d="M36 70 L84 70 L92 114 L28 114 Z" fill="#7dd3fc"/>
+            <rect x="46" y="70" width="28" height="16" rx="4" fill="#ffffff"/>
+            <ellipse cx="60" cy="98" rx="11" ry="6.5" fill="#ffffff"/>
+            <path d="M52 76 L68 76" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round"/>`;
+        case "outfit_melody_berry":
+          return `
+            <circle cx="36" cy="76" r="8" fill="#fce7f3"/><circle cx="84" cy="76" r="8" fill="#fce7f3"/>
+            <path d="M36 70 L84 70 L92 114 L28 114 Z" fill="#f472b6"/>
+            <path d="M44 72 L76 72 L80 110 L40 110 Z" fill="#ffffff"/>
+            <path d="M55 92 C55 88, 60 88, 60 91 C60 88, 65 88, 65 92 C65 96, 60 100, 60 100 C60 100, 55 96, 55 92 Z" fill="#fb7185"/>`;
+        case "outfit_kunugigaoka":
+          return `
+            <path d="M32 70 L88 70 L92 114 L28 114 Z" fill="#334155"/>
+            <path d="M44 70 L76 70 L78 106 L42 106 Z" fill="#fde047"/>
+            <polygon points="50,70 70,70 60,84" fill="#ffffff"/>
+            <path d="M58 76 L62 76 L63 96 L60 100 L57 96 Z" fill="#1e293b"/>
+            <circle cx="60" cy="86" r="2.8" fill="#fde047"/>`;
+        case "outfit_eden_academy":
+          return `
+            <path d="M32 70 L88 70 L94 114 L26 114 Z" fill="#1e293b"/>
+            <path d="M44 70 L60 80 L76 70" fill="#ffffff"/>
+            <polygon points="54,75 66,75 60,83" fill="#dc2626"/>
+            <line x1="28" y1="107" x2="92" y2="107" stroke="#fbbf24" stroke-width="3" stroke-dasharray="5,3"/>
+            <circle cx="52" cy="88" r="2" fill="#fbbf24"/><circle cx="68" cy="88" r="2" fill="#fbbf24"/>`;
+        case "outfit_moonlight_gala":
+          return `
+            <path d="M34 72 L86 72 L96 114 L24 114 Z" fill="#6d28d9"/>
+            <path d="M40 70 L80 70 L88 114 L32 114 Z" fill="#a855f7"/>
+            <path d="M42 88 Q60 94 78 88" fill="none" stroke="#fef08a" stroke-width="2.5" stroke-dasharray="3,3"/>
+            ${renderStarPolygon(60, 82, 5, 2.2, "#fef08a")}`;
+        case "outfit_macaron_chef":
+          return `
+            <circle cx="35" cy="76" r="8" fill="#a7f3d0"/><circle cx="85" cy="76" r="8" fill="#a7f3d0"/>
+            <path d="M36 70 L84 70 L92 114 L28 114 Z" fill="#6ee7b7"/>
+            <path d="M43 72 L77 72 L82 112 L38 112 Z" fill="#fffbeb"/>
+            <circle cx="60" cy="82" r="3.2" fill="#f472b6"/><circle cx="60" cy="92" r="3.2" fill="#fde047"/><circle cx="60" cy="102" r="3.2" fill="#38bdf8"/>`;
+        case "outfit_miko_sakura":
+          return `
+            <path d="M30 70 L18 96 L34 100 L42 78 Z" fill="#ffffff" stroke="#fda4af" stroke-width="1.5"/>
+            <path d="M90 70 L102 96 L86 100 L78 78 Z" fill="#ffffff" stroke="#fda4af" stroke-width="1.5"/>
+            <path d="M38 70 L82 70 L84 92 L36 92 Z" fill="#ffffff"/>
+            <path d="M34 90 L86 90 L92 114 L28 114 Z" fill="#e11d48"/>
+            <path d="M50 70 L60 86 L70 70" fill="none" stroke="#e11d48" stroke-width="3"/>`;
+        case "outfit_angel_symphony":
+          return `
+            <circle cx="34" cy="75" r="9" fill="#ffffff" stroke="#bae6fd" stroke-width="1.5"/>
+            <circle cx="86" cy="75" r="9" fill="#ffffff" stroke="#bae6fd" stroke-width="1.5"/>
+            <path d="M34 70 L86 70 L96 114 L24 114 Z" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.8"/>
+            <path d="M26 104 Q60 114 94 104 L96 114 L24 114 Z" fill="#99f6e4"/>
+            <path d="M42 86 Q60 94 78 86" fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+            ${renderStarPolygon(60, 80, 5.5, 2.3, "#fbbf24")}`;
+        case "outfit_default":
+        default:
+          return `
+            <circle cx="36" cy="76" r="7.5" fill="#ffffff" stroke="#99f6e4" stroke-width="1.5"/>
+            <circle cx="84" cy="76" r="7.5" fill="#ffffff" stroke="#99f6e4" stroke-width="1.5"/>
+            <path d="M36 94 L84 94 L90 114 L30 114 Z" fill="#39C5BB"/>
+            <path d="M38 70 L82 70 L84 96 L36 96 Z" fill="#ffffff"/>
+            <polygon points="38,70 82,70 72,83 48,83" fill="#39C5BB"/>
+            <ellipse cx="54" cy="82" rx="6" ry="3.5" fill="#ec4899"/>
+            <ellipse cx="66" cy="82" rx="6" ry="3.5" fill="#ec4899"/>
+            <circle cx="60" cy="82" r="3" fill="#f472b6"/>`;
+      }
+    }
+
+    function renderHeadwearLayer(headwearId) {
+      switch (headwearId) {
+        case "head_sakura_crown":
+          return `
+            <g>
+              <circle cx="42" cy="20" r="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="1.2"/>
+              <circle cx="60" cy="16" r="7" fill="#f9a8d4" stroke="#ec4899" stroke-width="1.2"/>
+              <circle cx="78" cy="20" r="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="1.2"/>
+              <circle cx="42" cy="20" r="2" fill="#fde047"/><circle cx="60" cy="16" r="2.4" fill="#fde047"/><circle cx="78" cy="20" r="2" fill="#fde047"/>
+              <line x1="84" y1="22" x2="88" y2="32" stroke="#16a34a" stroke-width="1.6"/>
+              <circle cx="86" cy="34" r="3.2" fill="#e11d48"/><circle cx="91" cy="33" r="3.2" fill="#f43f5e"/>
+            </g>`;
+        case "head_ai_bunny":
+          return `
+            <g transform="translate(70, 12) rotate(14)">
+              <ellipse cx="4" cy="8" rx="4" ry="10" fill="#ffffff" stroke="#db2777" stroke-width="1.5"/>
+              <ellipse cx="13" cy="9" rx="4" ry="10" fill="#ffffff" stroke="#db2777" stroke-width="1.5"/>
+              <circle cx="8.5" cy="18" r="6.5" fill="#f472b6" stroke="#db2777" stroke-width="1.5"/>
+              <circle cx="6.5" cy="17" r="1.2" fill="#1e293b"/><circle cx="10.5" cy="17" r="1.2" fill="#1e293b"/>
+            </g>`;
+        case "head_diamond_tiara":
+          return `
+            <polygon points="42,22 47,10 54,18 60,6 66,18 73,10 78,22" fill="#fde047" stroke="#ca8a04" stroke-width="1.5"/>
+            <circle cx="60" cy="15" r="3.2" fill="#ec4899"/><circle cx="49" cy="17" r="2" fill="#38bdf8"/><circle cx="71" cy="17" r="2" fill="#38bdf8"/>`;
+        case "head_frieren_wreath":
+          return `
+            <path d="M36 24 Q60 12 84 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="43" cy="20" r="5" fill="#38bdf8"/><circle cx="60" cy="16" r="5.5" fill="#7dd3fc"/><circle cx="77" cy="20" r="5" fill="#38bdf8"/>
+            <circle cx="43" cy="20" r="1.8" fill="#fef08a"/><circle cx="60" cy="16" r="2" fill="#fef08a"/><circle cx="77" cy="20" r="1.8" fill="#fef08a"/>`;
+        case "head_fern_butterfly":
+          return `
+            <g transform="translate(74, 18) rotate(18)">
+              <ellipse cx="0" cy="0" rx="7" ry="5" fill="#a855f7" stroke="#fef08a" stroke-width="1.2"/>
+              <ellipse cx="10" cy="0" rx="7" ry="5" fill="#c084fc" stroke="#fef08a" stroke-width="1.2"/>
+              <line x1="5" y1="-5" x2="5" y2="7" stroke="#fef08a" stroke-width="2"/>
+            </g>`;
+        case "head_madoka_ribbons":
+          return `
+            <polygon points="24,26 36,20 35,32" fill="#f43f5e"/><polygon points="44,26 34,20 35,32" fill="#fff1f2"/>
+            <polygon points="96,26 84,20 85,32" fill="#f43f5e"/><polygon points="76,26 86,20 85,32" fill="#fff1f2"/>`;
+        case "head_neko_headphones":
+          return `
+            <path d="M30 42 C30 14, 90 14, 90 42" fill="none" stroke="#39C5BB" stroke-width="4"/>
+            <polygon points="34,24 40,10 48,20" fill="#1e293b" stroke="#ec4899" stroke-width="1.8"/>
+            <polygon points="86,24 80,10 72,20" fill="#1e293b" stroke="#ec4899" stroke-width="1.8"/>
+            <rect x="25" y="38" width="9" height="16" rx="4" fill="#ec4899" stroke="#1e293b" stroke-width="1.5"/>
+            <rect x="86" y="38" width="9" height="16" rx="4" fill="#ec4899" stroke="#1e293b" stroke-width="1.5"/>`;
+        case "head_koro_gradcap":
+          return `
+            <polygon points="60,6 88,16 60,25 32,16" fill="#1e293b" stroke="#fde047" stroke-width="1.5"/>
+            <rect x="46" y="19" width="28" height="6" rx="2" fill="#334155"/>
+            <line x1="84" y1="16" x2="88" y2="30" stroke="#facc15" stroke-width="2.2"/>
+            <circle cx="88" cy="31" r="2.8" fill="#facc15"/>`;
+        case "head_star_halo":
+          return `
+            <ellipse cx="60" cy="12" rx="22" ry="5" fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+            ${renderStarPolygon(40, 12, 4.5, 2, "#fde047")}
+            ${renderStarPolygon(60, 9, 5.5, 2.3, "#f472b6")}
+            ${renderStarPolygon(80, 12, 4.5, 2, "#38bdf8")}`;
+        case "head_pearl_beret":
+          return `
+            <ellipse cx="62" cy="18" rx="23" ry="9" transform="rotate(-8 62 18)" fill="#e11d48" stroke="#9f1239" stroke-width="1.5"/>
+            <circle cx="50" cy="18" r="2" fill="#ffffff"/><circle cx="62" cy="15" r="2.2" fill="#ffffff"/><circle cx="74" cy="17" r="2" fill="#ffffff"/>`;
+        case "head_angel_clips":
+          return `
+            <path d="M22 30 Q14 22 26 20 Q30 16 34 26 Z" fill="#ffffff" stroke="#93c5fd" stroke-width="1.4"/>
+            <path d="M98 30 Q106 22 94 20 Q90 16 86 26 Z" fill="#ffffff" stroke="#93c5fd" stroke-width="1.4"/>`;
+        default:
+          return "";
+      }
+    }
+
+    function renderJewelryBackLayer(jewelryId) {
+      if (jewelryId === "jewel_angel_wings") {
+        return `
+          <path d="M38 74 C10 54, 4 74, 18 88 C8 92, 16 104, 38 96 Z" fill="#ffffff" stroke="#fbcfe8" stroke-width="2"/>
+          <path d="M82 74 C110 54, 116 74, 102 88 C112 92, 104 104, 82 96 Z" fill="#ffffff" stroke="#fbcfe8" stroke-width="2"/>`;
+      }
+      if (jewelryId === "jewel_sakura_pearl") {
+        return `
+          <ellipse cx="16" cy="28" rx="4" ry="2.2" transform="rotate(-30 16 28)" fill="#f9a8d4"/>
+          <ellipse cx="104" cy="24" rx="4" ry="2.2" transform="rotate(25 104 24)" fill="#fbcfe8"/>
+          <ellipse cx="14" cy="84" rx="4" ry="2.2" transform="rotate(40 14 84)" fill="#f472b6"/>
+          <ellipse cx="106" cy="88" rx="4" ry="2.2" transform="rotate(-20 106 88)" fill="#f9a8d4"/>`;
+      }
+      if (jewelryId === "jewel_butterfly_aura") {
+        return `
+          <text x="10" y="34" font-size="13">🦋</text>
+          <text x="96" y="30" font-size="13">🦋</text>
+          <text x="12" y="96" font-size="11">✨</text>`;
+      }
+      return "";
+    }
+
+    function renderJewelryFrontLayer(jewelryId) {
+      switch (jewelryId) {
+        case "jewel_sakura_pearl":
+          return `
+            <path d="M48 69 Q60 76 72 69" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="2,2.5"/>
+            <circle cx="60" cy="75" r="4.2" fill="#ec4899" stroke="#fde047" stroke-width="1.2"/>
+            <circle cx="36" cy="54" r="3" fill="#fbcfe8" stroke="#ec4899" stroke-width="1"/>
+            <circle cx="84" cy="54" r="3" fill="#fbcfe8" stroke="#ec4899" stroke-width="1"/>`;
+        case "jewel_soulgem_heart":
+          return `
+            <path d="M48 68 Q60 77 72 68" fill="none" stroke="#fde047" stroke-width="1.8"/>
+            <path d="M56 75 C56 72, 60 72, 60 74 C60 72, 64 72, 64 75 C64 78, 60 81, 60 81 C60 81, 56 78, 56 75 Z" fill="#ec4899" stroke="#fde047" stroke-width="1.2"/>
+            ${renderStarPolygon(36, 55, 3.8, 1.6, "#fde047")}
+            ${renderStarPolygon(84, 55, 3.8, 1.6, "#fde047")}`;
+        case "jewel_idol_mic":
+          return `
+            <circle cx="36" cy="54" r="2.8" fill="#ec4899"/><circle cx="84" cy="54" r="2.8" fill="#ec4899"/>
+            <g transform="translate(88, 64) rotate(18)">
+              <rect x="3" y="8" width="5" height="18" rx="2" fill="#f472b6" stroke="#1e293b" stroke-width="1.2"/>
+              <circle cx="5.5" cy="5" r="6" fill="#38bdf8" stroke="#fde047" stroke-width="1.5"/>
+            </g>
+            <text x="94" y="42" font-size="13">🎵</text><text x="12" y="40" font-size="12">✨</text>`;
+        case "jewel_frieren_staff":
+          return `
+            <g transform="translate(94, 34) rotate(8)">
+              <line x1="6" y1="12" x2="6" y2="74" stroke="#b45309" stroke-width="3.2" stroke-linecap="round"/>
+              <path d="M-2 14 C-2 2, 14 2, 14 14" fill="none" stroke="#fbbf24" stroke-width="3"/>
+              <circle cx="6" cy="10" r="4" fill="#dc2626" stroke="#fde047" stroke-width="1.2"/>
+            </g>
+            <text x="12" y="42" font-size="13">🌼</text>`;
+        case "jewel_angel_wings":
+          return `
+            <path d="M47 69 Q60 76 73 69" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="2.5,2.5"/>
+            ${renderStarPolygon(60, 75, 4.5, 2, "#fde047")}`;
+        case "jewel_sapphire_star":
+          return `
+            <path d="M48 68 Q60 76 72 68" fill="none" stroke="#bae6fd" stroke-width="2"/>
+            ${renderStarPolygon(60, 76, 5, 2.2, "#0284c7")}
+            <ellipse cx="36" cy="55" rx="2.2" ry="3.8" fill="#38bdf8"/>
+            <ellipse cx="84" cy="55" rx="2.2" ry="3.8" fill="#38bdf8"/>`;
+        case "jewel_red_scarf_key":
+          return `
+            <rect x="40" y="64" width="40" height="11" rx="5.5" fill="#dc2626" stroke="#991b1b" stroke-width="1.4"/>
+            <path d="M66 72 L72 90 L63 90 Z" fill="#dc2626"/>
+            <line x1="60" y1="75" x2="60" y2="87" stroke="#fbbf24" stroke-width="2.2"/>
+            <circle cx="60" cy="89" r="3.2" fill="none" stroke="#fbbf24" stroke-width="2"/>`;
+        case "jewel_strawberry_ribbon":
+          return `
+            <rect x="49" y="66" width="22" height="5" rx="2.5" fill="#ffffff" stroke="#fda4af" stroke-width="1.2"/>
+            <circle cx="60" cy="73" r="4" fill="#e11d48"/>
+            <circle cx="36" cy="55" r="2.8" fill="#e11d48"/><circle cx="84" cy="55" r="2.8" fill="#e11d48"/>`;
+        case "jewel_emerald_brooch":
+          return `
+            <polygon points="52,68 68,68 64,80 56,80" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+            <ellipse cx="60" cy="73" rx="3.5" ry="4.5" fill="#10b981" stroke="#fbbf24" stroke-width="1.4"/>`;
+        case "jewel_koro_sweets":
+          return `
+            <text x="88" y="84" font-size="16">🍮</text>
+            <circle cx="22" cy="30" r="9" fill="none" stroke="#ef4444" stroke-width="2"/>
+            <text x="16" y="34" font-size="9" font-weight="900" fill="#ef4444">100</text>`;
+        case "jewel_anya_peanut":
+          return `
+            <text x="88" y="84" font-size="16">🥜</text>
+            ${renderStarPolygon(20, 30, 7, 3, "#fde047")}`;
+        case "jewel_butterfly_aura":
+          return `
+            <path d="M48 68 Q60 76 72 68" fill="none" stroke="#e9d5ff" stroke-width="2"/>
+            <circle cx="60" cy="75" r="4" fill="#9333ea" stroke="#fde047" stroke-width="1.2"/>`;
+        case "jewel_music_symphony":
+          return `
+            <circle cx="60" cy="74" r="4.2" fill="#39C5BB" stroke="#ffffff" stroke-width="1.4"/>
+            <text x="90" y="38" font-size="13">🎶</text>`;
+        default:
+          return "";
+      }
+    }
+
+    function renderMascotHead(kind) {
+      if (kind === "cinna") {
+        return `
+          <ellipse cx="24" cy="50" rx="12" ry="22" transform="rotate(24 24 50)" fill="#ffffff" stroke="#7dd3fc" stroke-width="2.4"/>
+          <ellipse cx="96" cy="50" rx="12" ry="22" transform="rotate(-24 96 50)" fill="#ffffff" stroke="#7dd3fc" stroke-width="2.4"/>
+          <ellipse cx="60" cy="46" rx="25" ry="20" fill="#ffffff" stroke="#7dd3fc" stroke-width="2.4"/>
+          <ellipse cx="49" cy="46" rx="3.4" ry="4.4" fill="#0284c7"/><ellipse cx="71" cy="46" rx="3.4" ry="4.4" fill="#0284c7"/>
+          <circle cx="48" cy="44.5" r="1.3" fill="#ffffff"/><circle cx="70" cy="44.5" r="1.3" fill="#ffffff"/>
+          <ellipse cx="42" cy="51" rx="4" ry="2.2" fill="#f9a8d4"/><ellipse cx="78" cy="51" rx="4" ry="2.2" fill="#f9a8d4"/>
+          <path d="M55 50 Q57.5 53 60 50 Q62.5 53 65 50" stroke="#0284c7" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+      }
+      if (kind === "melody") {
+        return `
+          <ellipse cx="44" cy="20" rx="8" ry="17" transform="rotate(-8 44 20)" fill="#f472b6"/>
+          <ellipse cx="76" cy="21" rx="8" ry="17" transform="rotate(12 76 21)" fill="#f472b6"/>
+          <ellipse cx="60" cy="47" rx="26" ry="22" fill="#f472b6"/>
+          <ellipse cx="60" cy="50" rx="19" ry="15" fill="#ffffff"/>
+          <circle cx="75" cy="31" r="6" fill="#fff1f2" stroke="#f43f5e" stroke-width="1.4"/><circle cx="75" cy="31" r="2.5" fill="#facc15"/>
+          <ellipse cx="51" cy="49" rx="2.6" ry="3.5" fill="#334155"/><ellipse cx="69" cy="49" rx="2.6" ry="3.5" fill="#334155"/>
+          <ellipse cx="60" cy="52" rx="2.8" ry="2" fill="#facc15"/>`;
+      }
+      if (kind === "purin") {
+        return `
+          <ellipse cx="30" cy="48" rx="9" ry="16" transform="rotate(20 30 48)" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+          <ellipse cx="90" cy="48" rx="9" ry="16" transform="rotate(-20 90 48)" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+          <ellipse cx="60" cy="48" rx="25" ry="21" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+          <ellipse cx="60" cy="27" rx="16" ry="6" fill="#78350f"/>
+          <circle cx="50" cy="47" r="2.6" fill="#451a03"/><circle cx="70" cy="47" r="2.6" fill="#451a03"/>
+          <path d="M54 52 Q57 55 60 51 Q63 55 66 52" stroke="#78350f" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+      }
+      if (kind === "twins") {
+        return `
+          ${renderStarPolygon(60, 44, 34, 16, "#fef08a")}
+          <circle cx="49" cy="47" r="13" fill="#fff1f2"/><path d="M36 44 C38 31, 60 31, 62 44 Z" fill="#38bdf8"/>
+          <circle cx="71" cy="47" r="13" fill="#fff1f2"/><path d="M58 44 C60 31, 82 31, 84 44 Z" fill="#f472b6"/>
+          <circle cx="45" cy="48" r="1.8" fill="#334155"/><circle cx="53" cy="48" r="1.8" fill="#334155"/>
+          <circle cx="67" cy="48" r="1.8" fill="#334155"/><circle cx="75" cy="48" r="1.8" fill="#334155"/>`;
+      }
+      if (kind === "pochacco") {
+        return `
+          <ellipse cx="32" cy="38" rx="6.5" ry="16" transform="rotate(28 32 38)" fill="#1e293b"/>
+          <ellipse cx="88" cy="38" rx="6.5" ry="16" transform="rotate(-28 88 38)" fill="#1e293b"/>
+          <ellipse cx="60" cy="47" rx="23" ry="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.2"/>
+          <path d="M60 27 L60 20 M56 28 L53 22 M64 28 L67 22" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="51" cy="46" r="2.6" fill="#1e293b"/><circle cx="69" cy="46" r="2.6" fill="#1e293b"/>
+          <ellipse cx="60" cy="50" rx="3.2" ry="2.2" fill="#1e293b"/>`;
+      }
+      if (kind === "kitty") {
+        return `
+          <polygon points="36,35 40,17 54,29" fill="#ffffff" stroke="#fda4af" stroke-width="2.2"/>
+          <polygon points="84,35 80,17 66,29" fill="#ffffff" stroke="#fda4af" stroke-width="2.2"/>
+          <ellipse cx="60" cy="47" rx="25" ry="20" fill="#ffffff" stroke="#fda4af" stroke-width="2.2"/>
+          <ellipse cx="71" cy="28" rx="7" ry="5" fill="#f43f5e"/><ellipse cx="83" cy="31" rx="7" ry="5" fill="#f43f5e"/><circle cx="77" cy="29.5" r="4" fill="#fb7185"/>
+          <ellipse cx="49" cy="47" rx="2.6" ry="3.5" fill="#1e293b"/><ellipse cx="71" cy="47" rx="2.6" ry="3.5" fill="#1e293b"/>
+          <ellipse cx="60" cy="51" rx="3" ry="2" fill="#facc15"/>`;
+      }
+      if (kind === "koro" || kind === "koro_pink") {
+        const faceFill = kind === "koro_pink" ? "#fbcfe8" : "#fde047";
+        return `
+          <circle cx="60" cy="45" r="23" fill="${faceFill}" stroke="#ca8a04" stroke-width="2.2"/>
+          <circle cx="50" cy="39" r="2.5" fill="#1e293b"/><circle cx="70" cy="39" r="2.5" fill="#1e293b"/>
+          <ellipse cx="42" cy="45" rx="4" ry="2.4" fill="#f472b6" opacity="0.65"/><ellipse cx="78" cy="45" rx="4" ry="2.4" fill="#f472b6" opacity="0.65"/>
+          <path d="M42 48 Q60 63 78 48 Q60 54 42 48 Z" fill="#ffffff" stroke="#1e293b" stroke-width="1.6"/>
+          <line x1="51" y1="50" x2="51" y2="55" stroke="#1e293b" stroke-width="1.3"/>
+          <line x1="60" y1="51" x2="60" y2="56" stroke="#1e293b" stroke-width="1.3"/>
+          <line x1="69" y1="50" x2="69" y2="55" stroke="#1e293b" stroke-width="1.3"/>`;
+      }
+      if (kind === "piano") {
+        return `
+          <circle cx="44" cy="28" r="9" fill="#fbcfe8"/><circle cx="60" cy="25" r="10" fill="#fbcfe8"/><circle cx="76" cy="28" r="9" fill="#fbcfe8"/>
+          <ellipse cx="34" cy="47" rx="7" ry="12" fill="#f9a8d4"/><ellipse cx="86" cy="47" rx="7" ry="12" fill="#f9a8d4"/>
+          <ellipse cx="60" cy="48" rx="22" ry="18" fill="#fff1f2" stroke="#f9a8d4" stroke-width="2"/>
+          <circle cx="50" cy="47" r="2.6" fill="#334155"/><circle cx="70" cy="47" r="2.6" fill="#334155"/>
+          <ellipse cx="60" cy="50" rx="2.6" ry="1.8" fill="#facc15"/>`;
+      }
+      if (kind === "hangyodon") {
+        return `
+          <path d="M55 20 Q60 12 65 20 Z" fill="#f472b6"/>
+          <ellipse cx="60" cy="46" rx="23" ry="21" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+          <circle cx="50" cy="42" r="5.5" fill="#ffffff"/><circle cx="70" cy="42" r="5.5" fill="#ffffff"/>
+          <circle cx="50" cy="42" r="2.2" fill="#1e293b"/><circle cx="70" cy="42" r="2.2" fill="#1e293b"/>
+          <ellipse cx="60" cy="53" rx="8" ry="4.5" fill="#f472b6"/>`;
+      }
+      if (kind === "kyubey") {
+        return `
+          <ellipse cx="32" cy="28" rx="7" ry="18" transform="rotate(-18 32 28)" fill="#ffffff" stroke="#fbcfe8" stroke-width="2"/>
+          <ellipse cx="88" cy="28" rx="7" ry="18" transform="rotate(18 88 28)" fill="#ffffff" stroke="#fbcfe8" stroke-width="2"/>
+          <circle cx="26" cy="40" r="5" fill="none" stroke="#fbbf24" stroke-width="2.2"/><circle cx="94" cy="40" r="5" fill="none" stroke="#fbbf24" stroke-width="2.2"/>
+          <ellipse cx="60" cy="47" rx="22" ry="18" fill="#ffffff" stroke="#fbcfe8" stroke-width="2"/>
+          <circle cx="50" cy="46" r="3.2" fill="#e11d48"/><circle cx="70" cy="46" r="3.2" fill="#e11d48"/>
+          <path d="M56 52 Q58 55 60 52 Q62 55 64 52" stroke="#f43f5e" stroke-width="1.8" fill="none"/>`;
+      }
+      if (kind === "bond") {
+        return `
+          <ellipse cx="34" cy="48" rx="8" ry="15" transform="rotate(14 34 48)" fill="#334155"/>
+          <ellipse cx="86" cy="48" rx="8" ry="15" transform="rotate(-14 86 48)" fill="#334155"/>
+          <circle cx="60" cy="46" r="23" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+          <circle cx="50" cy="44" r="2.8" fill="#1e293b"/><circle cx="70" cy="44" r="2.8" fill="#1e293b"/>
+          <ellipse cx="60" cy="49" rx="4" ry="3" fill="#1e293b"/>`;
+      }
+      // chiikawa default cute bear-hamster
+      return `
+        <circle cx="41" cy="27" r="7.5" fill="#ffffff" stroke="#fda4af" stroke-width="2"/>
+        <circle cx="79" cy="27" r="7.5" fill="#ffffff" stroke="#fda4af" stroke-width="2"/>
+        <ellipse cx="60" cy="47" rx="24" ry="20" fill="#ffffff" stroke="#fda4af" stroke-width="2"/>
+        <circle cx="50" cy="45" r="3" fill="#1e293b"/><circle cx="70" cy="45" r="3" fill="#1e293b"/>
+        <ellipse cx="42" cy="50" rx="4.2" ry="2.4" fill="#f9a8d4"/><ellipse cx="78" cy="50" rx="4.2" ry="2.4" fill="#f9a8d4"/>
+        <path d="M56 50 Q58 53 60 50 Q62 53 64 50" stroke="#1e293b" stroke-width="1.8" fill="none"/>`;
+    }
+
+    function renderHumanBackHair(cfg) {
+      const h = cfg.hair || "#39C5BB";
+      const h2 = cfg.hair2 || h;
+      if (cfg.backHair === "twintails") {
+        return `
+          <path d="M36 32 C12 44, 8 78, 18 104 C26 98, 30 70, 36 44 Z" fill="${h}"/>
+          <path d="M84 32 C108 44, 112 78, 102 104 C94 98, 90 70, 84 44 Z" fill="${h}"/>
+          <path d="M15 82 C16 94, 20 104, 24 98 C25 90, 22 82, 15 82 Z" fill="${h2}" opacity="0.65"/>
+          <path d="M105 82 C104 94, 100 104, 96 98 C95 90, 98 82, 105 82 Z" fill="${h2}" opacity="0.65"/>`;
+      }
+      if (cfg.backHair === "hightwin") {
+        return `
+          <path d="M36 26 C12 20, 8 56, 22 72 C28 64, 30 46, 38 34 Z" fill="${h}"/>
+          <path d="M84 26 C108 20, 112 56, 98 72 C92 64, 90 46, 82 34 Z" fill="${h}"/>`;
+      }
+      if (cfg.backHair === "sidetail") {
+        return `
+          <path d="M34 32 L28 96 L90 96 L86 32 Z" fill="${h}"/>
+          <path d="M84 30 C108 34, 112 68, 98 86 C90 78, 88 54, 82 38 Z" fill="${h2}"/>`;
+      }
+      if (cfg.backHair === "long") {
+        return `<path d="M33 30 C26 56, 24 88, 28 106 L92 106 C96 88, 94 56, 87 30 Z" fill="${h}"/>`;
+      }
+      if (cfg.backHair === "shorttwin") {
+        return `
+          <ellipse cx="28" cy="52" rx="8" ry="15" transform="rotate(20 28 52)" fill="${h}"/>
+          <ellipse cx="92" cy="52" rx="8" ry="15" transform="rotate(-20 92 52)" fill="${h}"/>`;
+      }
+      if (cfg.backHair === "anya") {
+        return `<ellipse cx="60" cy="46" rx="28" ry="23" fill="${h}"/>`;
+      }
+      if (cfg.backHair === "curly") {
+        return `
+          <circle cx="30" cy="42" r="14" fill="${h}"/><circle cx="90" cy="42" r="14" fill="${h}"/>
+          <circle cx="28" cy="60" r="12" fill="${h}"/><circle cx="92" cy="60" r="12" fill="${h}"/>`;
+      }
+      return `<ellipse cx="60" cy="42" rx="26" ry="22" fill="${h}"/>`;
+    }
+
+    function renderHumanHeadAndFace(cfg) {
+      const h = cfg.hair || "#39C5BB";
+      const eyeColor = cfg.eyes || "#0f766e";
+      const elfEars = cfg.elf ? `
+        <polygon points="36,44 22,40 36,53" fill="#fff1f2" stroke="#fbcfe8" stroke-width="1.5"/>
+        <polygon points="84,44 98,40 84,53" fill="#fff1f2" stroke="#fbcfe8" stroke-width="1.5"/>` : "";
+
+      let ties = "";
+      if (cfg.tie === "miku_sq") {
+        ties = `<rect x="27" y="25" width="10" height="10" rx="2.5" transform="rotate(-18 32 30)" fill="#ec4899" stroke="#1e293b" stroke-width="1.4"/>
+                <rect x="83" y="25" width="10" height="10" rx="2.5" transform="rotate(18 88 30)" fill="#ec4899" stroke="#1e293b" stroke-width="1.4"/>`;
+      } else if (cfg.tie === "cherry") {
+        ties = `<circle cx="30" cy="30" r="4" fill="#e11d48"/><circle cx="36" cy="32" r="4" fill="#f43f5e"/>
+                <circle cx="90" cy="30" r="4" fill="#e11d48"/><circle cx="84" cy="32" r="4" fill="#f43f5e"/>`;
+      } else if (cfg.tie === "snow") {
+        ties = `${renderStarPolygon(32, 30, 6, 2.5, "#38bdf8")}${renderStarPolygon(88, 30, 6, 2.5, "#38bdf8")}`;
+      } else if (cfg.tie === "ribbon_red") {
+        ties = `<polygon points="26,28 36,24 35,34" fill="#e11d48"/><polygon points="94,28 84,24 85,34" fill="#e11d48"/>`;
+      } else if (cfg.tie === "anya_cones") {
+        ties = `<polygon points="36,26 42,12 48,26" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5"/>
+                <polygon points="72,26 78,12 84,26" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5"/>`;
+      }
+
+      let leftPupil = `<circle cx="47.5" cy="46" r="1.8" fill="#ffffff"/><circle cx="50.5" cy="49.5" r="1" fill="#ffffff"/>`;
+      let rightPupil = `<circle cx="70.5" cy="46" r="1.8" fill="#ffffff"/><circle cx="73.5" cy="49.5" r="1" fill="#ffffff"/>`;
+      if (cfg.pupil === "star_both") {
+        leftPupil = renderStarPolygon(49, 48, 3.8, 1.5, "#ffffff");
+        rightPupil = renderStarPolygon(71, 48, 3.8, 1.5, "#ffffff");
+      } else if (cfg.pupil === "star_left") {
+        leftPupil = renderStarPolygon(49, 48, 3.8, 1.5, "#ffffff");
+      } else if (cfg.pupil === "star_right") {
+        rightPupil = renderStarPolygon(71, 48, 3.8, 1.5, "#ffffff");
+      } else if (cfg.pupil === "flower") {
+        leftPupil = `<circle cx="49" cy="48" r="2.3" fill="#fde047"/><circle cx="47.5" cy="45.8" r="1.5" fill="#ffffff"/>`;
+        rightPupil = `<circle cx="71" cy="48" r="2.3" fill="#fde047"/><circle cx="69.5" cy="45.8" r="1.5" fill="#ffffff"/>`;
+      }
+
+      const mouth = cfg.smile === "open"
+        ? `<path d="M55 55 Q60 62 65 55 Z" fill="#fb7185"/>`
+        : cfg.pupil === "cool"
+          ? `<path d="M56 56 L64 55" stroke="#475569" stroke-width="2" stroke-linecap="round"/>`
+          : `<path d="M55.5 55 Q60 59 64.5 55" stroke="#e11d48" stroke-width="2.1" fill="none" stroke-linecap="round"/>`;
+
+      return `
+        ${elfEars}
+        <rect x="55" y="62" width="10" height="9" rx="4" fill="#ffe4e6"/>
+        <circle cx="60" cy="45" r="22.5" fill="#fff1f2" stroke="#fecdd3" stroke-width="1.2"/>
+        <path d="M36 42 C38 19, 82 19, 84 42 C78 32, 70 43, 60 42 C50 43, 42 32, 36 42 Z" fill="${h}"/>
+        <path d="M46 28 Q60 24 74 28" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.45" stroke-linecap="round"/>
+        ${ties}
+        <ellipse cx="49" cy="48" rx="4.5" ry="5.3" fill="${eyeColor}"/>
+        <ellipse cx="71" cy="48" rx="4.5" ry="5.3" fill="${eyeColor}"/>
+        <path d="M43.5 44 Q49 41 54 44" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+        <path d="M66 44 Q71 41 76.5 44" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+        ${leftPupil}${rightPupil}
+        <ellipse cx="41.5" cy="53.5" rx="3.8" ry="2" fill="${cfg.blush || '#f472b6'}" opacity="0.55"/>
+        <ellipse cx="78.5" cy="53.5" rx="3.8" ry="2" fill="${cfg.blush || '#f472b6'}" opacity="0.55"/>
+        ${mouth}`;
+    }
+
+    function renderChibiSVG(opts = {}) {
+      const avatarObj = AVATAR_CATALOG.find(a => a.id === opts.avatar) || AVATAR_CATALOG[1];
+      const cfg = opts.customCfg || avatarObj.cfg;
+      const outfitId = opts.outfit || "outfit_default";
+      const headwearId = opts.headwear || "head_none";
+      const jewelryId = opts.jewelry || "jewel_none";
+      const bgFill = opts.bg || cfg.bg || "#fdf2f8";
+      const cornerBadge = opts.badge ? `<text x="88" y="28" font-size="18">${opts.badge}</text>` : "";
+
+      const backHair = cfg.type === "human" ? renderHumanBackHair(cfg) : "";
+      const headLayer = cfg.type === "human" ? renderHumanHeadAndFace(cfg) : renderMascotHead(cfg.mascotKind);
+
+      return `<svg viewBox="0 0 120 120" class="w-full h-full">
+        <circle cx="60" cy="60" r="56" fill="${bgFill}"/>
+        ${renderJewelryBackLayer(jewelryId)}
+        ${backHair}
+        ${renderOutfitLayer(outfitId)}
+        ${headLayer}
+        ${renderJewelryFrontLayer(jewelryId)}
+        ${renderHeadwearLayer(headwearId)}
+        ${cornerBadge}
+      </svg>`;
+    }
+
+    // Populate backward-compatible CHARACTER_SVGS map for all 150 curriculum stages + new avatars
+    const CHARACTER_SVGS = {};
+    AVATAR_CATALOG.forEach(av => {
+      const defaultOutfitMap = {
+        sakura_miku: "outfit_sakura_lolita",
+        miku: "outfit_default",
+        snow_miku: "outfit_snow_princess",
+        strawberry_miku: "outfit_strawberry_cake",
+        ai_hoshino: "outfit_idol_stage",
+        ruby_hoshino: "outfit_idol_stage",
+        kana_arima: "outfit_strawberry_cake",
+        frieren: "outfit_frieren_mage",
+        fern: "outfit_moonlight_gala",
+        madoka: "outfit_madoka_rose",
+        homura: "outfit_moonlight_gala",
+        korosensei: "outfit_kunugigaoka",
+        nagisa: "outfit_kunugigaoka",
+        levi_chibi: "outfit_aot_cloak",
+        mikasa_chibi: "outfit_aot_cloak",
+        anya: "outfit_eden_academy",
+        cinnamoroll: "outfit_cinna_cloud",
+        mymelody: "outfit_melody_berry",
+        pompompurin: "outfit_macaron_chef",
+        twinstars: "outfit_snow_princess",
+        pochacco: "outfit_default",
+        hellokitty: "outfit_strawberry_cake"
+      };
+      CHARACTER_SVGS[av.id] = {
+        name: av.name,
+        cheer: av.cheer,
+        svg: renderChibiSVG({ avatar: av.id, outfit: defaultOutfitMap[av.id] || "outfit_default" })
+      };
+    });
+
+    const STICKER_CATALOG = [
+  {
+    "id": "s1",
+    "buddy": "miku",
+    "title": "鋼琴獨奏初音",
+    "rarity": "SSR",
+    "desc": "She plays the piano after school! 琴音閃耀全場～",
+    "series": "vocaloid",
+    "look": {
+      "avatar": "miku",
+      "outfit": "outfit_default",
+      "headwear": "head_neko_headphones",
+      "jewelry": "jewel_idol_mic",
+      "badge": "🎤"
+    }
+  },
+  {
+    "id": "s2",
+    "buddy": "cinnamoroll",
+    "title": "麵包烘焙大耳狗",
+    "rarity": "SSR",
+    "desc": "I'm going to the bakery! 剛出爐的可頌最香了！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "cinnamoroll",
+      "outfit": "outfit_cinna_cloud",
+      "headwear": "head_angel_clips",
+      "jewelry": "jewel_sapphire_star",
+      "badge": "☁️"
+    }
+  },
+  {
+    "id": "s3",
+    "buddy": "mymelody",
+    "title": "粉紅洋裝美樂蒂",
+    "rarity": "SSR",
+    "desc": "She is wearing a cute pink dress! 時尚滿分！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "mymelody",
+      "outfit": "outfit_strawberry_cake",
+      "headwear": "head_sakura_crown",
+      "jewelry": "jewel_strawberry_ribbon",
+      "badge": "🍓"
+    }
+  },
+  {
+    "id": "s4",
+    "buddy": "twinstars",
+    "title": "植物花園雙子星",
+    "rarity": "SSR",
+    "desc": "行光合作用吸收二氧化碳、釋放滿滿氧氣！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "twinstars",
+      "outfit": "outfit_moonlight_gala",
+      "headwear": "head_star_halo",
+      "jewelry": "jewel_sapphire_star",
+      "badge": "🌟"
+    }
+  },
+  {
+    "id": "s5",
+    "buddy": "pompompurin",
+    "title": "小小理財家布丁狗",
+    "rarity": "SR",
+    "desc": "分辨需要與想要，養成記帳儲蓄好習慣！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "pompompurin",
+      "outfit": "outfit_macaron_chef",
+      "headwear": "head_none",
+      "jewelry": "jewel_koro_sweets",
+      "badge": "🍮"
+    }
+  },
+  {
+    "id": "s6",
+    "buddy": "pochacco",
+    "title": "灌籃高手帕恰狗",
+    "rarity": "SR",
+    "desc": "I play basketball after school! 活力百分百！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "pochacco",
+      "outfit": "outfit_kunugigaoka",
+      "headwear": "head_none",
+      "jewelry": "jewel_emerald_brooch",
+      "badge": "🐾"
+    }
+  },
+  {
+    "id": "s7",
+    "buddy": "hellokitty",
+    "title": "溫柔小護士Kitty",
+    "rarity": "SR",
+    "desc": "What's wrong? Take care and get well soon!",
+    "series": "sanrio",
+    "look": {
+      "avatar": "hellokitty",
+      "outfit": "outfit_melody_berry",
+      "headwear": "head_diamond_tiara",
+      "jewelry": "jewel_soulgem_heart",
+      "badge": "🎀"
+    }
+  },
+  {
+    "id": "s8",
+    "buddy": "miku",
+    "title": "耳機聽歌初音",
+    "rarity": "SR",
+    "desc": "I listen to music in my free time! 🎵",
+    "series": "vocaloid",
+    "look": {
+      "avatar": "miku",
+      "outfit": "outfit_default",
+      "headwear": "head_none",
+      "jewelry": "jewel_music_symphony",
+      "badge": "🎵"
+    }
+  },
+  {
+    "id": "s9",
+    "buddy": "cinnamoroll",
+    "title": "大稻埕茶香大耳狗",
+    "rarity": "SR",
+    "desc": "認識清代開港通商的台灣烏龍茶傳奇！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "cinnamoroll",
+      "outfit": "outfit_cinna_cloud",
+      "headwear": "head_none",
+      "jewelry": "jewel_strawberry_ribbon",
+      "badge": "🧋"
+    }
+  },
+  {
+    "id": "s10",
+    "buddy": "mymelody",
+    "title": "保溫瓶科學美樂蒂",
+    "rarity": "SR",
+    "desc": "真空夾層阻絕傳導與對流、鍍銀反射輻射！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "mymelody",
+      "outfit": "outfit_macaron_chef",
+      "headwear": "head_sakura_crown",
+      "jewelry": "jewel_none",
+      "badge": "🥗"
+    }
+  },
+  {
+    "id": "s11",
+    "buddy": "miku",
+    "title": "鐵道領航員初音",
+    "rarity": "SSR",
+    "desc": "從劉銘傳鐵路到日治縱貫鐵路全線通車！",
+    "series": "vocaloid",
+    "look": {
+      "avatar": "miku",
+      "outfit": "outfit_idol_stage",
+      "headwear": "head_neko_headphones",
+      "jewelry": "jewel_music_symphony",
+      "badge": "🎹"
+    }
+  },
+  {
+    "id": "s12",
+    "buddy": "twinstars",
+    "title": "寶石礦物雙子星",
+    "rarity": "SR",
+    "desc": "鑽石最硬、滑石最軟，大理岩滴鹽酸冒氣泡！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "twinstars",
+      "outfit": "outfit_snow_princess",
+      "headwear": "head_star_halo",
+      "jewelry": "jewel_sapphire_star",
+      "badge": "✨"
+    }
+  },
+  {
+    "id": "s13",
+    "buddy": "pompompurin",
+    "title": "嘉南大圳布丁狗",
+    "rarity": "SR",
+    "desc": "認識八田與一與烏山頭水庫的農業奇蹟！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "pompompurin",
+      "outfit": "outfit_aot_cloak",
+      "headwear": "head_koro_gradcap",
+      "jewelry": "jewel_red_scarf_key",
+      "badge": "⛵"
+    }
+  },
+  {
+    "id": "s14",
+    "buddy": "pochacco",
+    "title": "郵局送信帕恰狗",
+    "rarity": "R",
+    "desc": "He is going to the post office!",
+    "series": "sanrio",
+    "look": {
+      "avatar": "pochacco",
+      "outfit": "outfit_default",
+      "headwear": "head_angel_clips",
+      "jewelry": "jewel_none",
+      "badge": "🚲"
+    }
+  },
+  {
+    "id": "s15",
+    "buddy": "hellokitty",
+    "title": "百貨購物Kitty",
+    "rarity": "R",
+    "desc": "How much is this coat? 體驗摩登林百貨！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "hellokitty",
+      "outfit": "outfit_strawberry_cake",
+      "headwear": "head_pearl_beret",
+      "jewelry": "jewel_none",
+      "badge": "🍎"
+    }
+  },
+  {
+    "id": "s16",
+    "buddy": "cinnamoroll",
+    "title": "彈簧秤實驗大耳狗",
+    "rarity": "R",
+    "desc": "在彈性限度內，受力越大伸長量越長！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "cinnamoroll",
+      "outfit": "outfit_snow_princess",
+      "headwear": "head_frieren_wreath",
+      "jewelry": "jewel_sakura_pearl",
+      "badge": "🌈"
+    }
+  },
+  {
+    "id": "s17",
+    "buddy": "mymelody",
+    "title": "蒲公英飛行美樂蒂",
+    "rarity": "R",
+    "desc": "乘著風力傳播種子，飛向夢想花園！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "mymelody",
+      "outfit": "outfit_melody_berry",
+      "headwear": "head_sakura_crown",
+      "jewelry": "jewel_sakura_pearl",
+      "badge": "🌷"
+    }
+  },
+  {
+    "id": "s18",
+    "buddy": "miku",
+    "title": "環保回收初音",
+    "rarity": "R",
+    "desc": "寶特瓶回收再利用，變身時尚環保衣！",
+    "series": "vocaloid",
+    "look": {
+      "avatar": "miku",
+      "outfit": "outfit_default",
+      "headwear": "head_neko_headphones",
+      "jewelry": "jewel_none",
+      "badge": "🎧"
+    }
+  },
+  {
+    "id": "s19",
+    "buddy": "twinstars",
+    "title": "熱氣球對流雙子星",
+    "rarity": "R",
+    "desc": "熱空氣上升、冷空氣下降，飛向藍天！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "twinstars",
+      "outfit": "outfit_moonlight_gala",
+      "headwear": "head_star_halo",
+      "jewelry": "jewel_butterfly_aura",
+      "badge": "🪐"
+    }
+  },
+  {
+    "id": "s20",
+    "buddy": "pompompurin",
+    "title": "防震小達人布丁狗",
+    "rarity": "R",
+    "desc": "抗震保命三步驟：趴下、掩護、穩住！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "pompompurin",
+      "outfit": "outfit_aot_cloak",
+      "headwear": "head_none",
+      "jewelry": "jewel_emerald_brooch",
+      "badge": "⛰️"
+    }
+  },
+  {
+    "id": "s21",
+    "buddy": "pochacco",
+    "title": "拔河冠軍帕恰狗",
+    "rarity": "R",
+    "desc": "穿上防滑鞋增加摩擦力，贏得拔河勝利！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "pochacco",
+      "outfit": "outfit_cinna_cloud",
+      "headwear": "head_koro_gradcap",
+      "jewelry": "jewel_none",
+      "badge": "🔍"
+    }
+  },
+  {
+    "id": "s22",
+    "buddy": "hellokitty",
+    "title": "世界名畫家Kitty",
+    "rarity": "R",
+    "desc": "認識陳澄波油畫與黃土水《水牛群像》！",
+    "series": "sanrio",
+    "look": {
+      "avatar": "hellokitty",
+      "outfit": "outfit_angel_symphony",
+      "headwear": "head_madoka_ribbons",
+      "jewelry": "jewel_music_symphony",
+      "badge": "🎻"
+    }
+  },
+  {
+    "id": "s23",
+    "buddy": "cinnamoroll",
+    "title": "書店愛書大耳狗",
+    "rarity": "SR",
+    "desc": "I read a book in the bookstore!",
+    "series": "sanrio",
+    "look": {
+      "avatar": "cinnamoroll",
+      "outfit": "outfit_frieren_mage",
+      "headwear": "head_koro_gradcap",
+      "jewelry": "jewel_sapphire_star",
+      "badge": "🧪"
+    }
+  },
+  {
+    "id": "s24",
+    "buddy": "miku",
+    "title": "五下150關榮耀初音",
+    "rarity": "SSR",
+    "desc": "見證喬喬完成五年級下學期全部評量的最高榮耀！",
+    "series": "vocaloid",
+    "look": {
+      "avatar": "miku",
+      "outfit": "outfit_angel_symphony",
+      "headwear": "head_diamond_tiara",
+      "jewelry": "jewel_angel_wings",
+      "badge": "👑"
+    }
+  },
+  {
+    "id": "s25",
+    "series": "vocaloid",
+    "buddy": "sakura_miku",
+    "title": "櫻花初音・春櫻漫舞",
+    "rarity": "UR",
+    "desc": "粉櫻雙馬尾配晶瑩櫻桃髮飾，漫天櫻花瓣為喬喬浪漫應援！",
+    "look": {
+      "avatar": "sakura_miku",
+      "outfit": "outfit_sakura_lolita",
+      "headwear": "head_sakura_crown",
+      "jewelry": "jewel_sakura_pearl",
+      "badge": "🌸"
+    }
+  },
+  {
+    "id": "s26",
+    "series": "vocaloid",
+    "buddy": "snow_miku",
+    "title": "雪初音・北國冰晶精靈",
+    "rarity": "SSR",
+    "desc": "晶亮雪花雙馬尾，陪喬喬冷靜思考、冰雪聰明拿滿分！",
+    "look": {
+      "avatar": "snow_miku",
+      "outfit": "outfit_snow_princess",
+      "headwear": "head_diamond_tiara",
+      "jewelry": "jewel_sapphire_star",
+      "badge": "❄️"
+    }
+  },
+  {
+    "id": "s27",
+    "series": "vocaloid",
+    "buddy": "strawberry_miku",
+    "title": "草莓交響樂初音",
+    "rarity": "SSR",
+    "desc": "十五週年草莓鮮奶油蓬蓬裙初音，甜美歌聲療癒滿分！",
+    "look": {
+      "avatar": "strawberry_miku",
+      "outfit": "outfit_strawberry_cake",
+      "headwear": "head_madoka_ribbons",
+      "jewelry": "jewel_strawberry_ribbon",
+      "badge": "🍓"
+    }
+  },
+  {
+    "id": "s28",
+    "series": "vocaloid",
+    "buddy": "miku",
+    "title": "鏡音鈴・元氣橘子蝴蝶結",
+    "rarity": "SR",
+    "desc": "活力滿滿的金髮大蝴蝶結歌姬，高音應援能量百分百！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "bob",
+        "hair": "#fde047",
+        "hair2": "#f59e0b",
+        "tie": "none",
+        "eyes": "#0284c7",
+        "pupil": "star_both",
+        "blush": "#fb7185",
+        "bg": "#fefce8"
+      },
+      "outfit": "outfit_kunugigaoka",
+      "headwear": "head_madoka_ribbons",
+      "jewelry": "jewel_idol_mic",
+      "badge": "🍊"
+    }
+  },
+  {
+    "id": "s29",
+    "series": "vocaloid",
+    "buddy": "sakura_miku",
+    "title": "巡音流歌・粉紅星海歌姬",
+    "rarity": "SR",
+    "desc": "溫柔成熟的粉紅長髮流歌大姊姊，陪喬喬優雅學英文！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "long",
+        "hair": "#f9a8d4",
+        "hair2": "#db2777",
+        "tie": "none",
+        "eyes": "#0284c7",
+        "pupil": "normal",
+        "blush": "#f472b6",
+        "bg": "#fdf2f8"
+      },
+      "outfit": "outfit_moonlight_gala",
+      "headwear": "head_neko_headphones",
+      "jewelry": "jewel_music_symphony",
+      "badge": "🎶"
+    }
+  },
+  {
+    "id": "s30",
+    "series": "sanrio",
+    "buddy": "mymelody",
+    "title": "小羊彼安諾・棉花糖閨蜜",
+    "rarity": "SSR",
+    "desc": "美樂蒂最要好的軟綿綿粉紅小羊朋友，溫柔幫喬喬拍拍手！",
+    "look": {
+      "customCfg": {
+        "type": "mascot",
+        "mascotKind": "piano",
+        "bg": "#fdf2f8"
+      },
+      "outfit": "outfit_melody_berry",
+      "headwear": "head_sakura_crown",
+      "jewelry": "jewel_strawberry_ribbon",
+      "badge": "🐑"
+    }
+  },
+  {
+    "id": "s31",
+    "series": "sanrio",
+    "buddy": "cinnamoroll",
+    "title": "人魚漢頓・呆萌開心果",
+    "rarity": "SR",
+    "desc": "搞笑又善良的藍綠人魚漢頓，讓讀書時光充滿歡笑！",
+    "look": {
+      "customCfg": {
+        "type": "mascot",
+        "mascotKind": "hangyodon",
+        "bg": "#e0f2fe"
+      },
+      "outfit": "outfit_default",
+      "headwear": "head_koro_gradcap",
+      "jewelry": "jewel_none",
+      "badge": "🫧"
+    }
+  },
+  {
+    "id": "s32",
+    "series": "sanrio",
+    "buddy": "cinnamoroll",
+    "title": "牛奶寶寶 Milk・雲朵小跟班",
+    "rarity": "SR",
+    "desc": "最崇拜大耳狗的超萌小白狗，眨著大眼睛幫喬喬加油！",
+    "look": {
+      "avatar": "cinnamoroll",
+      "outfit": "outfit_macaron_chef",
+      "headwear": "head_star_halo",
+      "jewelry": "jewel_sakura_pearl",
+      "badge": "🍼"
+    }
+  },
+  {
+    "id": "s33",
+    "series": "madoka",
+    "buddy": "madoka",
+    "title": "鹿目圓・圓環之理希望女神",
+    "rarity": "UR",
+    "desc": "展開純白羽翼與粉紅星光，守護喬喬每一個閃耀願望！",
+    "look": {
+      "avatar": "madoka",
+      "outfit": "outfit_angel_symphony",
+      "headwear": "head_madoka_ribbons",
+      "jewelry": "jewel_angel_wings",
+      "badge": "🏹"
+    }
+  },
+  {
+    "id": "s34",
+    "series": "madoka",
+    "buddy": "madoka",
+    "title": "鹿目圓・粉紅薔薇魔法少女",
+    "rarity": "SSR",
+    "desc": "「只要懷抱希望就絕不孤單！」小圓帶著溫柔微笑陪妳闖關！",
+    "look": {
+      "avatar": "madoka",
+      "outfit": "outfit_madoka_rose",
+      "headwear": "head_madoka_ribbons",
+      "jewelry": "jewel_soulgem_heart",
+      "badge": "🌸"
+    }
+  },
+  {
+    "id": "s35",
+    "series": "madoka",
+    "buddy": "homura",
+    "title": "曉美焰・紫晶時光守護者",
+    "rarity": "SSR",
+    "desc": "穿越無數時間線的柔順黑長直小焰，陪妳戰勝所有難題！",
+    "look": {
+      "avatar": "homura",
+      "outfit": "outfit_moonlight_gala",
+      "headwear": "head_fern_butterfly",
+      "jewelry": "jewel_butterfly_aura",
+      "badge": "⏳"
+    }
+  },
+  {
+    "id": "s36",
+    "series": "madoka",
+    "buddy": "madoka",
+    "title": "巴麻美・黃金緞帶下午茶",
+    "rarity": "SR",
+    "desc": "優雅可靠的麻美學姐泡好香甜紅茶與蛋糕犒賞喬喬！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "hightwin",
+        "hair": "#fde047",
+        "hair2": "#eab308",
+        "tie": "none",
+        "eyes": "#d97706",
+        "pupil": "flower",
+        "blush": "#fda4af",
+        "bg": "#fefce8"
+      },
+      "outfit": "outfit_macaron_chef",
+      "headwear": "head_pearl_beret",
+      "jewelry": "jewel_soulgem_heart",
+      "badge": "☕"
+    }
+  },
+  {
+    "id": "s37",
+    "series": "madoka",
+    "buddy": "homura",
+    "title": "沙耶香＆杏子・紅藍雙星拍檔",
+    "rarity": "SR",
+    "desc": "正義感滿滿的藍色劍士與愛吃蘋果的紅髮搭檔一起應援！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "sidetail",
+        "hair": "#e11d48",
+        "hair2": "#be123c",
+        "tie": "ribbon_red",
+        "eyes": "#be123c",
+        "pupil": "star_left",
+        "blush": "#fda4af",
+        "bg": "#fff1f2"
+      },
+      "outfit": "outfit_miko_sakura",
+      "headwear": "head_madoka_ribbons",
+      "jewelry": "jewel_strawberry_ribbon",
+      "badge": "🍎"
+    }
+  },
+  {
+    "id": "s38",
+    "series": "madoka",
+    "buddy": "mymelody",
+    "title": "丘比・大耳星光契約精靈",
+    "rarity": "R",
+    "desc": "搖著蓬鬆尾巴：「喬喬今天也要來完成每日三關任務嗎？」",
+    "look": {
+      "customCfg": {
+        "type": "mascot",
+        "mascotKind": "kyubey",
+        "bg": "#fff1f2"
+      },
+      "outfit": "outfit_madoka_rose",
+      "headwear": "head_star_halo",
+      "jewelry": "jewel_soulgem_heart",
+      "badge": "✨"
+    }
+  },
+  {
+    "id": "s39",
+    "series": "ansatsu",
+    "buddy": "korosensei",
+    "title": "殺老師・20馬赫滿分大紅圈",
+    "rarity": "UR",
+    "desc": "「蠕呼呼呼～喬喬這關表現太完美啦！蓋上100分特大紅圈！」",
+    "look": {
+      "avatar": "korosensei",
+      "outfit": "outfit_kunugigaoka",
+      "headwear": "head_koro_gradcap",
+      "jewelry": "jewel_koro_sweets",
+      "badge": "⭕"
+    }
+  },
+  {
+    "id": "s40",
+    "series": "ansatsu",
+    "buddy": "korosensei",
+    "title": "殺老師・粉紅臉頰甜點控",
+    "rarity": "SSR",
+    "desc": "吃到美味布丁整張臉變成幸福粉紅色的超萌殺老師！",
+    "look": {
+      "customCfg": {
+        "type": "mascot",
+        "mascotKind": "koro_pink",
+        "bg": "#fdf2f8"
+      },
+      "outfit": "outfit_macaron_chef",
+      "headwear": "head_koro_gradcap",
+      "jewelry": "jewel_koro_sweets",
+      "badge": "🍨"
+    }
+  },
+  {
+    "id": "s41",
+    "series": "ansatsu",
+    "buddy": "nagisa",
+    "title": "潮田渚・水藍雙馬尾筆記王",
+    "rarity": "SSR",
+    "desc": "細心溫柔的小渚幫喬喬把康軒必考重點全部畫好星星囉！",
+    "look": {
+      "avatar": "nagisa",
+      "outfit": "outfit_kunugigaoka",
+      "headwear": "head_none",
+      "jewelry": "jewel_sapphire_star",
+      "badge": "📘"
+    }
+  },
+  {
+    "id": "s42",
+    "series": "ansatsu",
+    "buddy": "kana_arima",
+    "title": "赤羽業・草莓牛奶滿分天才",
+    "rarity": "SSR",
+    "desc": "一邊悠閒喝著草莓牛奶、一邊拿下全學年第一名的帥氣業君！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "undercut",
+        "hair": "#dc2626",
+        "hair2": "#991b1b",
+        "tie": "none",
+        "eyes": "#d97706",
+        "pupil": "cool",
+        "blush": "#fca5a5",
+        "bg": "#fef2f2"
+      },
+      "outfit": "outfit_kunugigaoka",
+      "headwear": "head_none",
+      "jewelry": "jewel_strawberry_ribbon",
+      "badge": "🍓"
+    }
+  },
+  {
+    "id": "s43",
+    "series": "ansatsu",
+    "buddy": "nagisa",
+    "title": "茅野楓・超巨大布丁應援",
+    "rarity": "SR",
+    "desc": "綠髮元氣少女小楓端出夢幻巨無霸焦糖布丁為喬喬慶功！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "shorttwin",
+        "hair": "#84cc16",
+        "hair2": "#4d7c0f",
+        "tie": "ribbon_red",
+        "eyes": "#ca8a04",
+        "pupil": "flower",
+        "blush": "#fda4af",
+        "bg": "#f7fee7"
+      },
+      "outfit": "outfit_kunugigaoka",
+      "headwear": "head_none",
+      "jewelry": "jewel_koro_sweets",
+      "badge": "🍮"
+    }
+  },
+  {
+    "id": "s44",
+    "series": "aot",
+    "buddy": "levi_chibi",
+    "title": "Q版里維兵長・打掃妖精反差萌",
+    "rarity": "UR",
+    "desc": "把錯題像灰塵一樣徹底掃乾淨！超認真又超可愛的Q版兵長！",
+    "look": {
+      "avatar": "levi_chibi",
+      "outfit": "outfit_aot_cloak",
+      "headwear": "head_angel_clips",
+      "jewelry": "jewel_emerald_brooch",
+      "badge": "🧹"
+    }
+  },
+  {
+    "id": "s45",
+    "series": "aot",
+    "buddy": "mikasa_chibi",
+    "title": "Q版米卡莎・溫暖紅圍巾守護",
+    "rarity": "SSR",
+    "desc": "圍著最珍貴的紅圍巾，給喬喬滿滿勇氣與百分之百的守護！",
+    "look": {
+      "avatar": "mikasa_chibi",
+      "outfit": "outfit_aot_cloak",
+      "headwear": "head_none",
+      "jewelry": "jewel_red_scarf_key",
+      "badge": "🧣"
+    }
+  },
+  {
+    "id": "s46",
+    "series": "aot",
+    "buddy": "levi_chibi",
+    "title": "Q版艾連・翠綠眼眸自由之翼",
+    "rarity": "SSR",
+    "desc": "戴著地下室金鑰匙，閃耀翠綠雙眼迎向自由寬廣的大海！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "bob",
+        "hair": "#451a03",
+        "hair2": "#27272a",
+        "tie": "none",
+        "eyes": "#10b981",
+        "pupil": "star_both",
+        "blush": "#fda4af",
+        "bg": "#ecfdf5"
+      },
+      "outfit": "outfit_aot_cloak",
+      "headwear": "head_none",
+      "jewelry": "jewel_red_scarf_key",
+      "badge": "🪽"
+    }
+  },
+  {
+    "id": "s47",
+    "series": "aot",
+    "buddy": "mikasa_chibi",
+    "title": "Q版阿爾敏・蔚藍大海貝殼夢",
+    "rarity": "SR",
+    "desc": "最愛看書與探索世界知識的聰明金髮小軍師阿爾敏！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "bob",
+        "hair": "#fde047",
+        "hair2": "#eab308",
+        "tie": "none",
+        "eyes": "#0284c7",
+        "pupil": "normal",
+        "blush": "#fda4af",
+        "bg": "#f0f9ff"
+      },
+      "outfit": "outfit_aot_cloak",
+      "headwear": "head_none",
+      "jewelry": "jewel_emerald_brooch",
+      "badge": "🐚"
+    }
+  },
+  {
+    "id": "s48",
+    "series": "aot",
+    "buddy": "mikasa_chibi",
+    "title": "Q版莎夏・幸福烤馬鈴薯吃貨",
+    "rarity": "SR",
+    "desc": "雙眼閃閃發光抱著香噴噴熱馬鈴薯，讀書也要吃飽飽喔！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "sidetail",
+        "hair": "#92400e",
+        "hair2": "#78350f",
+        "tie": "ribbon_red",
+        "eyes": "#b45309",
+        "pupil": "star_both",
+        "smile": "open",
+        "blush": "#fb7185",
+        "bg": "#fffbeb"
+      },
+      "outfit": "outfit_aot_cloak",
+      "headwear": "head_none",
+      "jewelry": "jewel_anya_peanut",
+      "badge": "🥔"
+    }
+  },
+  {
+    "id": "s49",
+    "series": "frieren",
+    "buddy": "frieren",
+    "title": "弗莉蓮・變出美麗花田的魔法",
+    "rarity": "UR",
+    "desc": "揮動新月紅寶石法杖，為努力闖關的喬喬綻放整片夢幻花海！",
+    "look": {
+      "avatar": "frieren",
+      "outfit": "outfit_frieren_mage",
+      "headwear": "head_frieren_wreath",
+      "jewelry": "jewel_frieren_staff",
+      "badge": "🌼"
+    }
+  },
+  {
+    "id": "s50",
+    "series": "frieren",
+    "buddy": "frieren",
+    "title": "弗莉蓮・寶箱怪爆炸捲捲頭",
+    "rarity": "SSR",
+    "desc": "「好黑喔！好可怕！」剛從寶箱怪被拉出來變成蓬鬆捲捲頭超呆萌！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "elf": true,
+        "backHair": "curly",
+        "hair": "#e2e8f0",
+        "hair2": "#94a3b8",
+        "tie": "none",
+        "eyes": "#10b981",
+        "pupil": "flower",
+        "smile": "open",
+        "blush": "#f472b6",
+        "bg": "#fef3c7"
+      },
+      "outfit": "outfit_frieren_mage",
+      "headwear": "head_none",
+      "jewelry": "jewel_frieren_staff",
+      "badge": "📦"
+    }
+  },
+  {
+    "id": "s51",
+    "series": "frieren",
+    "buddy": "fern",
+    "title": "費倫・紫蝶法杖天才魔法使",
+    "rarity": "SSR",
+    "desc": "別著欣梅爾風格紫蝶髮飾的優等生費倫，溫柔陪喬喬複習！",
+    "look": {
+      "avatar": "fern",
+      "outfit": "outfit_moonlight_gala",
+      "headwear": "head_fern_butterfly",
+      "jewelry": "jewel_butterfly_aura",
+      "badge": "🦋"
+    }
+  },
+  {
+    "id": "s52",
+    "series": "frieren",
+    "buddy": "kana_arima",
+    "title": "修塔爾克・巨無霸生日漢堡排",
+    "rarity": "SR",
+    "desc": "善良勇敢的紅髮小戰士端出超厚切漢堡排幫喬喬補充體力！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "undercut",
+        "hair": "#dc2626",
+        "hair2": "#991b1b",
+        "tie": "none",
+        "eyes": "#d97706",
+        "pupil": "normal",
+        "smile": "open",
+        "blush": "#fca5a5",
+        "bg": "#fef2f2"
+      },
+      "outfit": "outfit_frieren_mage",
+      "headwear": "head_none",
+      "jewelry": "jewel_red_scarf_key",
+      "badge": "🍔"
+    }
+  },
+  {
+    "id": "s53",
+    "series": "frieren",
+    "buddy": "frieren",
+    "title": "勇者欣梅爾・蒼月草溫柔微笑",
+    "rarity": "SSR",
+    "desc": "戴著故鄉蒼月草花冠的藍髮勇者，永遠為認真的喬喬喝采！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "bob",
+        "hair": "#60a5fa",
+        "hair2": "#2563eb",
+        "tie": "none",
+        "eyes": "#2563eb",
+        "pupil": "star_left",
+        "blush": "#fbcfe8",
+        "bg": "#eff6ff"
+      },
+      "outfit": "outfit_frieren_mage",
+      "headwear": "head_frieren_wreath",
+      "jewelry": "jewel_sapphire_star",
+      "badge": "💙"
+    }
+  },
+  {
+    "id": "s54",
+    "series": "oshinoko",
+    "buddy": "ai_hoshino",
+    "title": "星野愛・雙瞳星芒傳奇C位",
+    "rarity": "UR",
+    "desc": "雙眼綻放璀璨六芒星，戴著兔耳髮飾對喬喬比出最閃耀愛心！",
+    "look": {
+      "avatar": "ai_hoshino",
+      "outfit": "outfit_idol_stage",
+      "headwear": "head_ai_bunny",
+      "jewelry": "jewel_idol_mic",
+      "badge": "🌟"
+    }
+  },
+  {
+    "id": "s55",
+    "series": "oshinoko",
+    "buddy": "ruby_hoshino",
+    "title": "星野露比・B小町粉紅新星",
+    "rarity": "SSR",
+    "desc": "繼承媽媽星芒眼神的元氣偶像露比，在舞台上為喬喬熱力開唱！",
+    "look": {
+      "avatar": "ruby_hoshino",
+      "outfit": "outfit_idol_stage",
+      "headwear": "head_diamond_tiara",
+      "jewelry": "jewel_idol_mic",
+      "badge": "💖"
+    }
+  },
+  {
+    "id": "s56",
+    "series": "oshinoko",
+    "buddy": "nagisa",
+    "title": "星野阿奎亞・藍瞳星芒神應援",
+    "rarity": "SSR",
+    "desc": "右眼閃耀冰藍六芒星，揮舞超亮螢光棒為喬喬打 Call！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "undercut",
+        "hair": "#fef08a",
+        "hair2": "#eab308",
+        "tie": "none",
+        "eyes": "#0284c7",
+        "pupil": "star_right",
+        "blush": "#fbcfe8",
+        "bg": "#eff6ff"
+      },
+      "outfit": "outfit_eden_academy",
+      "headwear": "head_none",
+      "jewelry": "jewel_sapphire_star",
+      "badge": "💎"
+    }
+  },
+  {
+    "id": "s57",
+    "series": "oshinoko",
+    "buddy": "kana_arima",
+    "title": "有馬佳奈・貝雷帽天才小歌后",
+    "rarity": "SSR",
+    "desc": "戴著珍珠紅貝雷帽的小蘇打天才童星，歌聲與實力都是滿分！",
+    "look": {
+      "avatar": "kana_arima",
+      "outfit": "outfit_strawberry_cake",
+      "headwear": "head_pearl_beret",
+      "jewelry": "jewel_idol_mic",
+      "badge": "🎩"
+    }
+  },
+  {
+    "id": "s58",
+    "series": "oshinoko",
+    "buddy": "ruby_hoshino",
+    "title": "MEM啾・小惡魔角元氣啾咪",
+    "rarity": "SR",
+    "desc": "超人氣直播主 MEM啾戴著可愛小角耳機來幫喬喬加油打氣！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "bob",
+        "hair": "#fef08a",
+        "hair2": "#38bdf8",
+        "tie": "anya_cones",
+        "eyes": "#db2777",
+        "pupil": "flower",
+        "smile": "open",
+        "blush": "#f472b6",
+        "bg": "#fefce8"
+      },
+      "outfit": "outfit_idol_stage",
+      "headwear": "head_neko_headphones",
+      "jewelry": "jewel_music_symphony",
+      "badge": "💛"
+    }
+  },
+  {
+    "id": "s59",
+    "series": "anime_stars",
+    "buddy": "anya",
+    "title": "安妮亞・哇庫哇庫星星眼",
+    "rarity": "UR",
+    "desc": "《間諜家家酒》超能力讀心小可愛！「喬喬拿到星星了～哇庫哇庫！」",
+    "look": {
+      "avatar": "anya",
+      "outfit": "outfit_eden_academy",
+      "headwear": "head_star_halo",
+      "jewelry": "jewel_anya_peanut",
+      "badge": "🥜"
+    }
+  },
+  {
+    "id": "s60",
+    "series": "anime_stars",
+    "buddy": "cinnamoroll",
+    "title": "彭德・毛茸茸預知滿分大白狗",
+    "rarity": "SR",
+    "desc": "《間諜家家酒》軟綿綿彭德「汪！」一聲預見喬喬考試大滿貫！",
+    "look": {
+      "customCfg": {
+        "type": "mascot",
+        "mascotKind": "bond",
+        "bg": "#f0fdf4"
+      },
+      "outfit": "outfit_eden_academy",
+      "headwear": "head_madoka_ribbons",
+      "jewelry": "jewel_none",
+      "badge": "🐶"
+    }
+  },
+  {
+    "id": "s61",
+    "series": "anime_stars",
+    "buddy": "madoka",
+    "title": "木之本櫻・夢之杖百變小櫻",
+    "rarity": "SSR",
+    "desc": "《庫洛魔法使》「絕對沒問題的！」粉紅羽翼星杖守護喬喬！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "bob",
+        "hair": "#b45309",
+        "hair2": "#92400e",
+        "tie": "none",
+        "eyes": "#10b981",
+        "pupil": "flower",
+        "smile": "open",
+        "blush": "#fb7185",
+        "bg": "#fdf2f8"
+      },
+      "outfit": "outfit_madoka_rose",
+      "headwear": "head_pearl_beret",
+      "jewelry": "jewel_angel_wings",
+      "badge": "🌸"
+    }
+  },
+  {
+    "id": "s62",
+    "series": "anime_stars",
+    "buddy": "homura",
+    "title": "Q版禰豆子・粉紅麻葉呆萌眨眼",
+    "rarity": "SSR",
+    "desc": "《鬼滅之刃》縮小版超萌禰豆子穿著粉紅和服為喬喬加油！",
+    "look": {
+      "customCfg": {
+        "type": "human",
+        "backHair": "long",
+        "hair": "#1e293b",
+        "hair2": "#ea580c",
+        "tie": "ribbon_red",
+        "eyes": "#ec4899",
+        "pupil": "flower",
+        "blush": "#f472b6",
+        "bg": "#fff1f2"
+      },
+      "outfit": "outfit_sakura_lolita",
+      "headwear": "head_sakura_crown",
+      "jewelry": "jewel_sakura_pearl",
+      "badge": "🎋"
+    }
+  },
+  {
+    "id": "s63",
+    "series": "anime_stars",
+    "buddy": "mymelody",
+    "title": "吉伊卡哇・五級除草合格證書",
+    "rarity": "SSR",
+    "desc": "努力讀書考取證照的小可愛，陪喬喬一起拿康軒滿分獎狀！",
+    "look": {
+      "customCfg": {
+        "type": "mascot",
+        "mascotKind": "chiikawa",
+        "bg": "#fff1f2"
+      },
+      "outfit": "outfit_strawberry_cake",
+      "headwear": "head_frieren_wreath",
+      "jewelry": "jewel_soulgem_heart",
+      "badge": "💮"
+    }
+  },
+  {
+    "id": "s64",
+    "series": "anime_stars",
+    "buddy": "sakura_miku",
+    "title": "全動漫星光大集合・榮耀傳說",
+    "rarity": "UR",
+    "desc": "櫻花初音、星野愛、弗莉蓮、小圓、殺老師與三麗鷗全員為喬喬喝采！",
+    "look": {
+      "avatar": "sakura_miku",
+      "outfit": "outfit_angel_symphony",
+      "headwear": "head_diamond_tiara",
+      "jewelry": "jewel_angel_wings",
+      "badge": "🌈"
+    }
+  }
+];
+
 
     // =========================================================================
     // WEB AUDIO SYNTHESIZER (Cute Chimes, Fanfare & Vocaloid Arpeggios)
@@ -919,6 +2733,11 @@
       wrong() {
         this.playTone(300, 0.15, 'sawtooth', 0, 0.08);
         this.playTone(250, 0.22, 'sawtooth', 0.14, 0.08);
+      }
+      urFanfare() {
+        const notes = [523.25, 659.25, 783.99, 1046.5, 1318.5, 1567.98, 2093.0];
+        const times = [0, 0.08, 0.16, 0.24, 0.34, 0.44, 0.56];
+        notes.forEach((n, i) => this.playTone(n, 0.26, 'triangle', times[i], 0.16));
       }
       fanfare() {
         const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5];
@@ -996,10 +2815,20 @@
       }
 
       saveState() {
+        this.ensureV2State();
+        this.state.wardrobe = this.mergeWardrobeWithShared(this.state.wardrobe);
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
         } catch (e) {}
         this.updateHeaderStats();
+      }
+      showMiniToast(msg) {
+        const el = document.getElementById('mini-toast');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.remove('hidden');
+        clearTimeout(this._toastTimer);
+        this._toastTimer = setTimeout(() => el.classList.add('hidden'), 2600);
       }
 
       getTodayKey() {
@@ -1024,16 +2853,20 @@
 
       cyclePartner() {
         sfx.pop();
-        const keys = Object.keys(CHARACTER_SVGS);
-        const idx = keys.indexOf(this.state.partner);
-        this.state.partner = keys[(idx + 1) % keys.length];
+        this.ensureV2State();
+        const ownedAvatars = this.state.wardrobe.avatars;
+        const cur = this.state.equipped.avatar || this.state.partner || 'miku';
+        const idx = ownedAvatars.indexOf(cur);
+        const nextId = ownedAvatars[(idx + 1) % ownedAvatars.length];
+        this.state.equipped.avatar = nextId;
+        this.state.partner = nextId;
         this.saveState();
         this.renderHome();
       }
 
       updateHeaderStats() {
-        const partnerObj = CHARACTER_SVGS[this.state.partner] || CHARACTER_SVGS.miku;
-        document.getElementById('header-mascot').innerHTML = partnerObj.svg;
+        this.ensureV2State();
+        document.getElementById('header-mascot').innerHTML = this.getEquippedAvatarSVG();
 
         let totalStars = 0;
         ['english', 'social', 'science'].forEach(sub => {
@@ -1114,8 +2947,11 @@
       }
 
       renderHome() {
-        const partnerObj = CHARACTER_SVGS[this.state.partner] || CHARACTER_SVGS.miku;
-        document.getElementById('hero-partner-svg').innerHTML = partnerObj.svg;
+        this.ensureV2State();
+        const giftBanner = document.getElementById('v2-welcome-gift-banner');
+        if (giftBanner) giftBanner.classList.toggle('hidden', Boolean(this.state.v2GiftClaimed));
+        const partnerObj = this.getEquippedPartnerMeta();
+        document.getElementById('hero-partner-svg').innerHTML = this.getEquippedAvatarSVG();
         document.getElementById('hero-partner-name').textContent = partnerObj.name;
         document.getElementById('hero-speech').textContent = partnerObj.cheer;
 
@@ -1247,7 +3083,7 @@
         document.getElementById('subject-progress-list').innerHTML = progressHtml;
 
         document.getElementById('home-mistake-count').textContent = `${(this.state.mistakes || []).length} 題待複習`;
-        document.getElementById('home-sticker-count').textContent = `已收集 ${(this.state.stickers || []).length} / 24`;
+        const ws = this.getTotalWardrobeStats(); document.getElementById('home-sticker-count').textContent = `服飾 ${ws.owned}/${ws.total}・貼紙 ${new Set(this.state.stickers || []).size}/${STICKER_CATALOG.length}`;
       }
 
       setMapSubject(sub) {
@@ -1755,7 +3591,7 @@
         const totalQ = st.questions.length;
         const ratio = this.quizScore / totalQ;
         const stars = ratio >= 0.85 ? 3 : ratio >= 0.6 ? 2 : 1;
-        const earnedCoins = stars * 10;
+        const earnedCoins = stars * 12;
 
         this.state.coins = (this.state.coins || 0) + earnedCoins;
 
@@ -1783,8 +3619,9 @@
 
         this.saveState();
 
-        const buddy = CHARACTER_SVGS[st.meta.buddy] || CHARACTER_SVGS.miku;
-        document.getElementById('complete-mascot-svg').innerHTML = buddy.svg;
+        const buddy = this.getEquippedPartnerMeta();
+        document.getElementById('complete-mascot-svg').innerHTML = this.getEquippedAvatarSVG();
+        launchConfetti(28);
         document.getElementById('complete-stars-row').textContent = '⭐'.repeat(stars);
         document.getElementById('complete-title').textContent = this.isMistakePractice
           ? '🎉 錯題大掃除挑戰完成！'
@@ -1881,81 +3718,7 @@
         this.renderQuizQuestion();
       }
 
-      renderGacha() {
-        document.getElementById('gacha-coin-display').textContent = this.state.coins || 0;
-        const owned = new Set(this.state.stickers || []);
-        document.getElementById('sticker-collected-num').textContent = owned.size;
-
-        document.getElementById('stickers-grid').innerHTML = STICKER_CATALOG.map(st => {
-          const isUnlocked = owned.has(st.id);
-          const charObj = CHARACTER_SVGS[st.buddy] || CHARACTER_SVGS.miku;
-          const rarityColor = st.rarity === 'SSR'
-            ? 'bg-gradient-to-r from-amber-400 to-pink-500 text-white'
-            : st.rarity === 'SR'
-              ? 'bg-teal-500 text-white'
-              : 'bg-sky-100 text-sky-700';
-
-          return `
-            <div onclick="${isUnlocked ? `app.selectStickerPartner('${st.buddy}', '${st.title}')` : ''}" class="p-3 rounded-2xl border-2 text-center space-y-2 transition-all ${
-              isUnlocked
-                ? 'bg-white border-pink-200 shadow-sm cursor-pointer btn-bounce'
-                : 'bg-slate-50/70 border-slate-200 opacity-55'
-            }">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-black px-2 py-0.2 rounded-full ${rarityColor}">${st.rarity}</span>
-                <span class="text-xs font-bold text-slate-400">${isUnlocked ? '✨ 已擁有' : '🔒 未解鎖'}</span>
-              </div>
-              <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-teal-50 via-white to-pink-50 p-1.5 border border-pink-100 flex items-center justify-center">
-                ${isUnlocked ? charObj.svg : '<span class="text-2xl">❓</span>'}
-              </div>
-              <div class="text-xs font-black text-slate-800">${isUnlocked ? st.title : '神祕貼紙'}</div>
-              <p class="text-xs text-slate-500 leading-snug">${isUnlocked ? st.desc : '用音符幣轉扭蛋解鎖！'}</p>
-            </div>
-          `;
-        }).join('');
-      }
-
-      pullGacha() {
-        if ((this.state.coins || 0) < 30) {
-          sfx.wrong();
-          const box = document.getElementById('gacha-result-box');
-          box.innerHTML = `<div class="text-2xl">🎵</div><div class="text-xs font-black text-rose-600 mt-1">音符幣不夠 30 枚喔！<br>快去闖關賺取音符幣吧！</div>`;
-          return;
-        }
-
-        sfx.fanfare();
-        this.state.coins -= 30;
-        const owned = new Set(this.state.stickers || []);
-        const locked = STICKER_CATALOG.filter(s => !owned.has(s.id));
-        const pool = locked.length > 0 ? locked : STICKER_CATALOG;
-        const prize = pool[Math.floor(Math.random() * pool.length)];
-
-        if (!owned.has(prize.id)) {
-          this.state.stickers.push(prize.id);
-        }
-        this.state.partner = prize.buddy;
-        this.saveState();
-
-        const charObj = CHARACTER_SVGS[prize.buddy];
-        const box = document.getElementById('gacha-result-box');
-        box.innerHTML = `
-          <div class="w-20 h-20 mx-auto animate-pop">${charObj.svg}</div>
-          <div class="text-xs font-black text-pink-600 mt-1">🎉 抽中【${prize.rarity}】${prize.title}！</div>
-        `;
-        this.renderGacha();
-      }
-
-      selectStickerPartner(buddyKey, title) {
-        sfx.pop();
-        this.state.partner = buddyKey;
-        this.saveState();
-        const box = document.getElementById('gacha-result-box');
-        const charObj = CHARACTER_SVGS[buddyKey];
-        box.innerHTML = `
-          <div class="w-20 h-20 mx-auto animate-pop">${charObj.svg}</div>
-          <div class="text-xs font-black text-teal-600 mt-1">✨ 已切換陪伴夥伴：<br>${title}</div>
-        `;
-      }
+      // VIEW 5: GACHA, WARDROBE & 64 ANIME STICKERS (Injected via GACHA_METHODS_MIXIN below)
 
       renderCalendar() {
         let completedDaysCount = 0;
@@ -2035,6 +3798,674 @@
       }
     }
 
+    // =========================================================================
+    // SAKURA & STARLIGHT CONFETTI ENGINE
+    // =========================================================================
+    function launchConfetti(count = 36) {
+      const container = document.getElementById('confetti-layer');
+      if (!container) return;
+      const symbols = ['🌸', '✨', '⭐', '💖', '🎵', '🎀', '💎'];
+      for (let i = 0; i < count; i++) {
+        const span = document.createElement('span');
+        span.textContent = symbols[i % symbols.length];
+        span.style.position = 'fixed';
+        span.style.left = `${Math.random() * 96 + 2}vw`;
+        span.style.top = `-24px`;
+        span.style.fontSize = `${14 + Math.random() * 14}px`;
+        span.style.zIndex = '9999';
+        span.style.pointerEvents = 'none';
+        span.style.transition = `transform ${1.6 + Math.random() * 1.3}s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.8s ease`;
+        container.appendChild(span);
+        requestAnimationFrame(() => {
+          const dx = (Math.random() - 0.5) * 180;
+          const dy = window.innerHeight * (0.65 + Math.random() * 0.35);
+          const rot = (Math.random() - 0.5) * 520;
+          span.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+          span.style.opacity = '0';
+        });
+        setTimeout(() => span.remove(), 2900);
+      }
+    }
+
+    const SHARED_WARDROBE_KEY = "qiaoqiao_shared_wardrobe_v2";
+    const CRYSTAL_COST = { R: 25, SR: 40, SSR: 60, UR: 80 };
+
+    const GACHA_METHODS_MIXIN = {
+      getDefaultWardrobe() {
+        return {
+          avatars: AVATAR_CATALOG.filter(x => x.starter).map(x => x.id),
+          outfits: OUTFIT_CATALOG.filter(x => x.starter).map(x => x.id),
+          headwear: HEADWEAR_CATALOG.filter(x => x.starter).map(x => x.id),
+          jewelry: JEWELRY_CATALOG.filter(x => x.starter).map(x => x.id)
+        };
+      },
+
+      mergeWardrobeWithShared(w) {
+        const def = this.getDefaultWardrobe();
+        const cur = w || {};
+        let shared = {};
+        try {
+          shared = JSON.parse(localStorage.getItem(SHARED_WARDROBE_KEY) || "{}");
+        } catch (e) {}
+        const merged = {
+          avatars: Array.from(new Set([...def.avatars, ...(cur.avatars || []), ...(shared.avatars || [])])),
+          outfits: Array.from(new Set([...def.outfits, ...(cur.outfits || []), ...(shared.outfits || [])])),
+          headwear: Array.from(new Set([...def.headwear, ...(cur.headwear || []), ...(shared.headwear || [])])),
+          jewelry: Array.from(new Set([...def.jewelry, ...(cur.jewelry || []), ...(shared.jewelry || [])]))
+        };
+        try {
+          localStorage.setItem(SHARED_WARDROBE_KEY, JSON.stringify(merged));
+        } catch (e) {}
+        return merged;
+      },
+
+      ensureV2State() {
+        this.state.wardrobe = this.mergeWardrobeWithShared(this.state.wardrobe);
+        if (!this.state.equipped) {
+          this.state.equipped = {
+            avatar: this.state.partner || "miku",
+            outfit: "outfit_default",
+            headwear: "head_none",
+            jewelry: "jewel_none",
+            stageBg: "#fdf2f8"
+          };
+        }
+        if (typeof this.state.crystals !== 'number') this.state.crystals = 30;
+        if (typeof this.state.gachaPullCount !== 'number') this.state.gachaPullCount = 0;
+        if (!this.state.gachaBanner) this.state.gachaBanner = 'dressup';
+        if (!this.state.gachaWish) this.state.gachaWish = 'vocaloid';
+        if (!this.state.gachaSubTab) this.state.gachaSubTab = 'machine';
+        if (!this.state.wardrobeCat) this.state.wardrobeCat = 'avatars';
+        if (!this.state.stickerFilter) this.state.stickerFilter = 'ALL';
+        if (!Array.isArray(this.state.stickers)) this.state.stickers = ["s1", "s2", "s3"];
+      },
+
+      getEquippedAvatarSVG() {
+        this.ensureV2State();
+        const eq = this.state.equipped;
+        return renderChibiSVG({
+          avatar: eq.avatar || this.state.partner || "miku",
+          outfit: eq.outfit || "outfit_default",
+          headwear: eq.headwear || "head_none",
+          jewelry: eq.jewelry || "jewel_none",
+          bg: eq.stageBg || undefined
+        });
+      },
+
+      getEquippedPartnerMeta() {
+        this.ensureV2State();
+        const avId = this.state.equipped.avatar || this.state.partner || "miku";
+        return AVATAR_CATALOG.find(a => a.id === avId) || AVATAR_CATALOG[1];
+      },
+
+      getTotalWardrobeStats() {
+        this.ensureV2State();
+        const w = this.state.wardrobe;
+        const owned = w.avatars.length + w.outfits.length + w.headwear.length + w.jewelry.length;
+        const total = AVATAR_CATALOG.length + OUTFIT_CATALOG.length + HEADWEAR_CATALOG.length + JEWELRY_CATALOG.length;
+        return { owned, total };
+      },
+
+      claimWelcomeGift() {
+        if (this.state.v2GiftClaimed) return;
+        this.state.v2GiftClaimed = true;
+        this.state.coins = (this.state.coins || 0) + 200;
+        this.state.crystals = (this.state.crystals || 0) + 40;
+        if (!this.state.wardrobe.outfits.includes("outfit_strawberry_cake")) {
+          this.state.wardrobe.outfits.push("outfit_strawberry_cake");
+        }
+        this.state.equipped.outfit = "outfit_strawberry_cake";
+        this.saveState();
+        sfx.urFanfare();
+        launchConfetti(48);
+        this.switchTab('gacha');
+        this.setGachaSubTab('machine');
+        const box = document.getElementById('gacha-reveal-stage');
+        if (box) {
+          box.innerHTML = `
+            <div class="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-pink-50 via-amber-50 to-teal-50 border-2 border-pink-300 text-center space-y-2 animate-pop">
+              <div class="text-2xl">🎉🌸💎✨</div>
+              <div class="text-base sm:text-lg font-black text-pink-700">已領取喬喬專屬改版大禮包！(+200 🎵 音符幣、+40 💎 許願水晶、🍓 草莓公主裙)</div>
+              <p class="text-xs text-slate-600 font-semibold">現在馬上試試「🌈 豪華 5 連抽」，把 🌸 櫻花初音、星野愛、弗莉蓮、小圓跟可愛首飾帶回家吧！</p>
+            </div>`;
+        }
+      },
+
+      setGachaSubTab(sub) {
+        sfx.pop();
+        this.state.gachaSubTab = sub;
+        this.renderGacha();
+      },
+
+      setGachaBanner(banner) {
+        sfx.pop();
+        this.state.gachaBanner = banner;
+        this.saveState();
+        this.renderGacha();
+      },
+
+      setGachaWish(wish) {
+        sfx.pop();
+        this.state.gachaWish = wish;
+        this.saveState();
+        this.renderGacha();
+      },
+
+      setWardrobeCategory(cat) {
+        sfx.pop();
+        this.state.wardrobeCat = cat;
+        this.renderGacha();
+      },
+
+      setStickerFilter(series) {
+        sfx.pop();
+        this.state.stickerFilter = series;
+        this.renderGacha();
+      },
+
+      setStageBackdrop(color) {
+        sfx.pop();
+        this.state.equipped.stageBg = color;
+        this.saveState();
+        this.renderGacha();
+      },
+
+      getAllDressUpPool() {
+        const w = this.state.wardrobe;
+        const items = [];
+        AVATAR_CATALOG.forEach(a => items.push({ kind: "avatars", kindLabel: "👧 頭像", id: a.id, name: a.name, rarity: a.rarity, series: a.series, owned: w.avatars.includes(a.id) }));
+        OUTFIT_CATALOG.forEach(o => items.push({ kind: "outfits", kindLabel: "👗 服裝", id: o.id, name: o.name, rarity: o.rarity, series: o.series, owned: w.outfits.includes(o.id) }));
+        HEADWEAR_CATALOG.forEach(h => items.push({ kind: "headwear", kindLabel: "👑 頭飾", id: h.id, name: h.name, rarity: h.rarity, series: h.series, owned: w.headwear.includes(h.id) }));
+        JEWELRY_CATALOG.forEach(j => items.push({ kind: "jewelry", kindLabel: "💎 首飾", id: j.id, name: j.name, rarity: j.rarity, series: j.series, owned: w.jewelry.includes(j.id) }));
+        return items;
+      },
+
+      getAllStickerPool() {
+        const ownedSet = new Set(this.state.stickers || []);
+        return STICKER_CATALOG.map(s => ({
+          kind: "sticker",
+          kindLabel: "🏷️ 貼紙",
+          id: s.id,
+          name: s.title,
+          rarity: s.rarity,
+          series: s.series || "vocaloid",
+          owned: ownedSet.has(s.id),
+          stickerObj: s
+        }));
+      },
+
+      renderPrizePreviewSVG(item) {
+        if (item.kind === "sticker") {
+          const st = item.stickerObj || STICKER_CATALOG.find(x => x.id === item.id);
+          return renderChibiSVG(st.look || { avatar: st.buddy });
+        }
+        const eq = this.state.equipped;
+        if (item.kind === "avatars") {
+          const defOut = CHARACTER_SVGS[item.id] ? undefined : "outfit_default";
+          return CHARACTER_SVGS[item.id] ? CHARACTER_SVGS[item.id].svg : renderChibiSVG({ avatar: item.id, outfit: defOut });
+        }
+        if (item.kind === "outfits") {
+          return renderChibiSVG({ avatar: eq.avatar || "miku", outfit: item.id, headwear: eq.headwear, jewelry: eq.jewelry });
+        }
+        if (item.kind === "headwear") {
+          return renderChibiSVG({ avatar: eq.avatar || "miku", outfit: eq.outfit, headwear: item.id, jewelry: eq.jewelry });
+        }
+        return renderChibiSVG({ avatar: eq.avatar || "miku", outfit: eq.outfit, headwear: eq.headwear, jewelry: item.id });
+      },
+
+      pickWeightedPrize(pool, forceHighRarity = false) {
+        const wish = this.state.gachaWish || 'vocaloid';
+        let candidates = forceHighRarity ? pool.filter(x => x.rarity === 'UR' || x.rarity === 'SSR') : pool;
+        if (candidates.length === 0) candidates = pool;
+
+        // Strongly prefer unowned items so Qiaoqiao constantly unlocks exciting new things!
+        const unowned = candidates.filter(x => !x.owned);
+        const working = (unowned.length > 0 && Math.random() < 0.88) ? unowned : candidates;
+
+        const weights = working.map(item => {
+          let w = item.rarity === 'UR' ? 14 : item.rarity === 'SSR' ? 28 : item.rarity === 'SR' ? 34 : 24;
+          if (wish !== 'all' && item.series === wish) w *= 3.4;
+          if (!item.owned) w *= 1.8;
+          return w;
+        });
+
+        const totalW = weights.reduce((a, b) => a + b, 0);
+        let r = Math.random() * totalW;
+        for (let i = 0; i < working.length; i++) {
+          r -= weights[i];
+          if (r <= 0) return working[i];
+        }
+        return working[working.length - 1];
+      },
+
+      pullGacha(count = 1) {
+        this.ensureV2State();
+        const cost = count === 5 ? 100 : 25;
+        if ((this.state.coins || 0) < cost) {
+          sfx.wrong();
+          const box = document.getElementById('gacha-reveal-stage');
+          if (box) {
+            box.innerHTML = `
+              <div class="p-4 rounded-2xl bg-rose-50 border-2 border-rose-200 text-center space-y-1 animate-pop">
+                <div class="text-2xl">🎵</div>
+                <div class="text-sm font-black text-rose-700">音符幣還差 ${cost - (this.state.coins || 0)} 枚喔！</div>
+                <div class="text-xs text-rose-500 font-semibold">每完成一關康軒評量都能賺取音符幣，快去闖關吧！</div>
+              </div>`;
+          }
+          return;
+        }
+
+        this.state.coins -= cost;
+        const results = [];
+        let crystalGain = 0;
+        let hasURorSSR = false;
+
+        for (let i = 0; i < count; i++) {
+          this.state.gachaPullCount = (this.state.gachaPullCount || 0) + 1;
+          const banner = this.state.gachaBanner || 'dressup';
+          let pool = banner === 'dressup'
+            ? this.getAllDressUpPool()
+            : banner === 'sticker'
+              ? this.getAllStickerPool()
+              : [...this.getAllDressUpPool(), ...this.getAllStickerPool()];
+
+          let prize = null;
+          // Special joyful guarantee: within first 5 pulls if Sakura Miku is still locked and wish is vocaloid/dressup, surprise Qiaoqiao with Sakura Miku!
+          const sakuraAvatar = pool.find(x => x.kind === 'avatars' && x.id === 'sakura_miku' && !x.owned);
+          if (sakuraAvatar && this.state.gachaPullCount <= 5 && (i === count - 1 || this.state.gachaPullCount === 3)) {
+            prize = sakuraAvatar;
+          } else {
+            const forceHigh = (count === 5 && i === count - 1 && !hasURorSSR) || (this.state.gachaPullCount % 5 === 0);
+            prize = this.pickWeightedPrize(pool, forceHigh);
+          }
+
+          if (prize.rarity === 'UR' || prize.rarity === 'SSR') hasURorSSR = true;
+
+          const isNew = !prize.owned;
+          if (isNew) {
+            if (prize.kind === 'sticker') {
+              this.state.stickers.push(prize.id);
+            } else {
+              this.state.wardrobe[prize.kind].push(prize.id);
+            }
+            crystalGain += 5;
+          } else {
+            crystalGain += 15; // Duplicate converts into extra Wish Crystals!
+          }
+
+          results.push({ ...prize, isNew });
+        }
+
+        this.state.crystals = (this.state.crystals || 0) + crystalGain;
+        this.saveState();
+
+        if (results.some(r => r.rarity === 'UR')) {
+          sfx.urFanfare();
+          launchConfetti(45);
+        } else if (hasURorSSR) {
+          sfx.fanfare();
+          launchConfetti(24);
+        } else {
+          sfx.correct();
+        }
+
+        this.renderGacha();
+        this.renderPullResults(results, crystalGain);
+      },
+
+      renderPullResults(results, crystalGain) {
+        const box = document.getElementById('gacha-reveal-stage');
+        if (!box) return;
+        const gridCols = results.length === 1 ? 'max-w-xs mx-auto' : 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3';
+        const cardsHtml = results.map((r, idx) => {
+          const rBadge = r.rarity === 'UR'
+            ? 'bg-gradient-to-r from-pink-500 via-amber-400 to-teal-400 text-white'
+            : r.rarity === 'SSR'
+              ? 'bg-gradient-to-r from-amber-400 to-pink-500 text-white'
+              : r.rarity === 'SR'
+                ? 'bg-teal-500 text-white'
+                : 'bg-sky-100 text-sky-700';
+          const borderCls = r.rarity === 'UR' ? 'ur-holo-card' : r.rarity === 'SSR' ? 'border-amber-300 bg-amber-50/40' : 'border-pink-200 bg-white';
+          const actionBtn = r.kind === 'sticker'
+            ? `<button onclick="app.selectStickerPartner('${r.id}')" class="btn-bounce w-full py-1.5 rounded-xl bg-pink-500 text-white text-xs font-black">🌟 設為夥伴</button>`
+            : `<button onclick="app.equipFromReveal('${r.kind}', '${r.id}')" class="btn-bounce w-full py-1.5 rounded-xl bg-gradient-to-r from-teal-500 to-pink-500 text-white text-xs font-black">👗 立即穿戴</button>`;
+
+          return `
+            <div style="animation-delay:${idx * 85}ms" class="p-3 rounded-2xl border-2 ${borderCls} text-center space-y-2 shadow-md animate-pop relative">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs font-black px-2 py-0.5 rounded-full ${rBadge}">${r.rarity}</span>
+                <span class="text-xs font-black ${r.isNew ? 'text-rose-600 bg-rose-50 border border-rose-200 px-1.5 rounded-full' : 'text-amber-600'}">${r.isNew ? '✨NEW!' : '+15💎'}</span>
+              </div>
+              <div class="w-20 h-20 mx-auto rounded-2xl bg-white p-1 border border-pink-100 shadow-inner">
+                ${this.renderPrizePreviewSVG(r)}
+              </div>
+              <div class="text-xs font-bold text-pink-600">${r.kindLabel}</div>
+              <div class="text-xs font-black text-slate-800 leading-snug line-clamp-2 min-h-[2rem]">${r.name}</div>
+              ${actionBtn}
+            </div>`;
+        }).join('');
+
+        box.innerHTML = `
+          <div class="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-pink-50/90 via-white to-teal-50/90 border-2 border-pink-200 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="text-sm sm:text-base font-black text-slate-800">🎉 星光扭蛋開獎結果！</div>
+              <div class="text-xs font-black text-purple-700 bg-purple-50 border border-purple-200 px-3 py-1 rounded-full">
+                本次獲得 +${crystalGain} 💎 許願水晶（目前共 ${this.state.crystals} 💎）
+              </div>
+            </div>
+            <div class="${gridCols}">${cardsHtml}</div>
+          </div>`;
+      },
+
+      equipFromReveal(kind, id) {
+        this.equipItem(kind, id);
+        const box = document.getElementById('gacha-reveal-stage');
+        if (box) {
+          const msg = document.createElement('div');
+          msg.className = "mt-2 text-center text-xs font-black text-teal-700 bg-teal-50 border border-teal-200 py-1.5 rounded-xl animate-pop";
+          msg.textContent = "✨ 已幫喬喬換上新造型囉！上方的頭像與更衣室都同步更新啦！";
+          box.appendChild(msg);
+        }
+      },
+
+      equipItem(kind, id) {
+        this.ensureV2State();
+        if (!this.state.wardrobe[kind].includes(id)) return;
+        sfx.pop();
+        if (kind === 'avatars') {
+          this.state.equipped.avatar = id;
+          this.state.partner = id;
+        } else if (kind === 'outfits') {
+          this.state.equipped.outfit = id;
+        } else if (kind === 'headwear') {
+          this.state.equipped.headwear = id;
+        } else if (kind === 'jewelry') {
+          this.state.equipped.jewelry = id;
+        }
+        this.saveState();
+        if (this.currentTab === 'gacha') this.renderGacha();
+        if (this.currentTab === 'home') this.renderHome();
+      },
+
+      equipSignatureSet(setId) {
+        this.ensureV2State();
+        const s = SIGNATURE_SETS.find(x => x.id === setId);
+        if (!s) return;
+        sfx.correct();
+        if (this.state.wardrobe.avatars.includes(s.avatar)) {
+          this.state.equipped.avatar = s.avatar;
+          this.state.partner = s.avatar;
+        }
+        if (this.state.wardrobe.outfits.includes(s.outfit)) this.state.equipped.outfit = s.outfit;
+        if (this.state.wardrobe.headwear.includes(s.headwear)) this.state.equipped.headwear = s.headwear;
+        if (this.state.wardrobe.jewelry.includes(s.jewelry)) this.state.equipped.jewelry = s.jewelry;
+        this.saveState();
+        this.renderGacha();
+      },
+
+      randomCuteOutfit() {
+        this.ensureV2State();
+        sfx.correct();
+        const w = this.state.wardrobe;
+        const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+        this.state.equipped.avatar = pick(w.avatars);
+        this.state.partner = this.state.equipped.avatar;
+        this.state.equipped.outfit = pick(w.outfits);
+        this.state.equipped.headwear = pick(w.headwear);
+        this.state.equipped.jewelry = pick(w.jewelry);
+        this.saveState();
+        this.renderGacha();
+      },
+
+      exchangeWithCrystals(kind, id, rarity) {
+        this.ensureV2State();
+        const price = CRYSTAL_COST[rarity] || 50;
+        if ((this.state.crystals || 0) < price) {
+          sfx.wrong();
+          this.showMiniToast(`💎 許願水晶還差 ${price - (this.state.crystals || 0)} 顆喔！每次轉扭蛋都會獲得水晶！`);
+          return;
+        }
+        this.state.crystals -= price;
+        if (kind === 'sticker') {
+          if (!this.state.stickers.includes(id)) this.state.stickers.push(id);
+        } else {
+          if (!this.state.wardrobe[kind].includes(id)) this.state.wardrobe[kind].push(id);
+          this.equipItem(kind, id);
+        }
+        sfx.urFanfare();
+        launchConfetti(30);
+        this.saveState();
+        this.renderGacha();
+      },
+
+      selectStickerPartner(stickerId) {
+        this.ensureV2State();
+        const st = STICKER_CATALOG.find(x => x.id === stickerId);
+        if (!st) return;
+        sfx.pop();
+        if (this.state.wardrobe.avatars.includes(st.buddy)) {
+          this.state.equipped.avatar = st.buddy;
+          this.state.partner = st.buddy;
+        }
+        this.state.featuredSticker = st.id;
+        this.saveState();
+        this.showMiniToast(`💖 已設定【${st.title}】為喬喬的應援夥伴！`);
+        this.renderGacha();
+      },
+
+      renderGacha() {
+        this.ensureV2State();
+        const sub = this.state.gachaSubTab || 'machine';
+        document.getElementById('gacha-coin-display').textContent = this.state.coins || 0;
+        document.getElementById('gacha-crystal-display').textContent = this.state.crystals || 0;
+
+        const wStats = this.getTotalWardrobeStats();
+        const sCount = new Set(this.state.stickers || []).size;
+
+        ['machine', 'wardrobe', 'stickers'].forEach(t => {
+          const btn = document.getElementById(`gsub-btn-${t}`);
+          const panel = document.getElementById(`gsub-panel-${t}`);
+          if (panel) panel.classList.toggle('hidden', t !== sub);
+          if (btn) {
+            btn.className = (t === sub)
+              ? "px-4 py-2 rounded-2xl text-xs sm:text-sm font-black bg-gradient-to-r from-pink-500 via-rose-400 to-teal-400 text-white shadow-md transition-all"
+              : "px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold bg-white text-slate-600 border-2 border-pink-100 hover:bg-pink-50 transition-all";
+          }
+        });
+
+        const wBadge = document.getElementById('gsub-wardrobe-count');
+        const sBadge = document.getElementById('gsub-sticker-count');
+        if (wBadge) wBadge.textContent = `${wStats.owned}/${wStats.total}`;
+        if (sBadge) sBadge.textContent = `${sCount}/${STICKER_CATALOG.length}`;
+
+        if (sub === 'machine') this.renderGachaMachinePanel();
+        if (sub === 'wardrobe') this.renderWardrobePanel();
+        if (sub === 'stickers') this.renderStickersPanel();
+      },
+
+      renderGachaMachinePanel() {
+        const banners = [
+          { id: 'dressup', icon: '👗', title: '夢幻換裝＆首飾池', sub: '抽：櫻花初音・可愛洋裝・皇冠髮飾・項鍊魔法杖', tag: '🔥 喬喬許願主打' },
+          { id: 'sticker', icon: '🌟', title: '超人氣動漫貼紙池', sub: '抽：初音・三麗鷗・小圓・暗殺・進擊・弗莉蓮・我推・安妮亞', tag: '64款大圖鑑' },
+          { id: 'mixed', icon: '🎁', title: '驚喜雙享綜合池', sub: '換裝服飾＋動漫貼紙一次同時抽！', tag: '雙倍驚喜' }
+        ];
+        document.getElementById('gacha-banners-grid').innerHTML = banners.map(b => {
+          const active = (this.state.gachaBanner === b.id);
+          return `
+            <div onclick="app.setGachaBanner('${b.id}')" class="cursor-pointer btn-bounce p-3.5 rounded-2xl border-2 text-left transition-all ${
+              active ? 'bg-gradient-to-br from-pink-50 via-white to-teal-50 border-pink-400 ring-2 ring-pink-300 shadow-md' : 'bg-white/85 border-pink-100 hover:border-pink-300'
+            }">
+              <div class="flex items-center justify-between">
+                <span class="text-2xl">${b.icon}</span>
+                <span class="text-xs font-black px-2 py-0.5 rounded-full ${active ? 'bg-pink-500 text-white' : 'bg-slate-100 text-slate-600'}">${b.tag}</span>
+              </div>
+              <div class="text-sm font-black text-slate-800 mt-1.5">${b.title}</div>
+              <div class="text-xs text-slate-500 mt-0.5 leading-snug">${b.sub}</div>
+            </div>`;
+        }).join('');
+
+        const wishes = [
+          { id: 'vocaloid', label: '🌸 櫻花初音＆歌姬 UP' },
+          { id: 'oshinoko', label: '🌟 我推的孩子 UP' },
+          { id: 'frieren', label: '🪄 葬送的弗莉蓮 UP' },
+          { id: 'madoka', label: '🏹 魔法少女小圓 UP' },
+          { id: 'ansatsu', label: '🐙 暗殺教室 UP' },
+          { id: 'aot', label: '🪽 進擊的巨人 UP' },
+          { id: 'sanrio', label: '🎀 三麗鷗夥伴 UP' },
+          { id: 'anime_stars', label: '🥜 安妮亞＆人氣動漫 UP' },
+          { id: 'all', label: '🌈 全部隨機' }
+        ];
+        document.getElementById('gacha-wish-pills').innerHTML = wishes.map(w => {
+          const active = (this.state.gachaWish === w.id);
+          return `
+            <button onclick="app.setGachaWish('${w.id}')" class="px-3 py-1.5 rounded-full text-xs font-black border transition-all ${
+              active ? 'bg-pink-500 text-white border-pink-500 shadow-sm scale-[1.03]' : 'bg-white text-slate-600 border-pink-200 hover:bg-pink-50'
+            }">${w.label}</button>`;
+        }).join('');
+
+        const previewEl = document.getElementById('gacha-live-avatar');
+        if (previewEl) previewEl.innerHTML = this.getEquippedAvatarSVG();
+      },
+
+      renderWardrobePanel() {
+        const eq = this.state.equipped;
+        const w = this.state.wardrobe;
+        const avMeta = this.getEquippedPartnerMeta();
+        document.getElementById('wardrobe-stage-svg').innerHTML = this.getEquippedAvatarSVG();
+        document.getElementById('wardrobe-stage-name').textContent = avMeta.name;
+        document.getElementById('wardrobe-stage-cheer').textContent = avMeta.cheer;
+
+        const bgs = [
+          { c: '#fdf2f8', n: '櫻花粉' },
+          { c: '#f0fdfa', n: '初音綠' },
+          { c: '#faf5ff', n: '星野紫' },
+          { c: '#f0f9ff', n: '蒼月藍' },
+          { c: '#fefce8', n: '星光金' }
+        ];
+        document.getElementById('wardrobe-bg-swatches').innerHTML = bgs.map(b => `
+          <button onclick="app.setStageBackdrop('${b.c}')" title="${b.n}背景" style="background:${b.c}" class="w-7 h-7 rounded-full border-2 ${eq.stageBg === b.c ? 'border-pink-500 scale-110' : 'border-slate-300'}"></button>
+        `).join('');
+
+        // Signature sets bar
+        document.getElementById('wardrobe-sets-grid').innerHTML = SIGNATURE_SETS.map(s => {
+          const cnt = (w.avatars.includes(s.avatar) ? 1 : 0) + (w.outfits.includes(s.outfit) ? 1 : 0) + (w.headwear.includes(s.headwear) ? 1 : 0) + (w.jewelry.includes(s.jewelry) ? 1 : 0);
+          return `
+            <button onclick="app.equipSignatureSet('${s.id}')" class="btn-bounce p-2.5 rounded-2xl bg-white border-2 border-pink-100 hover:border-pink-300 text-left flex items-center gap-2.5 shadow-sm">
+              <div class="w-11 h-11 rounded-xl overflow-hidden shrink-0 border border-pink-100">${renderChibiSVG({ avatar: s.avatar, outfit: s.outfit, headwear: s.headwear, jewelry: s.jewelry })}</div>
+              <div class="min-w-0">
+                <div class="text-xs font-black text-slate-800 truncate">${s.name}</div>
+                <div class="text-xs font-bold text-pink-600">已收集 ${cnt}/4 件・點此穿戴</div>
+              </div>
+            </button>`;
+        }).join('');
+
+        const cat = this.state.wardrobeCat || 'avatars';
+        const tabs = [
+          { id: 'avatars', label: `👧 頭像 (${w.avatars.length}/${AVATAR_CATALOG.length})` },
+          { id: 'outfits', label: `👗 服裝 (${w.outfits.length}/${OUTFIT_CATALOG.length})` },
+          { id: 'headwear', label: `👑 頭飾 (${w.headwear.length}/${HEADWEAR_CATALOG.length})` },
+          { id: 'jewelry', label: `💎 首飾品 (${w.jewelry.length}/${JEWELRY_CATALOG.length})` }
+        ];
+        document.getElementById('wardrobe-cat-tabs').innerHTML = tabs.map(t => `
+          <button onclick="app.setWardrobeCategory('${t.id}')" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
+            cat === t.id ? 'bg-slate-800 text-white shadow-sm' : 'bg-pink-50 text-slate-600 hover:bg-pink-100'
+          }">${t.label}</button>
+        `).join('');
+
+        const catalogMap = { avatars: AVATAR_CATALOG, outfits: OUTFIT_CATALOG, headwear: HEADWEAR_CATALOG, jewelry: JEWELRY_CATALOG };
+        const equippedId = cat === 'avatars' ? eq.avatar : cat === 'outfits' ? eq.outfit : cat === 'headwear' ? eq.headwear : eq.jewelry;
+
+        document.getElementById('wardrobe-items-grid').innerHTML = catalogMap[cat].map(item => {
+          const isOwned = w[cat].includes(item.id);
+          const isEquipped = (equippedId === item.id);
+          const cost = CRYSTAL_COST[item.rarity] || 50;
+          const rBadge = item.rarity === 'UR'
+            ? 'bg-gradient-to-r from-pink-500 via-amber-400 to-teal-400 text-white'
+            : item.rarity === 'SSR'
+              ? 'bg-gradient-to-r from-amber-400 to-pink-500 text-white'
+              : item.rarity === 'SR' ? 'bg-teal-500 text-white' : 'bg-sky-100 text-sky-700';
+
+          return `
+            <div onclick="${isOwned ? `app.equipItem('${cat}', '${item.id}')` : ''}" class="p-3 rounded-2xl border-2 text-center space-y-2 transition-all ${
+              isEquipped
+                ? 'bg-gradient-to-b from-pink-50 to-teal-50 border-pink-500 ring-2 ring-pink-300 shadow-md cursor-pointer'
+                : isOwned
+                  ? 'bg-white border-pink-200 hover:border-teal-400 cursor-pointer btn-bounce shadow-sm'
+                  : 'bg-slate-50/90 border-slate-200'
+            }">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-black px-2 py-0.5 rounded-full ${rBadge}">${item.rarity}</span>
+                <span class="text-xs font-black ${isEquipped ? 'text-pink-600' : isOwned ? 'text-teal-600' : 'text-slate-400'}">
+                  ${isEquipped ? '👗 穿戴中' : isOwned ? '✓ 已擁有' : '🔒 未解鎖'}
+                </span>
+              </div>
+              <div class="w-20 h-20 mx-auto rounded-2xl bg-white p-1 border border-pink-100 ${isOwned ? '' : 'opacity-55 grayscale-[35%]'}">
+                ${this.renderPrizePreviewSVG({ kind: cat, id: item.id })}
+              </div>
+              <div class="text-xs font-black text-slate-800 leading-snug">${item.name}</div>
+              <div class="text-xs text-slate-500 leading-snug">${item.desc || SERIES_LABELS[item.series] || ''}</div>
+              ${!isOwned ? `
+                <button onclick="event.stopPropagation(); app.exchangeWithCrystals('${cat}', '${item.id}', '${item.rarity}')" class="btn-bounce w-full py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-800 border border-purple-300 text-xs font-black">
+                  💎 ${cost} 水晶直接兌換
+                </button>` : ''}
+            </div>`;
+        }).join('');
+      },
+
+      renderStickersPanel() {
+        const owned = new Set(this.state.stickers || []);
+        document.getElementById('sticker-collected-num').textContent = owned.size;
+        document.getElementById('sticker-total-num').textContent = STICKER_CATALOG.length;
+
+        const curFilter = this.state.stickerFilter || 'ALL';
+        const filterKeys = ['ALL', 'vocaloid', 'sanrio', 'oshinoko', 'frieren', 'madoka', 'ansatsu', 'aot', 'anime_stars'];
+        document.getElementById('sticker-series-filters').innerHTML = filterKeys.map(k => {
+          const cnt = k === 'ALL' ? STICKER_CATALOG.length : STICKER_CATALOG.filter(s => s.series === k).length;
+          const label = k === 'ALL' ? `🌈 全部 (${cnt})` : `${SERIES_LABELS[k]} (${cnt})`;
+          const active = (curFilter === k);
+          return `
+            <button onclick="app.setStickerFilter('${k}')" class="px-3 py-1.5 rounded-full text-xs font-black border transition-all ${
+              active ? 'bg-slate-800 text-white border-slate-800 shadow-sm' : 'bg-white text-slate-600 border-pink-200 hover:bg-pink-50'
+            }">${label}</button>`;
+        }).join('');
+
+        const list = curFilter === 'ALL' ? STICKER_CATALOG : STICKER_CATALOG.filter(s => s.series === curFilter);
+        document.getElementById('stickers-grid').innerHTML = list.map(st => {
+          const isUnlocked = owned.has(st.id);
+          const cost = CRYSTAL_COST[st.rarity] || 40;
+          const rarityColor = st.rarity === 'UR'
+            ? 'bg-gradient-to-r from-pink-500 via-amber-400 to-teal-400 text-white'
+            : st.rarity === 'SSR'
+              ? 'bg-gradient-to-r from-amber-400 to-pink-500 text-white'
+              : st.rarity === 'SR'
+                ? 'bg-teal-500 text-white'
+                : 'bg-sky-100 text-sky-700';
+          const cardCls = isUnlocked
+            ? (st.rarity === 'UR' ? 'ur-holo-card cursor-pointer btn-bounce' : 'bg-white border-pink-200 shadow-sm cursor-pointer btn-bounce')
+            : 'bg-slate-50/85 border-slate-200';
+
+          return `
+            <div onclick="${isUnlocked ? `app.selectStickerPartner('${st.id}')` : ''}" class="p-3 rounded-2xl border-2 text-center space-y-2 transition-all ${cardCls}">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs font-black px-2 py-0.5 rounded-full ${rarityColor}">${st.rarity}</span>
+                <span class="text-xs font-bold ${isUnlocked ? 'text-pink-600' : 'text-slate-400'}">${isUnlocked ? (this.state.featuredSticker === st.id ? '💖 應援中' : '✨ 已收藏') : '🔒 未解鎖'}</span>
+              </div>
+              <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-teal-50 via-white to-pink-50 p-1 border border-pink-100 flex items-center justify-center ${isUnlocked ? '' : 'opacity-45 grayscale-[45%]'}">
+                ${renderChibiSVG(st.look || { avatar: st.buddy })}
+              </div>
+              <div class="text-xs font-bold text-teal-700">${SERIES_LABELS[st.series] || ''}</div>
+              <div class="text-xs font-black text-slate-800 leading-snug">${st.title}</div>
+              <p class="text-xs text-slate-500 leading-snug">${isUnlocked ? st.desc : '可在動漫貼紙池抽取，或用水晶兌換！'}</p>
+              ${!isUnlocked ? `
+                <button onclick="event.stopPropagation(); app.exchangeWithCrystals('sticker', '${st.id}', '${st.rarity}')" class="btn-bounce w-full py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-800 border border-purple-300 text-xs font-black">
+                  💎 ${cost} 水晶兌換
+                </button>` : ''}
+            </div>`;
+        }).join('');
+      }
+    };
+
+    Object.assign(QiaoQiaoApp.prototype, GACHA_METHODS_MIXIN);
     const app = new QiaoQiaoApp();
     window.addEventListener('DOMContentLoaded', () => app.init());
   </script>
