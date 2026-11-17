@@ -246,7 +246,7 @@
             </a>
           </div>
           <p class="text-xs text-pink-500 font-semibold">
-            🎀 夢幻圓潤洋娃娃沙龍 × 世界計畫初音 × 櫻花初音 × 弗莉蓮 陪妳快樂闖關！
+            🎀 夢幻洋娃娃沙龍 × 全 150 關開放自由選關 陪喬喬快樂闖關！
           </p>
         </div>
       </div>
@@ -276,7 +276,7 @@
     <!-- Desktop / Tablet Sub-Navigation -->
     <nav class="hidden md:flex max-w-6xl mx-auto px-6 py-1.5 gap-2 border-t border-pink-50 text-sm font-bold">
       <button onclick="app.switchTab('home')" id="nav-d-home" class="px-4 py-1.5 rounded-full transition-all">🏠 今日三關任務</button>
-      <button onclick="app.switchTab('map')" id="nav-d-map" class="px-4 py-1.5 rounded-full transition-all">🗺️ 150關冒險地圖</button>
+      <button onclick="app.switchTab('map')" id="nav-d-map" class="px-4 py-1.5 rounded-full transition-all">🎯 150關自由選關</button>
       <button onclick="app.switchTab('mistakes')" id="nav-d-mistakes" class="px-4 py-1.5 rounded-full transition-all">📓 魔法錯題本 <span id="badge-d-mistakes" class="ml-1 px-1.5 py-0.2 text-xs rounded-full bg-rose-100 text-rose-600">0</span></button>
       <button onclick="app.switchTab('gacha')" id="nav-d-gacha" class="px-4 py-1.5 rounded-full transition-all">👗 洋娃娃換裝＆抽卡</button>
       <button onclick="app.switchTab('calendar')" id="nav-d-calendar" class="px-4 py-1.5 rounded-full transition-all">📅 50天進度與備份</button>
@@ -326,6 +326,7 @@
               <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 border border-pink-200 text-xs font-bold text-pink-600">
                 <span id="hero-partner-name">🌈 世界計畫初音</span>
                 <span>・五年級下學期康軒評量</span>
+                <button onclick="app.switchTab('map')" class="ml-1 px-2.5 py-0.5 rounded-full bg-teal-500 text-white text-xs font-black transition-all">🎯 自由選關</button>
                 <button onclick="app.switchTab('gacha'); app.setGachaSubTab('wardrobe');" class="ml-1 px-2.5 py-0.5 rounded-full sekai-candy-btn text-white text-xs font-black transition-all">👗 洋娃娃沙龍</button>
               </div>
               <h2 id="hero-greeting" class="text-lg sm:text-2xl font-black text-slate-800 leading-snug">
@@ -356,20 +357,33 @@
         </div>
       </div>
 
-      <!-- TODAY'S 3 MISSIONS (每日三關核心設計：英文 / 社會 / 自然，每科約10分鐘) -->
+            <!-- TODAY'S 3 MISSIONS + FREE STAGE & UNIT PICKER -->
       <div class="space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2 px-1">
           <div class="flex items-center gap-2">
-            <span class="text-xl">🌟</span>
+            <span class="text-xl">🎯</span>
             <h3 class="text-base sm:text-xl font-black text-slate-800">
-              喬喬的五下今日闖關任務（每日三關・每科約 10 分鐘）
+              喬喬的自由選關任務（配合學校進度・想玩哪一關都能直接選！）
             </h3>
           </div>
-          <span id="today-date-label" class="text-xs font-bold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full cursor-pointer">
+          <span id="today-date-label" class="text-xs font-bold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
           </span>
         </div>
 
-        <!-- 3 Subject Mission Cards Grid -->
+        <!-- Quick School Progress Unit Jump Bar -->
+        <div class="kawaii-card p-3.5 sm:p-4 bg-gradient-to-r from-pink-50/90 via-white to-teal-50/90 border-2 border-pink-200 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-1.5">
+            <div class="text-xs sm:text-sm font-black text-slate-800">
+              🏫 學校已經上過前面的課了嗎？點一下直接跳到目前單元（每科卡片也能個別選第 1～50 關喔！）：
+            </div>
+            <button onclick="app.switchTab('map')" class="text-xs font-black text-pink-600 hover:underline">
+              🗺️ 瀏覽 五下 全部 150 關清單 →
+            </button>
+          </div>
+          <div id="school-quick-jump-bar" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <!-- 3 Subject Mission Cards Grid (Each with Direct Unit Pills & 50-Stage Dropdown!) -->
         <div id="daily-missions-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <!-- Populated dynamically by JS -->
         </div>
@@ -384,7 +398,7 @@
               <span>📊</span> 三科康軒五下學習進度（每科 50 關）
             </h3>
             <button onclick="app.switchTab('map')" class="text-xs font-bold text-teal-600 hover:underline">
-              查看全部 150 關地圖 →
+              🎯 前往 150 關自由選關 →
             </button>
           </div>
           <div id="subject-progress-list" class="space-y-3">
@@ -423,30 +437,33 @@
       </div>
     </section>
 
-    <!-- =================================================================== -->
-    <!-- VIEW 2: 150-STAGE ADVENTURE MAP (三科 50 關完整地圖) -->
+        <!-- =================================================================== -->
+    <!-- VIEW 2: 150-STAGE FREE LESSON PICKER (三科 50 關全開放自由選關大廳) -->
     <!-- =================================================================== -->
     <section id="view-map" class="hidden space-y-4 animate-pop">
-      <div class="kawaii-card p-4 sm:p-5 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="kawaii-card p-4 sm:p-6 space-y-4 bg-gradient-to-r from-teal-50/60 via-white to-pink-50/60">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
-            <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2">
-              <span>🗺️</span> 康軒五下 150 關星光冒險地圖
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 border border-teal-200 text-xs font-black">
+              🔓 全 150 關完全開放・不需照順序過關！
+            </span>
+            <h2 class="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2 mt-1">
+              <span>🎯</span> 康軒五下 150 關自由選關大廳
             </h2>
-            <p class="text-xs text-slate-500 mt-0.5">
-              每個科目共有 50 關，循序漸進涵蓋五年級下學期全部 4 大單元與期中、期末評量！可隨時點選任何一關進行學習或複習。
+            <p class="text-xs text-slate-600 mt-0.5">
+              學校已經教過的課程可以直接跳過！點選上方「科目」與「單元」，或搜尋課名關鍵字，點任何一關都能馬上開始挑戰或複習喔！
             </p>
           </div>
 
           <!-- Subject Filter Tabs -->
-          <div class="flex bg-pink-50/80 p-1 rounded-2xl border-2 border-pink-100 self-start">
-            <button onclick="app.setMapSubject('english')" id="map-tab-english" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all">
+          <div class="flex flex-wrap bg-pink-50/90 p-1.5 rounded-2xl border-2 border-pink-200 self-start gap-1">
+            <button onclick="app.setMapSubject('english')" id="map-tab-english" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all">
               🎤 英文 (50關)
             </button>
-            <button onclick="app.setMapSubject('social')" id="map-tab-social" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all">
+            <button onclick="app.setMapSubject('social')" id="map-tab-social" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all">
               ☁️ 社會 (50關)
             </button>
-            <button onclick="app.setMapSubject('science')" id="map-tab-science" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black transition-all">
+            <button onclick="app.setMapSubject('science')" id="map-tab-science" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black transition-all">
               🌸 自然 (50關)
             </button>
           </div>
@@ -455,6 +472,14 @@
         <!-- Unit Filter Pills -->
         <div id="map-unit-filters" class="flex flex-wrap gap-1.5 pt-1">
           <!-- Rendered by JS -->
+        </div>
+
+        <!-- Search Input & Status Filter Pills -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2 border-t border-pink-100">
+          <div class="relative flex-1 max-w-md">
+            <input id="map-search-input" type="text" oninput="app.setMapSearch(this.value)" placeholder="🔍 輸入課名或關鍵字快速找關卡（例如：期中考、交通、聲音、太陽...）" class="w-full px-3.5 py-2 rounded-2xl border-2 border-pink-200 bg-white text-xs sm:text-sm font-bold text-slate-700 focus:outline-none focus:border-pink-400" />
+          </div>
+          <div id="map-status-filters" class="flex flex-wrap items-center gap-1.5"></div>
         </div>
       </div>
 
@@ -468,22 +493,32 @@
     <!-- VIEW 3: INTERACTIVE GAMEPLAY STAGE (三階段 10分鐘深度學習闖關) -->
     <!-- =================================================================== -->
     <section id="view-play" class="hidden space-y-4 animate-pop">
-      <!-- Stage Top Control Bar -->
-      <div class="kawaii-card p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-2 bg-white/95">
-        <div class="flex items-center gap-2.5">
-          <button onclick="app.exitStage()" class="btn-bounce px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1">
-            <span>←</span> 返回
+            <!-- Stage Top Control Bar (With Instant In-Stage Switcher!) -->
+      <div class="kawaii-card p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white/95">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <button onclick="app.exitStage()" class="btn-bounce px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1 shrink-0">
+            <span>←</span> 首頁
           </button>
-          <div>
-            <div class="flex items-center gap-1.5">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-1.5">
               <span id="play-subject-badge" class="text-xs font-black px-2 py-0.5 rounded-full"></span>
               <span id="play-unit-badge" class="text-xs font-bold text-slate-500"></span>
             </div>
-            <h2 id="play-stage-title" class="text-sm sm:text-base font-black text-slate-800 mt-0.5"></h2>
+            <h2 id="play-stage-title" class="text-sm sm:text-base font-black text-slate-800 mt-0.5 truncate"></h2>
           </div>
         </div>
 
-        <!-- 10-Minute Study Timer & Phase Indicator -->
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Instant Stage Switcher inside Gameplay -->
+          <div id="play-stage-switcher-wrap" class="flex items-center gap-1.5">
+            <select id="play-stage-quick-select" aria-label="快速切換關卡" onchange="if(app.activeStage) app.launchStage(app.activeStage.subject, this.value)" class="max-w-[210px] sm:max-w-[250px] h-8 px-2.5 rounded-xl border-2 border-pink-200 bg-pink-50/50 text-xs font-black text-slate-700 focus:outline-none focus:border-pink-400">
+            </select>
+            <button onclick="if(app.activeStage) app.openSubjectStagePicker(app.activeStage.subject, app.activeStage.meta.unit)" class="btn-bounce px-2.5 py-1.5 rounded-xl bg-white border-2 border-pink-200 text-pink-600 text-xs font-black shrink-0">
+              🎯 選關清單
+            </button>
+          </div>
+
+          <!-- 10-Minute Study Timer & Phase Indicator -->
         <div class="flex items-center gap-2 sm:gap-3">
           <div class="flex items-center gap-1.5 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full text-xs font-bold text-teal-700" title="建議每關學習時間約 8~10 分鐘，不限時壓力！">
             <span>⏱️ 學習時間</span>
@@ -509,22 +544,27 @@
         </div>
       </div>
 
-      <!-- PHASE 1: STUDY FLASHCARDS (魔法重點祕笈) -->
+            <!-- PHASE 1: STUDY FLASHCARDS (魔法重點祕笈) -->
       <div id="phase-study" class="kawaii-card p-4 sm:p-6 space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-pink-100 pb-3">
           <div class="flex items-center gap-3">
             <div id="study-buddy-svg" class="w-14 h-14 rounded-2xl bg-pink-50 p-1.5 border-2 border-pink-200 shrink-0"></div>
             <div>
               <h3 class="text-base sm:text-lg font-black text-slate-800">
-                ✨ 第一階段：先看重點祕笈，把觀念記起來！
+                ✨ 第一階段：魔法重點祕笈（學校上過可直接跳測驗喔！）
               </h3>
               <p class="text-xs text-slate-500">
-                請喬喬點選每一張「魔法知識卡」閱讀重點（英文卡可以點 🔊 聽發音喔！），全部打勾就能進入測驗！
+                點選「魔法知識卡」可複習重點（英文卡可點 🔊 聽發音）；如果學校已經教熟了，也可直接點右側按鈕開始測驗！
               </p>
             </div>
           </div>
-          <div class="text-xs font-black text-teal-600 bg-teal-50 px-3 py-1.5 rounded-full border border-teal-200 self-start sm:self-center">
-            已學會：<span id="study-read-count">0</span> / <span id="study-total-count">4</span> 張
+          <div class="flex flex-wrap items-center gap-2 self-start sm:self-center shrink-0">
+            <span class="text-xs font-black text-teal-600 bg-teal-50 px-3 py-1.5 rounded-full border border-teal-200">
+              已讀：<span id="study-read-count">0</span> / <span id="study-total-count">4</span>
+            </span>
+            <button onclick="app.startPhase2Quiz()" class="btn-bounce px-3.5 py-1.5 rounded-full sekai-candy-btn text-white text-xs font-black shadow-sm">
+              ⚡ 學校學過了，直接測驗 →
+            </button>
           </div>
         </div>
 
@@ -643,12 +683,18 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <button onclick="app.switchTab('home')" class="btn-bounce px-6 py-3 rounded-2xl bg-gradient-to-r from-teal-400 to-pink-400 text-white font-black text-sm shadow-md">
-            🏠 回到今日三關任務
+                <div class="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+          <button id="btn-complete-next-stage" onclick="app.playNextStage()" class="btn-bounce px-6 py-3 rounded-2xl sekai-candy-btn text-white font-black text-sm shadow-md">
+            ⏭️ 直接挑戰下一關
           </button>
-          <button onclick="app.replayCurrentStage()" class="btn-bounce px-5 py-3 rounded-2xl bg-white border-2 border-pink-200 text-pink-600 font-bold text-sm">
-            🔄 再玩一次本關
+          <button onclick="app.openSubjectStagePicker(app.activeStage ? app.activeStage.subject : 'english')" class="btn-bounce px-5 py-3 rounded-2xl bg-teal-50 border-2 border-teal-300 text-teal-800 font-black text-sm shadow-sm">
+            🎯 自由挑其他關卡
+          </button>
+          <button onclick="app.switchTab('home')" class="btn-bounce px-5 py-3 rounded-2xl bg-white border-2 border-pink-200 text-slate-700 font-black text-sm shadow-sm">
+            🏠 回到首頁三關
+          </button>
+          <button onclick="app.replayCurrentStage()" class="btn-bounce px-4 py-3 rounded-2xl bg-white border-2 border-pink-200 text-pink-600 font-bold text-sm">
+            🔄 再玩本關
           </button>
           <button onclick="app.switchTab('gacha')" class="btn-bounce px-5 py-3 rounded-2xl bg-amber-50 border-2 border-amber-200 text-amber-700 font-bold text-sm">
             👗 去洋娃娃沙龍＆抽蓬蓬裙
@@ -4015,6 +4061,7 @@
 
       saveState() {
         this.ensureV2State();
+        if (typeof this.ensureStagePickerState === 'function') this.ensureStagePickerState();
         this.state.wardrobe = this.mergeWardrobeWithShared(this.state.wardrobe);
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
@@ -4148,11 +4195,8 @@
       }
 
       renderHome() {
-        this.ensureV2State();
-        const giftBanner = document.getElementById('v2-welcome-gift-banner');
-        if (giftBanner) giftBanner.classList.toggle('hidden', Boolean(this.state.v4DollSalonGiftClaimed));
-        const partnerObj = this.getEquippedPartnerMeta();
-        document.getElementById('hero-partner-svg').innerHTML = this.getEquippedAvatarSVG();
+        const partnerObj = CHARACTER_SVGS[this.state.partner] || CHARACTER_SVGS.miku;
+        document.getElementById('hero-partner-svg').innerHTML = partnerObj.svg;
         document.getElementById('hero-partner-name').textContent = partnerObj.name;
         document.getElementById('hero-speech').textContent = partnerObj.cheer;
 
@@ -4284,7 +4328,7 @@
         document.getElementById('subject-progress-list').innerHTML = progressHtml;
 
         document.getElementById('home-mistake-count').textContent = `${(this.state.mistakes || []).length} 題待複習`;
-        const ws = this.getTotalWardrobeStats(); document.getElementById('home-sticker-count').textContent = `洋娃娃服飾 ${ws.owned}/${ws.total}・角色卡 ${new Set(this.state.stickers || []).size}/${STICKER_CATALOG.length}`;
+        document.getElementById('home-sticker-count').textContent = `已收集 ${(this.state.stickers || []).length} / 24`;
       }
 
       setMapSubject(sub) {
@@ -4530,7 +4574,8 @@
         document.getElementById('play-unit-badge').textContent = st.meta.unit;
         document.getElementById('play-stage-title').textContent = `${st.meta.title}（${st.meta.sub}）`;
 
-        document.getElementById('study-buddy-svg').innerHTML = this.getEquippedAvatarSVG();
+        const buddy = CHARACTER_SVGS[st.meta.buddy] || CHARACTER_SVGS.miku;
+        document.getElementById('study-buddy-svg').innerHTML = buddy.svg;
 
         this.setPhaseIndicators(1);
         this.renderStudyCards();
@@ -4791,7 +4836,7 @@
         const totalQ = st.questions.length;
         const ratio = this.quizScore / totalQ;
         const stars = ratio >= 0.85 ? 3 : ratio >= 0.6 ? 2 : 1;
-        const earnedCoins = stars * 15;
+        const earnedCoins = stars * 10;
 
         this.state.coins = (this.state.coins || 0) + earnedCoins;
 
@@ -4819,9 +4864,8 @@
 
         this.saveState();
 
-        const buddy = this.getEquippedPartnerMeta();
-        document.getElementById('complete-mascot-svg').innerHTML = this.getEquippedAvatarSVG();
-        launchConfetti(32);
+        const buddy = CHARACTER_SVGS[st.meta.buddy] || CHARACTER_SVGS.miku;
+        document.getElementById('complete-mascot-svg').innerHTML = buddy.svg;
         document.getElementById('complete-stars-row').textContent = '⭐'.repeat(stars);
         document.getElementById('complete-title').textContent = this.isMistakePractice
           ? '🎉 錯題大掃除挑戰完成！'
@@ -6828,7 +6872,761 @@
       }
     };
 
-    Object.assign(QiaoQiaoApp.prototype, GACHA_METHODS_MIXIN);
+    // =========================================================================
+    // V5 FREE STAGE & UNIT SELECTOR MIXIN (全 150 關自由選關・配合學校進度隨時跳關！)
+    // Lets Qiaoqiao freely pick ANY unit or ANY stage (1..50) per subject right
+    // from the Home cards, the 150-Stage Picker tab, inside active gameplay,
+    // and on the Stage Complete celebration screen — never forcing 1-by-1 order!
+    // =========================================================================
+
+    const STAGE_PICKER_MIXIN = {
+      ensureStagePickerState() {
+        if (!this.state.subjectCursor || typeof this.state.subjectCursor !== 'object') {
+          this.state.subjectCursor = { english: null, social: null, science: null };
+        }
+        ['english', 'social', 'science'].forEach(sub => {
+          const val = Number(this.state.subjectCursor[sub]);
+          if (!Number.isInteger(val) || val < 1 || val > 50) {
+            this.state.subjectCursor[sub] = null;
+          }
+        });
+        if (typeof this.mapSearchQuery !== 'string') this.mapSearchQuery = '';
+        if (!['ALL', 'TODO', 'DONE'].includes(this.mapStatusFilter)) this.mapStatusFilter = 'ALL';
+      },
+
+      getSubjectStagesList(subject) {
+        if (subject === 'english') return CURRICULUM_DATA.englishStages;
+        if (subject === 'social') return CURRICULUM_DATA.socialStages;
+        return CURRICULUM_DATA.scienceStages;
+      },
+
+      getSubjectUnitsSummary(subject) {
+        const stages = this.getSubjectStagesList(subject);
+        const cleared = (this.state.clearedStages && this.state.clearedStages[subject]) || {};
+        const unitMap = new Map();
+        stages.forEach(st => {
+          if (!unitMap.has(st.unit)) {
+            unitMap.set(st.unit, { unit: st.unit, firstId: st.id, lastId: st.id, total: 0, done: 0 });
+          }
+          const entry = unitMap.get(st.unit);
+          entry.lastId = st.id;
+          entry.total++;
+          if (cleared[st.id]) entry.done++;
+        });
+        return Array.from(unitMap.values());
+      },
+
+      findNextUnplayedFrom(subject, startId = 1) {
+        const cleared = (this.state.clearedStages && this.state.clearedStages[subject]) || {};
+        const safeStart = Math.max(1, Math.min(50, Number(startId) || 1));
+        for (let i = safeStart; i <= 50; i++) {
+          if (!cleared[i]) return i;
+        }
+        for (let i = 1; i < safeStart; i++) {
+          if (!cleared[i]) return i;
+        }
+        return safeStart;
+      },
+
+      getNextStageId(subject) {
+        this.ensureStagePickerState();
+        const cursor = this.state.subjectCursor[subject];
+        if (cursor && cursor >= 1 && cursor <= 50) {
+          return cursor;
+        }
+        if (this.state.selectedPlanDay && this.state.selectedPlanDay >= 1 && this.state.selectedPlanDay <= 50) {
+          return Number(this.state.selectedPlanDay);
+        }
+        return this.findNextUnplayedFrom(subject, 1);
+      },
+
+      buildStageOptionsHtml(subject, selectedId) {
+        const stages = this.getSubjectStagesList(subject);
+        const cleared = (this.state.clearedStages && this.state.clearedStages[subject]) || {};
+        const groups = new Map();
+        stages.forEach(st => {
+          if (!groups.has(st.unit)) groups.set(st.unit, []);
+          groups.get(st.unit).push(st);
+        });
+
+        const htmlParts = [];
+        groups.forEach((list, unitName) => {
+          const opts = list.map(st => {
+            const info = cleared[st.id];
+            const statusTag = info ? `✅${'★'.repeat(info.stars || 3)}` : '✨';
+            const sel = Number(st.id) === Number(selectedId) ? ' selected' : '';
+            return `<option value="${st.id}"${sel}>${statusTag} 第 ${st.id} 關｜${st.title}</option>`;
+          }).join('');
+          htmlParts.push(`<optgroup label="📘 ${unitName}（第 ${list[0].id}~${list[list.length - 1].id} 關）">${opts}</optgroup>`);
+        });
+        return htmlParts.join('');
+      },
+
+      pickSubjectStage(subject, stageId, silent = false) {
+        this.ensureStagePickerState();
+        sfx.pop();
+        const targetId = Math.max(1, Math.min(50, Number(stageId) || 1));
+
+        // Preserve any active calendar plan day on the OTHER subjects before clearing global override
+        if (this.state.selectedPlanDay) {
+          const planDay = Number(this.state.selectedPlanDay);
+          ['english', 'social', 'science'].forEach(s => {
+            if (s !== subject && !this.state.subjectCursor[s]) {
+              this.state.subjectCursor[s] = planDay;
+            }
+          });
+          this.state.selectedPlanDay = null;
+        }
+
+        this.state.subjectCursor[subject] = targetId;
+        this.saveState();
+        if (this.currentTab === 'home') this.renderHome();
+        if (this.currentTab === 'map') this.renderMap();
+        if (!silent) {
+          const meta = this.getStageMeta(subject, targetId);
+          this.showMiniToast(`🎯 已切換至【第 ${targetId} 關：${meta.title}】！點挑戰按鈕即可開始！`);
+        }
+      },
+
+      stepSubjectStage(subject, delta) {
+        const cur = this.getNextStageId(subject);
+        let next = cur + delta;
+        if (next < 1) next = 50;
+        if (next > 50) next = 1;
+        this.pickSubjectStage(subject, next, true);
+      },
+
+      jumpSubjectToUnitIndex(subject, unitIdx) {
+        this.ensureStagePickerState();
+        const units = this.getSubjectUnitsSummary(subject);
+        const uObj = units[unitIdx];
+        if (!uObj) return;
+        const stages = this.getSubjectStagesList(subject).filter(s => s.unit === uObj.unit);
+        const cleared = (this.state.clearedStages && this.state.clearedStages[subject]) || {};
+        const firstUnplayed = stages.find(s => !cleared[s.id]);
+        const targetId = firstUnplayed ? firstUnplayed.id : stages[0].id;
+        this.pickSubjectStage(subject, targetId, true);
+        this.showMiniToast(`🎯 已跳至【${uObj.unit}】第 ${targetId} 關！`);
+      },
+
+      jumpAllSubjectsToSchoolStage(startStageId, labelText) {
+        this.ensureStagePickerState();
+        sfx.correct();
+        this.state.selectedPlanDay = null;
+        ['english', 'social', 'science'].forEach(sub => {
+          const cleared = (this.state.clearedStages && this.state.clearedStages[sub]) || {};
+          let chosen = startStageId;
+          for (let i = startStageId; i <= 50; i++) {
+            if (!cleared[i]) {
+              chosen = i;
+              break;
+            }
+          }
+          this.state.subjectCursor[sub] = chosen;
+        });
+        this.saveState();
+        this.renderHome();
+        this.showMiniToast(`🏫 已幫喬喬將三科同步切換到【${labelText}】！各科卡片也可個別選不同關卡喔！`);
+      },
+
+      resetAutoRecommend() {
+        this.ensureStagePickerState();
+        sfx.pop();
+        this.state.selectedPlanDay = null;
+        this.state.subjectCursor = { english: null, social: null, science: null };
+        this.saveState();
+        this.renderHome();
+        this.showMiniToast('✨ 已恢復從最早尚未過關的關卡推薦！隨時都能再自由跳關喔！');
+      },
+
+      openSubjectStagePicker(subject, unitName = 'ALL') {
+        this.ensureStagePickerState();
+        this.mapSubject = ['english', 'social', 'science'].includes(subject) ? subject : 'english';
+        this.mapUnitFilter = unitName || 'ALL';
+        this.mapSearchQuery = '';
+        this.mapStatusFilter = 'ALL';
+        const searchEl = document.getElementById('map-search-input');
+        if (searchEl) searchEl.value = '';
+        this.switchTab('map');
+      },
+
+      selectPlanDay(day) {
+        this.ensureStagePickerState();
+        sfx.pop();
+        const d = Math.max(1, Math.min(50, Number(day) || 1));
+        this.state.selectedPlanDay = d;
+        this.state.subjectCursor = { english: d, social: d, science: d };
+        this.saveState();
+        this.switchTab('home');
+        this.showMiniToast(`📅 已切換至第 ${d} 天計畫（英文・社會・自然第 ${d} 關）！`);
+      },
+
+      renderHome() {
+        this.ensureV2State();
+        this.ensureStagePickerState();
+        const is5B = typeof STORAGE_KEY === 'string' && STORAGE_KEY.includes('5b');
+
+        const giftBanner = document.getElementById('v2-welcome-gift-banner');
+        if (giftBanner) giftBanner.classList.toggle('hidden', Boolean(this.state.v4DollSalonGiftClaimed));
+        const partnerObj = this.getEquippedPartnerMeta();
+        document.getElementById('hero-partner-svg').innerHTML = this.getEquippedAvatarSVG();
+        document.getElementById('hero-partner-name').textContent = partnerObj.name;
+        document.getElementById('hero-speech').textContent = partnerObj.cheer;
+
+        const engDone = Object.keys(this.state.clearedStages.english || {}).length;
+        const socDone = Object.keys(this.state.clearedStages.social || {}).length;
+        const sciDone = Object.keys(this.state.clearedStages.science || {}).length;
+        const totalDone = engDone + socDone + sciDone;
+        const pct = Math.round((totalDone / 150) * 100);
+
+        document.getElementById('home-total-progress-text').textContent = `${totalDone} / 150 關 (${pct}%)`;
+        document.getElementById('home-total-progress-bar').style.width = `${pct}%`;
+
+        const todayKey = this.getTodayKey();
+        const todayRecord = this.state.dailyHistory[todayKey] || {};
+        const todayCount = ['english', 'social', 'science'].filter(s => todayRecord[s]).length;
+        document.getElementById('home-today-badge').textContent = `${todayCount} / 3 關完成`;
+
+        const hasCustomCursor = Boolean(
+          this.state.selectedPlanDay ||
+          this.state.subjectCursor.english ||
+          this.state.subjectCursor.social ||
+          this.state.subjectCursor.science
+        );
+        const dateEl = document.getElementById('today-date-label');
+        if (dateEl) {
+          dateEl.textContent = hasCustomCursor
+            ? `🎯 自選關卡模式中（點此可恢復從頭推薦）`
+            : `🔓 全 150 關開放自由選關（今日：${todayKey}）`;
+          dateEl.className = "cursor-pointer text-xs font-bold text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-200 px-3 py-1 rounded-full transition-all";
+          dateEl.onclick = () => {
+            if (hasCustomCursor) this.resetAutoRecommend();
+            else this.switchTab('map');
+          };
+        }
+
+        // Render Quick School-Progress Jump Bar right above the 3 Subject Cards
+        const quickJumpEl = document.getElementById('school-quick-jump-bar');
+        if (quickJumpEl) {
+          const jumps = [
+            { start: 1, label: '📘 第1單元 (第1關起)' },
+            { start: 13, label: '📗 第2單元 (第13關起)' },
+            { start: 24, label: '📝 期中評量 (第24~25關)' },
+            { start: 26, label: '📙 第3單元 (第26關起)' },
+            { start: 38, label: '📕 第4單元 (第38關起)' },
+            { start: 47, label: '🏆 期末總複習 (第47關起)' }
+          ];
+          quickJumpEl.innerHTML = jumps.map(j => `
+            <button onclick="app.jumpAllSubjectsToSchoolStage(${j.start}, '${j.label}')" class="btn-bounce px-3 py-1.5 rounded-full bg-white hover:bg-pink-50 border-2 border-pink-200 text-slate-700 text-xs font-black shadow-sm">
+              ${j.label}
+            </button>
+          `).join('');
+        }
+
+        const subjectsConfig = is5B
+          ? [
+              {
+                key: "english",
+                label: "🎤 英文科 (Wonder World 6)",
+                themeCard: "kawaii-card-miku",
+                badgeBg: "bg-teal-100 text-teal-800 border-teal-300",
+                pillActive: "bg-teal-500 text-white border-teal-500",
+                btnGradient: "from-teal-400 to-emerald-400",
+                mascot: "miku",
+                timeLabel: "約 10 分鐘 (含單字發音＋8題＋配對)"
+              },
+              {
+                key: "social",
+                label: "☁️ 社會科 (康軒五下經濟・清代・日治)",
+                themeCard: "kawaii-card-cinna",
+                badgeBg: "bg-sky-100 text-sky-800 border-sky-300",
+                pillActive: "bg-sky-500 text-white border-sky-500",
+                btnGradient: "from-sky-400 to-blue-400",
+                mascot: "cinnamoroll",
+                timeLabel: "約 10 分鐘 (含歷史圖卡＋8題＋配對)"
+              },
+              {
+                key: "science",
+                label: "🌸 自然科 (康軒五下力/大地/植物/熱)",
+                themeCard: "kawaii-card-melody",
+                badgeBg: "bg-pink-100 text-pink-800 border-pink-300",
+                pillActive: "bg-pink-500 text-white border-pink-500",
+                btnGradient: "from-pink-400 to-rose-400",
+                mascot: "mymelody",
+                timeLabel: "約 10 分鐘 (含實驗祕笈＋8題＋配對)"
+              }
+            ]
+          : [
+              {
+                key: "english",
+                label: "🎤 英文科 (Wonder World 5)",
+                themeCard: "kawaii-card-miku",
+                badgeBg: "bg-teal-100 text-teal-800 border-teal-300",
+                pillActive: "bg-teal-500 text-white border-teal-500",
+                btnGradient: "from-teal-400 to-emerald-400",
+                mascot: "miku",
+                timeLabel: "約 10 分鐘 (含單字發音＋8題＋配對)"
+              },
+              {
+                key: "social",
+                label: "☁️ 社會科 (康軒五上臺灣歷史地理)",
+                themeCard: "kawaii-card-cinna",
+                badgeBg: "bg-sky-100 text-sky-800 border-sky-300",
+                pillActive: "bg-sky-500 text-white border-sky-500",
+                btnGradient: "from-sky-400 to-blue-400",
+                mascot: "cinnamoroll",
+                timeLabel: "約 10 分鐘 (含重點圖卡＋8題＋配對)"
+              },
+              {
+                key: "science",
+                label: "🌸 自然科 (康軒五上科學探索)",
+                themeCard: "kawaii-card-melody",
+                badgeBg: "bg-pink-100 text-pink-800 border-pink-300",
+                pillActive: "bg-pink-500 text-white border-pink-500",
+                btnGradient: "from-pink-400 to-rose-400",
+                mascot: "mymelody",
+                timeLabel: "約 10 分鐘 (含實驗祕笈＋8題＋配對)"
+              }
+            ];
+
+        const grid = document.getElementById('daily-missions-grid');
+        grid.innerHTML = subjectsConfig.map(cfg => {
+          const nextId = this.getNextStageId(cfg.key);
+          const meta = this.getStageMeta(cfg.key, nextId);
+          const clearedInfo = (this.state.clearedStages[cfg.key] || {})[nextId];
+          const doneToday = Boolean(todayRecord[cfg.key]);
+          const isClearedStage = Boolean(clearedInfo);
+          const buddyObj = CHARACTER_SVGS[meta.buddy] || CHARACTER_SVGS[cfg.mascot];
+          const units = this.getSubjectUnitsSummary(cfg.key);
+
+          const unitPillsHtml = units.map((u, uIdx) => {
+            const activeUnit = u.unit === meta.unit;
+            return `
+              <button onclick="app.jumpSubjectToUnitIndex('${cfg.key}', ${uIdx})" class="px-2 py-0.5 rounded-full text-[11px] font-black border transition-all ${
+                activeUnit ? cfg.pillActive + ' shadow-sm' : 'bg-white/90 text-slate-600 border-slate-200 hover:border-pink-300'
+              }">${u.unit}</button>`;
+          }).join('');
+
+          return `
+            <div class="${cfg.themeCard} p-4 sm:p-5 flex flex-col justify-between space-y-3.5 relative overflow-hidden">
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-black px-2.5 py-1 rounded-full border ${cfg.badgeBg}">
+                    ${cfg.label}
+                  </span>
+                  <span class="text-xs font-black ${isClearedStage ? 'text-emerald-600 bg-emerald-50 border-emerald-200' : doneToday ? 'text-teal-700 bg-teal-50 border-teal-200' : 'text-pink-600 bg-pink-50 border-pink-200'} px-2.5 py-0.5 rounded-full border">
+                    ${isClearedStage ? `✅ 已過關 (${'⭐'.repeat(clearedInfo.stars || 3)})` : '🎯 自由選關'}
+                  </span>
+                </div>
+
+                <!-- Current Selected Stage Info -->
+                <div class="flex items-center gap-3 pt-0.5">
+                  <div class="w-14 h-14 rounded-2xl bg-white p-1.5 border-2 border-slate-100 shadow-sm shrink-0">
+                    ${buddyObj.svg}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-black text-pink-600">
+                      第 ${meta.id} / 50 關 ・ ${meta.unit}
+                    </div>
+                    <h4 class="text-base sm:text-lg font-black text-slate-800 leading-snug truncate">
+                      ${meta.title}
+                    </h4>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5 line-clamp-1">
+                      ${meta.sub}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Direct Unit Jump + 50-Stage Dropdown Picker right inside Home Card! -->
+                <div class="p-2.5 rounded-2xl bg-white/85 border border-pink-100 space-y-2">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="text-[11px] font-black text-slate-600">🎯 點單元或下拉直接選關：</span>
+                    <button onclick="app.openSubjectStagePicker('${cfg.key}', '${meta.unit}')" class="text-[11px] font-black text-pink-600 hover:underline">
+                      展開全 50 關清單 →
+                    </button>
+                  </div>
+                  <div class="flex flex-wrap gap-1">
+                    ${unitPillsHtml}
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <button onclick="app.stepSubjectStage('${cfg.key}', -1)" title="上一關" class="btn-bounce w-8 h-9 rounded-xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-pink-700 text-xs font-black shrink-0">◀</button>
+                    <select aria-label="${cfg.label} 關卡選擇" onchange="app.pickSubjectStage('${cfg.key}', this.value)" class="w-full h-9 px-2.5 rounded-xl border-2 border-pink-200 bg-white text-xs font-black text-slate-800 focus:outline-none focus:border-pink-400">
+                      ${this.buildStageOptionsHtml(cfg.key, meta.id)}
+                    </select>
+                    <button onclick="app.stepSubjectStage('${cfg.key}', 1)" title="下一關" class="btn-bounce w-8 h-9 rounded-xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-pink-700 text-xs font-black shrink-0">▶</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-2 pt-2 border-t border-slate-100">
+                <div class="flex items-center justify-between text-[11px] text-slate-500 font-semibold">
+                  <span>⏱️ ${cfg.timeLabel}</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                  <button onclick="app.launchStage('${cfg.key}', ${meta.id})" class="col-span-2 btn-bounce py-3 px-3 rounded-2xl bg-gradient-to-r ${cfg.btnGradient} text-white font-black text-xs sm:text-sm shadow-md flex items-center justify-center gap-1">
+                    <span>${isClearedStage ? `🌟 複習第 ${meta.id} 關` : `🚀 開始第 ${meta.id} 關`}</span>
+                  </button>
+                  <button onclick="app.openSubjectStagePicker('${cfg.key}')" class="btn-bounce py-3 px-2 rounded-2xl bg-white border-2 border-pink-200 text-pink-600 font-black text-xs shadow-sm">
+                    🗺️ 挑別關
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Render 3 Subject Progress Bars (Clickable to jump straight into that subject's 50-stage picker!)
+        const progressItems = is5B
+          ? [
+              { key: 'english', name: '🎤 英文 (康軒五下 Wonder World 6)', done: engDone, color: 'from-teal-400 to-emerald-400' },
+              { key: 'social', name: '☁️ 社會 (康軒五下 經濟/清領/日治時期)', done: socDone, color: 'from-sky-400 to-blue-400' },
+              { key: 'science', name: '🌸 自然 (康軒五下 力與運動/大地/植物/熱)', done: sciDone, color: 'from-pink-400 to-rose-400' }
+            ]
+          : [
+              { key: 'english', name: '🎤 英文 (康軒 Wonder World 5)', done: engDone, color: 'from-teal-400 to-emerald-400' },
+              { key: 'social', name: '☁️ 社會 (康軒五上 臺灣地理與歷史)', done: socDone, color: 'from-sky-400 to-blue-400' },
+              { key: 'science', name: '🌸 自然 (康軒五上 生物/聲光/空氣/星空)', done: sciDone, color: 'from-pink-400 to-rose-400' }
+            ];
+
+        document.getElementById('subject-progress-list').innerHTML = progressItems.map(item => {
+          const p = Math.round((item.done / 50) * 100);
+          return `
+            <div onclick="app.openSubjectStagePicker('${item.key}')" class="cursor-pointer group p-2 rounded-2xl hover:bg-pink-50/50 transition-all space-y-1">
+              <div class="flex items-center justify-between text-xs font-bold">
+                <span class="text-slate-700 group-hover:text-pink-600">${item.name} <span class="text-[11px] text-teal-600 font-black ml-1">🎯 點此選關 →</span></span>
+                <span class="text-slate-600">${item.done} / 50 關 (${p}%)</span>
+              </div>
+              <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                <div class="h-full bg-gradient-to-r ${item.color} rounded-full transition-all duration-500" style="width: ${p}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        document.getElementById('home-mistake-count').textContent = `${(this.state.mistakes || []).length} 題待複習`;
+        const ws = this.getTotalWardrobeStats();
+        document.getElementById('home-sticker-count').textContent = `洋娃娃服飾 ${ws.owned}/${ws.total}・角色卡 ${new Set(this.state.stickers || []).size}/${STICKER_CATALOG.length}`;
+      },
+
+      setMapSubject(sub) {
+        sfx.pop();
+        this.mapSubject = sub;
+        this.mapUnitFilter = 'ALL';
+        this.renderMap();
+      },
+
+      setMapUnitFilter(u) {
+        sfx.pop();
+        this.mapUnitFilter = u;
+        this.renderMap();
+      },
+
+      setMapSearch(q) {
+        this.mapSearchQuery = String(q || '').trim();
+        this.renderMapStagesOnly();
+      },
+
+      setMapStatusFilter(status) {
+        sfx.pop();
+        this.mapStatusFilter = status;
+        this.renderMap();
+      },
+
+      renderMap() {
+        this.ensureStagePickerState();
+        const subMeta = {
+          english: { icon: '🎤', title: '英文' },
+          social: { icon: '☁️', title: '社會' },
+          science: { icon: '🌸', title: '自然' }
+        };
+        ['english', 'social', 'science'].forEach(sub => {
+          const btn = document.getElementById(`map-tab-${sub}`);
+          if (!btn) return;
+          const doneCnt = Object.keys((this.state.clearedStages && this.state.clearedStages[sub]) || {}).length;
+          const active = (sub === this.mapSubject);
+          btn.textContent = `${subMeta[sub].icon} ${subMeta[sub].title} (${doneCnt}/50)`;
+          btn.className = active
+            ? "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black sekai-candy-btn text-white shadow-sm transition-all"
+            : "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-white/70 transition-all";
+        });
+
+        const unitSummaries = this.getSubjectUnitsSummary(this.mapSubject);
+        const unitFilterEl = document.getElementById('map-unit-filters');
+        if (unitFilterEl) {
+          const allActive = this.mapUnitFilter === 'ALL';
+          const allBtn = `
+            <button onclick="app.setMapUnitFilter('ALL')" class="px-3.5 py-1.5 rounded-full text-xs font-black border-2 transition-all ${
+              allActive ? 'bg-slate-800 text-white border-slate-800 shadow-sm' : 'bg-white text-slate-600 border-pink-200 hover:bg-pink-50'
+            }">🌟 全部單元 (50關)</button>`;
+          const uBtns = unitSummaries.map(u => {
+            const active = (u.unit === this.mapUnitFilter);
+            return `
+              <button onclick="app.setMapUnitFilter('${u.unit}')" class="px-3.5 py-1.5 rounded-full text-xs font-black border-2 transition-all ${
+                active ? 'bg-pink-500 text-white border-pink-500 shadow-sm' : 'bg-white text-slate-700 border-pink-200 hover:bg-pink-50'
+              }">📘 ${u.unit} (${u.done}/${u.total})</button>`;
+          }).join('');
+          unitFilterEl.innerHTML = allBtn + uBtns;
+        }
+
+        const statusEl = document.getElementById('map-status-filters');
+        if (statusEl) {
+          const stModes = [
+            { id: 'ALL', label: '🌈 全部關卡' },
+            { id: 'TODO', label: '✨ 尚未挑戰' },
+            { id: 'DONE', label: '✅ 已過關' }
+          ];
+          statusEl.innerHTML = stModes.map(m => `
+            <button onclick="app.setMapStatusFilter('${m.id}')" class="px-3 py-1.5 rounded-full text-xs font-black border transition-all ${
+              this.mapStatusFilter === m.id ? 'bg-teal-500 text-white border-teal-500 shadow-sm' : 'bg-white text-slate-600 border-pink-200 hover:bg-pink-50'
+            }">${m.label}</button>
+          `).join('');
+        }
+
+        const searchEl = document.getElementById('map-search-input');
+        if (searchEl && searchEl.value !== this.mapSearchQuery) {
+          searchEl.value = this.mapSearchQuery;
+        }
+
+        this.renderMapStagesOnly();
+      },
+
+      renderMapStagesOnly() {
+        const stages = this.getSubjectStagesList(this.mapSubject);
+        const clearedMap = (this.state.clearedStages && this.state.clearedStages[this.mapSubject]) || {};
+        const nextId = this.getNextStageId(this.mapSubject);
+        const q = (this.mapSearchQuery || '').toLowerCase();
+
+        const filtered = stages.filter(st => {
+          if (this.mapUnitFilter !== 'ALL' && st.unit !== this.mapUnitFilter) return false;
+          const isDone = Boolean(clearedMap[st.id]);
+          if (this.mapStatusFilter === 'TODO' && isDone) return false;
+          if (this.mapStatusFilter === 'DONE' && !isDone) return false;
+          if (q) {
+            const hay = `${st.id} ${st.unit} ${st.title} ${st.sub}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        const gridEl = document.getElementById('map-stages-grid');
+        if (!gridEl) return;
+
+        if (filtered.length === 0) {
+          gridEl.innerHTML = `
+            <div class="col-span-full kawaii-card p-8 text-center space-y-2">
+              <div class="text-3xl">🔍✨</div>
+              <div class="text-sm sm:text-base font-black text-slate-700">找不到符合篩選條件的關卡喔！</div>
+              <button onclick="app.openSubjectStagePicker('${this.mapSubject}')" class="btn-bounce px-4 py-2 rounded-xl bg-pink-500 text-white text-xs font-black">顯示全部 50 關</button>
+            </div>`;
+          return;
+        }
+
+        gridEl.innerHTML = filtered.map(st => {
+          const info = clearedMap[st.id];
+          const isCurrentPick = (Number(st.id) === Number(nextId));
+          const buddy = CHARACTER_SVGS[st.buddy] || CHARACTER_SVGS.miku;
+          const starsStr = info ? '⭐'.repeat(info.stars || 3) : '🔓 開放中';
+
+          return `
+            <div onclick="app.launchStage('${this.mapSubject}', ${st.id})" class="kawaii-card p-3.5 sm:p-4 cursor-pointer btn-bounce flex items-center justify-between gap-3 transition-all ${
+              isCurrentPick ? 'ring-2 ring-pink-400 bg-pink-50/40' : info ? 'bg-white/95 hover:border-teal-300' : 'bg-white/90 hover:border-pink-400'
+            }">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-50 to-pink-50 p-1 border border-pink-200 shrink-0">
+                  ${buddy.svg}
+                </div>
+                <div class="min-w-0">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="text-xs font-black px-2 py-0.5 rounded-full bg-pink-100 text-pink-700">
+                      第 ${st.id} 關
+                    </span>
+                    <span class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">${st.unit}</span>
+                    ${isCurrentPick ? '<span class="text-[11px] font-black text-pink-600">📌 目前選取</span>' : ''}
+                  </div>
+                  <h4 class="text-sm font-black text-slate-800 mt-1 truncate">${st.title}</h4>
+                  <p class="text-xs text-slate-500 truncate">${st.sub}</p>
+                </div>
+              </div>
+              <div class="text-right shrink-0 space-y-1">
+                <div class="text-[11px] font-bold ${info ? 'text-amber-500' : 'text-teal-600'}">${starsStr}</div>
+                <span class="inline-block text-xs font-black px-3 py-1.5 rounded-xl shadow-sm ${
+                  info ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'sekai-candy-btn text-white'
+                }">
+                  ${info ? '複習' : '直接玩'}
+                </span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      launchStage(subject, stageId) {
+        this.ensureStagePickerState();
+        sfx.pop();
+        const targetId = Math.max(1, Math.min(50, Number(stageId) || 1));
+        this.isMistakePractice = false;
+        this.state.subjectCursor[subject] = targetId;
+        this.saveState();
+
+        this.activeStage = this.buildStageContent(subject, targetId);
+        this.studyChecked = new Set();
+        this.quizIndex = 0;
+        this.quizScore = 0;
+        this.quizCombo = 0;
+        this.stageSeconds = 0;
+
+        this.switchTab('play');
+        this.startStageTimer();
+        this.renderPhase1Study();
+      },
+
+      playNextStage() {
+        if (!this.activeStage || this.isMistakePractice) {
+          this.switchTab('map');
+          return;
+        }
+        const nextId = this.activeStage.id < 50 ? this.activeStage.id + 1 : 1;
+        this.launchStage(this.activeStage.subject, nextId);
+      },
+
+      renderPhase1Study() {
+        const st = this.activeStage;
+        const subMap = {
+          english: { name: "🎤 英文科", cls: "bg-teal-100 text-teal-800" },
+          social: { name: "☁️ 社會科", cls: "bg-sky-100 text-sky-800" },
+          science: { name: "🌸 自然科", cls: "bg-pink-100 text-pink-800" }
+        };
+        const badge = subMap[st.subject];
+        const bEl = document.getElementById('play-subject-badge');
+        bEl.className = `text-xs font-black px-2.5 py-0.5 rounded-full ${badge.cls}`;
+        bEl.textContent = `${badge.name} ・ 第 ${st.id} 關`;
+        document.getElementById('play-unit-badge').textContent = st.meta.unit;
+        document.getElementById('play-stage-title').textContent = `${st.meta.title}（${st.meta.sub}）`;
+
+        // Populate in-stage quick switcher dropdown so Qiaoqiao can switch stages anytime!
+        const quickSwitchWrap = document.getElementById('play-stage-switcher-wrap');
+        const quickSelect = document.getElementById('play-stage-quick-select');
+        if (quickSwitchWrap) quickSwitchWrap.classList.remove('hidden');
+        if (quickSelect) {
+          quickSelect.innerHTML = this.buildStageOptionsHtml(st.subject, st.id);
+          quickSelect.value = String(st.id);
+        }
+
+        document.getElementById('study-buddy-svg').innerHTML = this.getEquippedAvatarSVG();
+        this.setPhaseIndicators(1);
+        this.renderStudyCards();
+      },
+
+      startMistakePractice() {
+        const list = this.state.mistakes || [];
+        if (list.length === 0) return;
+        sfx.pop();
+        this.isMistakePractice = true;
+        this.activeStage = {
+          subject: "english",
+          id: 0,
+          meta: { unit: "錯題特訓", title: "魔法錯題大掃除", sub: "答對即可消除錯題並獲得音符幣！", buddy: "miku" },
+          studyCards: [],
+          questions: list.slice(0, 8).map(m => ({
+            mistakeId: m.id,
+            q: m.q,
+            opts: m.opts,
+            ans: m.ans,
+            exp: m.exp,
+            tts: m.tts
+          })),
+          matchPairs: []
+        };
+        this.quizIndex = 0;
+        this.quizScore = 0;
+        this.quizCombo = 0;
+        this.stageSeconds = 0;
+        this.switchTab('play');
+        this.startStageTimer();
+
+        const quickSwitchWrap = document.getElementById('play-stage-switcher-wrap');
+        if (quickSwitchWrap) quickSwitchWrap.classList.add('hidden');
+
+        document.getElementById('play-subject-badge').className = "text-xs font-black px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        document.getElementById('play-subject-badge').textContent = "📓 錯題本複習";
+        document.getElementById('play-unit-badge').textContent = `共 ${this.activeStage.questions.length} 題`;
+        document.getElementById('play-stage-title').textContent = "喬喬的魔法錯題大掃除";
+        this.setPhaseIndicators(2);
+        this.renderQuizQuestion();
+      },
+
+      finishStageComplete() {
+        this.ensureStagePickerState();
+        this.stopStageTimer();
+        sfx.fanfare();
+        this.setPhaseIndicators(4);
+
+        const st = this.activeStage;
+        const totalQ = st.questions.length;
+        const ratio = this.quizScore / totalQ;
+        const stars = ratio >= 0.85 ? 3 : ratio >= 0.6 ? 2 : 1;
+        const earnedCoins = stars * 15;
+
+        this.state.coins = (this.state.coins || 0) + earnedCoins;
+
+        if (!this.isMistakePractice) {
+          const prev = (this.state.clearedStages[st.subject] || {})[st.id];
+          this.state.clearedStages[st.subject][st.id] = {
+            stars: Math.max(stars, prev ? prev.stars : 0),
+            bestScore: Math.max(this.quizScore, prev ? prev.bestScore : 0),
+            timeSec: this.stageSeconds
+          };
+
+          // Advance subject cursor forward from current stage (never snap back to Stage 1!)
+          const nextForward = st.id < 50 ? this.findNextUnplayedFrom(st.subject, st.id + 1) : this.findNextUnplayedFrom(st.subject, 1);
+          this.state.subjectCursor[st.subject] = nextForward;
+
+          const todayKey = this.getTodayKey();
+          if (!this.state.dailyHistory[todayKey]) {
+            this.state.dailyHistory[todayKey] = {};
+          }
+          this.state.dailyHistory[todayKey][st.subject] = st.id;
+
+          if (this.state.lastPlayedDate !== todayKey) {
+            if (this.state.lastPlayedDate) {
+              this.state.streak = (this.state.streak || 1) + 1;
+            }
+            this.state.lastPlayedDate = todayKey;
+          }
+        }
+
+        this.saveState();
+
+        const buddy = this.getEquippedPartnerMeta();
+        document.getElementById('complete-mascot-svg').innerHTML = this.getEquippedAvatarSVG();
+        launchConfetti(32);
+        document.getElementById('complete-stars-row').textContent = '⭐'.repeat(stars);
+        document.getElementById('complete-title').textContent = this.isMistakePractice
+          ? '🎉 錯題大掃除挑戰完成！'
+          : `🎉 恭喜喬喬通過【第 ${st.id} 關：${st.meta.title}】！`;
+        document.getElementById('complete-subtitle').textContent = `${buddy.name}：「喬喬太棒了！想接著挑戰下一關，或自由挑選其他單元都可以喔！」`;
+        document.getElementById('complete-score').textContent = `${this.quizScore} / ${totalQ}`;
+
+        const m = String(Math.floor(this.stageSeconds / 60)).padStart(2, '0');
+        const s = String(this.stageSeconds % 60).padStart(2, '0');
+        document.getElementById('complete-time').textContent = `${m}:${s}`;
+        document.getElementById('complete-coins').textContent = `+${earnedCoins} 🎵`;
+
+        const nextBtn = document.getElementById('btn-complete-next-stage');
+        if (nextBtn) {
+          if (this.isMistakePractice) {
+            nextBtn.classList.add('hidden');
+          } else {
+            const nextSeq = st.id < 50 ? st.id + 1 : 1;
+            const nextMeta = this.getStageMeta(st.subject, nextSeq);
+            nextBtn.classList.remove('hidden');
+            nextBtn.textContent = `⏭️ 直接挑戰第 ${nextSeq} 關（${nextMeta.title}）`;
+          }
+        }
+      }
+    };
+
+    Object.assign(QiaoQiaoApp.prototype, GACHA_METHODS_MIXIN, STAGE_PICKER_MIXIN);
     const app = new QiaoQiaoApp();
     window.addEventListener('DOMContentLoaded', () => app.init());
   </script>
